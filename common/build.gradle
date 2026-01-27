@@ -9,4 +9,9 @@ repositories {
 
 dependencies {
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+}
+
+test {
+    useJUnitPlatform()
 }
