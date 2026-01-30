@@ -52,6 +52,7 @@ public final class DirectionalAnalysis {
             result[0] = result[1] = result[2] = p3;
         } else {
             double disc = qq*qq - pp*pp*pp;
+<<<<<<< ours
             // For symmetric matrices all eigenvalues are real; disc > 0 only arises from
             // floating-point noise near degenerate roots. Use a relative epsilon guard so
             // near-degenerate cases fall through to the more accurate trigonometric branch.
@@ -59,6 +60,11 @@ public final class DirectionalAnalysis {
             if (disc <= eps) {
                 double sqrtPP = Math.sqrt(pp);
                 double theta = Math.acos(Math.max(-1.0, Math.min(1.0, -qq / (pp * sqrtPP))));
+=======
+            if (disc <= 0) {
+                double sqrtPP = Math.sqrt(pp);
+                double theta = Math.acos(Math.max(-1.0, Math.min(1.0, qq / (pp * sqrtPP))));
+>>>>>>> theirs
                 result[0] = -2.0*sqrtPP*Math.cos(theta / 3.0) + p3;
                 result[1] = -2.0*sqrtPP*Math.cos((theta + 2.0*Math.PI) / 3.0) + p3;
                 result[2] = -2.0*sqrtPP*Math.cos((theta - 2.0*Math.PI) / 3.0) + p3;
@@ -67,8 +73,12 @@ public final class DirectionalAnalysis {
                 double a = -Math.signum(qq) * Math.cbrt(Math.abs(qq) + sqrtDisc);
                 double b = (Math.abs(a) > 1e-30) ? pp / a : 0.0;
                 result[0] = a + b + p3;
+<<<<<<< ours
                 result[1] = -(a + b) / 2.0 + p3;
                 result[2] = -(a + b) / 2.0 + p3;
+=======
+                result[1] = result[2] = p3;
+>>>>>>> theirs
             }
         }
         for (int i = 0; i < 3; i++) if (result[i] < 0) result[i] = 0;
