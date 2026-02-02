@@ -91,7 +91,11 @@ public final class EnvironmentProfile {
         float[] specSum = new float[3];
         for (ReflectionTap tap : taps) {
             float[] abs = SpectralFilter.computeAbsorption(tap.material(), config);
+<<<<<<< ours
             absSum += (abs[0] + abs[1] + abs[2]) / 3.0f; // mean of all 3 bands per spec
+=======
+            absSum += abs[1];
+>>>>>>> theirs
             specSum[0] += abs[0]; specSum[1] += abs[1]; specSum[2] += abs[2];
         }
         float avgAbs = absSum / taps.size();
@@ -169,6 +173,7 @@ public final class EnvironmentProfile {
     public float windExposure() { return windExposure; }
     public float canopyCoverage() { return canopyCoverage; }
     public Vec3 mostOpenSkyDirection() { return mostOpenSkyDirection; }
+<<<<<<< ours
 
     /**
      * Estimates room volume from enclosure factor and average return distance.
@@ -185,4 +190,6 @@ public final class EnvironmentProfile {
     public float criticalDistance() {
         return RoomGeometry.criticalDistance(estimatedVolume(), estimatedRT60);
     }
+=======
+>>>>>>> theirs
 }
