@@ -63,7 +63,11 @@ public final class DirectionalAnalysis {
 =======
             if (disc <= 0) {
                 double sqrtPP = Math.sqrt(pp);
+<<<<<<< ours
                 double theta = Math.acos(Math.max(-1.0, Math.min(1.0, qq / (pp * sqrtPP))));
+>>>>>>> theirs
+=======
+                double theta = Math.acos(Math.max(-1.0, Math.min(1.0, -qq / (pp * sqrtPP))));
 >>>>>>> theirs
                 result[0] = -2.0*sqrtPP*Math.cos(theta / 3.0) + p3;
                 result[1] = -2.0*sqrtPP*Math.cos((theta + 2.0*Math.PI) / 3.0) + p3;
