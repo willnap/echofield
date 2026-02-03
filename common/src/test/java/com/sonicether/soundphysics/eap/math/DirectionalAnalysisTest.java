@@ -70,6 +70,9 @@ class DirectionalAnalysisTest {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     @Test void eigenvalues_nearDegenerate() {
         // Matrix with eigenvalues approximately 10, 0, 0
         // Near-degenerate case that exercises the Cardano fallback path
@@ -80,6 +83,9 @@ class DirectionalAnalysisTest {
         assertEquals(10.0, eigs[2], 0.01);
     }
 
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
     private static Vec3[] goldenSpiral(int n) {

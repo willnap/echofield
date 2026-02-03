@@ -92,9 +92,13 @@ public final class EnvironmentProfile {
         for (ReflectionTap tap : taps) {
             float[] abs = SpectralFilter.computeAbsorption(tap.material(), config);
 <<<<<<< ours
+<<<<<<< ours
             absSum += (abs[0] + abs[1] + abs[2]) / 3.0f; // mean of all 3 bands per spec
 =======
             absSum += abs[1];
+>>>>>>> theirs
+=======
+            absSum += (abs[0] + abs[1] + abs[2]) / 3.0f; // mean of all 3 bands per spec
 >>>>>>> theirs
             specSum[0] += abs[0]; specSum[1] += abs[1]; specSum[2] += abs[2];
         }

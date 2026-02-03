@@ -53,15 +53,21 @@ public final class DirectionalAnalysis {
         } else {
             double disc = qq*qq - pp*pp*pp;
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
             // For symmetric matrices all eigenvalues are real; disc > 0 only arises from
             // floating-point noise near degenerate roots. Use a relative epsilon guard so
             // near-degenerate cases fall through to the more accurate trigonometric branch.
             double eps = pp * pp * pp * 1e-10;
             if (disc <= eps) {
+<<<<<<< ours
                 double sqrtPP = Math.sqrt(pp);
                 double theta = Math.acos(Math.max(-1.0, Math.min(1.0, -qq / (pp * sqrtPP))));
 =======
             if (disc <= 0) {
+=======
+>>>>>>> theirs
                 double sqrtPP = Math.sqrt(pp);
 <<<<<<< ours
                 double theta = Math.acos(Math.max(-1.0, Math.min(1.0, qq / (pp * sqrtPP))));
@@ -78,10 +84,15 @@ public final class DirectionalAnalysis {
                 double b = (Math.abs(a) > 1e-30) ? pp / a : 0.0;
                 result[0] = a + b + p3;
 <<<<<<< ours
+<<<<<<< ours
                 result[1] = -(a + b) / 2.0 + p3;
                 result[2] = -(a + b) / 2.0 + p3;
 =======
                 result[1] = result[2] = p3;
+>>>>>>> theirs
+=======
+                result[1] = -(a + b) / 2.0 + p3;
+                result[2] = -(a + b) / 2.0 + p3;
 >>>>>>> theirs
             }
         }
