@@ -27,7 +27,11 @@ public class EnvironmentProfiler {
     private static final float MAX_DISTANCE = 256F;
     private static final int MAX_BOUNCES = 3;
     private static final double SPEED_OF_SOUND = 343.0;
+<<<<<<< ours
     static final int CROSSFADE_TICKS = 25; // 1250ms at 20 ticks/sec — package-private for testing
+=======
+    static final int CROSSFADE_TICKS = 25; // 500ms at 50 ticks/sec — package-private for testing
+>>>>>>> theirs
     private static final int SNAPSHOT_CHUNK_RADIUS = 16;
 
     // --- Published state (read by audio threads) ---
