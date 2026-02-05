@@ -13,7 +13,10 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+<<<<<<< ours
 import java.util.concurrent.ThreadLocalRandom;
+=======
+>>>>>>> theirs
 
 /**
  * Manages five looping OpenAL sources that produce environmental ambience
@@ -26,8 +29,13 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public final class ExcitationSourceManager {
 
+<<<<<<< ours
     /** Length of the shared noise buffer in samples (mono, 44100 Hz, 2 seconds). */
     private static final int NOISE_SAMPLES = 88200; // 2 seconds at 44.1 kHz — long enough to avoid audible looping
+=======
+    /** Length of the shared noise buffer in samples (mono, 44100 Hz). */
+    private static final int NOISE_SAMPLES = 44100; // 1 second at 44.1 kHz
+>>>>>>> theirs
     private static final int SAMPLE_RATE = 44100;
 
     /** Exponential smoothing factor per tick. */
@@ -36,18 +44,26 @@ public final class ExcitationSourceManager {
     private static final float SILENCE = 0.001f;
 
     private final ExcitationSource[] sources;
+<<<<<<< ours
     private final int[] buffers; // one per ExcitationType
 
     private final java.util.Map<ExcitationType, Boolean> typeEnabled = new java.util.EnumMap<>(ExcitationType.class);
 
     private float masterGain = 1.0f;
     private float excitationVolume = 0.2f;
+=======
+    private int noiseBuffer;
+
+    private float masterGain = 1.0f;
+    private float excitationVolume = 1.0f;
+>>>>>>> theirs
     private boolean enabled = true;
     private double playerX, playerY, playerZ;
 
     // ── Construction ──────────────────────────────────────────────────
 
     public ExcitationSourceManager() {
+<<<<<<< ours
         ExcitationType[] types = ExcitationType.values();
         sources = new ExcitationSource[types.length];
         buffers = new int[types.length];
@@ -56,6 +72,12 @@ public final class ExcitationSourceManager {
         for (int i = 0; i < types.length; i++) {
             buffers[i] = generateProceduralBuffer(types[i]);
         }
+=======
+        noiseBuffer = generateNoiseBuffer();
+
+        ExcitationType[] types = ExcitationType.values();
+        sources = new ExcitationSource[types.length];
+>>>>>>> theirs
 
         for (int i = 0; i < types.length; i++) {
             ExcitationSource s = new ExcitationSource(types[i]);
@@ -69,6 +91,7 @@ public final class ExcitationSourceManager {
             EXTEfx.alFilterf(s.filterId, EXTEfx.AL_LOWPASS_GAINHF, 1.0f);
             Loggers.logALError("ExcitationSourceManager: alGenFilters for " + types[i]);
 
+<<<<<<< ours
             // Create per-source send filters for aux reverb sends
             for (int j = 0; j < 4; j++) {
                 s.sendFilterIds[j] = EXTEfx.alGenFilters();
@@ -85,6 +108,13 @@ public final class ExcitationSourceManager {
             AL10.alSourcef(s.sourceId, AL10.AL_ROLLOFF_FACTOR, 1.0f);
             AL10.alSourcef(s.sourceId, AL10.AL_REFERENCE_DISTANCE, 8.0f);
             AL10.alSourcef(s.sourceId, AL10.AL_MAX_DISTANCE, 64.0f);
+=======
+            // Bind buffer, set looping, start at gain=0
+            AL10.alSourcei(s.sourceId, AL10.AL_BUFFER, noiseBuffer);
+            AL10.alSourcei(s.sourceId, AL10.AL_LOOPING, AL10.AL_TRUE);
+            AL10.alSourcef(s.sourceId, AL10.AL_GAIN, 0.0f);
+            AL10.alSourcef(s.sourceId, AL10.AL_ROLLOFF_FACTOR, 0.0f);
+>>>>>>> theirs
             AL10.alSourcei(s.sourceId, AL10.AL_SOURCE_RELATIVE, AL10.AL_FALSE);
             AL11.alSourcei(s.sourceId, EXTEfx.AL_DIRECT_FILTER, s.filterId);
             Loggers.logALError("ExcitationSourceManager: source setup for " + types[i]);
@@ -92,12 +122,20 @@ public final class ExcitationSourceManager {
             AL10.alSourcePlay(s.sourceId);
             Loggers.logALError("ExcitationSourceManager: alSourcePlay for " + types[i]);
 
+<<<<<<< ours
             // Initialize filter state — procedural buffers are already shaped,
             // so filters are for environmental fine-tuning, not primary shaping
             s.currentFilterGain = 0.5f;
             s.currentFilterGainHF = 0.3f;
             s.targetFilterGain = 0.5f;
             s.targetFilterGainHF = 0.3f;
+=======
+            // Initialize filter state
+            s.currentFilterGain = 1.0f;
+            s.currentFilterGainHF = 1.0f;
+            s.targetFilterGain = 1.0f;
+            s.targetFilterGainHF = 1.0f;
+>>>>>>> theirs
 
             sources[i] = s;
         }
@@ -108,6 +146,7 @@ public final class ExcitationSourceManager {
     // ── Noise buffer ──────────────────────────────────────────────────
 
     /**
+<<<<<<< ours
      * Generates a procedural audio buffer tailored to the given excitation type.
      * Each type uses a different synthesis model:
      * <ul>
@@ -139,11 +178,25 @@ public final class ExcitationSourceManager {
                 .order(ByteOrder.nativeOrder());
         for (float s : samples) {
             data.putShort((short) (s * norm * Short.MAX_VALUE));
+=======
+     * Generates a mono 16-bit white-noise buffer at 44100 Hz.
+     *
+     * @return OpenAL buffer handle
+     */
+    static int generateNoiseBuffer() {
+        Random rng = new Random(42); // deterministic seed for reproducibility
+        ByteBuffer data = ByteBuffer.allocateDirect(NOISE_SAMPLES * 2)
+                .order(ByteOrder.nativeOrder());
+        for (int i = 0; i < NOISE_SAMPLES; i++) {
+            short sample = (short) ((rng.nextFloat() * 2.0f - 1.0f) * Short.MAX_VALUE);
+            data.putShort(sample);
+>>>>>>> theirs
         }
         data.flip();
 
         int buf = AL10.alGenBuffers();
         AL10.alBufferData(buf, AL10.AL_FORMAT_MONO16, data, SAMPLE_RATE);
+<<<<<<< ours
         Loggers.logALError("ExcitationSourceManager: generateProceduralBuffer " + type);
         return buf;
     }
@@ -287,11 +340,18 @@ public final class ExcitationSourceManager {
         }
     }
 
+=======
+        Loggers.logALError("ExcitationSourceManager: generateNoiseBuffer");
+        return buf;
+    }
+
+>>>>>>> theirs
     // ── Shutdown ──────────────────────────────────────────────────────
 
     public void shutdown() {
         for (ExcitationSource s : sources) {
             AL10.alSourceStop(s.sourceId);
+<<<<<<< ours
             AL10.alSourcei(s.sourceId, AL10.AL_BUFFER, 0);
             AL10.alDeleteSources(s.sourceId);
             EXTEfx.alDeleteFilters(s.filterId);
@@ -302,6 +362,13 @@ public final class ExcitationSourceManager {
         for (int buf : buffers) {
             if (buf != 0) AL10.alDeleteBuffers(buf);
         }
+=======
+            AL10.alDeleteSources(s.sourceId);
+            EXTEfx.alDeleteFilters(s.filterId);
+        }
+        AL10.alDeleteBuffers(noiseBuffer);
+        noiseBuffer = 0;
+>>>>>>> theirs
         Loggers.log("ExcitationSourceManager: shut down");
     }
 
@@ -319,10 +386,13 @@ public final class ExcitationSourceManager {
         this.enabled = enabled;
     }
 
+<<<<<<< ours
     public void setTypeEnabled(ExcitationType type, boolean enabled) {
         typeEnabled.put(type, enabled);
     }
 
+=======
+>>>>>>> theirs
     public void setPlayerPosition(double x, double y, double z) {
         this.playerX = x;
         this.playerY = y;
@@ -342,7 +412,11 @@ public final class ExcitationSourceManager {
      * all source values toward their targets. Call once per tick.
      */
     public void update(EnvironmentProfile profile) {
+<<<<<<< ours
         if (profile == null || !enabled) {
+=======
+        if (!enabled) {
+>>>>>>> theirs
             silenceAll();
             return;
         }
@@ -354,6 +428,7 @@ public final class ExcitationSourceManager {
         computeWaterTargets(profile);
         computeLavaTargets(profile);
 
+<<<<<<< ours
         // Gate disabled excitation types
         for (ExcitationSource s : sources) {
             if (Boolean.FALSE.equals(typeEnabled.get(s.type))) {
@@ -361,6 +436,8 @@ public final class ExcitationSourceManager {
             }
         }
 
+=======
+>>>>>>> theirs
         // Smooth and apply
         for (ExcitationSource s : sources) {
             // Scale target gain by master and excitation volume
@@ -378,6 +455,7 @@ public final class ExcitationSourceManager {
                 s.currentGain = 0.0f;
             }
 
+<<<<<<< ours
             // Apply amplitude modulation if depth > 0 (foliage rustle per spec)
             float appliedGain = s.currentGain;
             if (s.modulationDepth > 0.001f) {
@@ -389,6 +467,10 @@ public final class ExcitationSourceManager {
 
             // Apply to OpenAL
             AL10.alSourcef(s.sourceId, AL10.AL_GAIN, appliedGain);
+=======
+            // Apply to OpenAL
+            AL10.alSourcef(s.sourceId, AL10.AL_GAIN, s.currentGain);
+>>>>>>> theirs
             AL10.alSource3f(s.sourceId, AL10.AL_POSITION,
                     s.currentX, s.currentY, s.currentZ);
 
@@ -396,6 +478,7 @@ public final class ExcitationSourceManager {
                     Math.max(0.0f, Math.min(1.0f, s.currentFilterGain)));
             EXTEfx.alFilterf(s.filterId, EXTEfx.AL_LOWPASS_GAINHF,
                     Math.max(0.0f, Math.min(1.0f, s.currentFilterGainHF)));
+<<<<<<< ours
             // Re-bind filter to source — OpenAL requires re-binding after parameter changes
             AL11.alSourcei(s.sourceId, EXTEfx.AL_DIRECT_FILTER, s.filterId);
 
@@ -429,6 +512,17 @@ public final class ExcitationSourceManager {
                 ExcitationType.WATER, ExcitationType.LAVA}) {
             ExcitationSource s = sources[type.ordinal()];
             s.targetGain = 0.0f;
+=======
+            AL11.alSourcei(s.sourceId, EXTEfx.AL_DIRECT_FILTER, s.filterId);
+        }
+    }
+
+    private void silenceAll() {
+        for (ExcitationSource s : sources) {
+            s.currentGain *= (1.0f - SMOOTH);
+            if (s.currentGain < SILENCE) s.currentGain = 0.0f;
+            AL10.alSourcef(s.sourceId, AL10.AL_GAIN, s.currentGain);
+>>>>>>> theirs
         }
     }
 
@@ -454,6 +548,7 @@ public final class ExcitationSourceManager {
         float scatter = profile.scatteringDensity();
 
         if (enclosure > 0.7f && scatter < 0.3f) {
+<<<<<<< ours
             // Channeled wind (tunnels, corridors) — darker, more resonant
             s.targetFilterGain = 0.8f;
             s.targetFilterGainHF = 0.3f;
@@ -465,6 +560,19 @@ public final class ExcitationSourceManager {
             // Open wind — full character
             s.targetFilterGain = 0.9f;
             s.targetFilterGainHF = 0.8f;
+=======
+            // Channeled wind (tunnels, corridors)
+            s.targetFilterGain = 0.8f;
+            s.targetFilterGainHF = 0.3f;
+        } else if (enclosure > 0.4f) {
+            // Draft (partial enclosure)
+            s.targetFilterGain = 0.6f;
+            s.targetFilterGainHF = 0.4f;
+        } else {
+            // Broadband open wind
+            s.targetFilterGain = 1.0f;
+            s.targetFilterGainHF = 0.6f;
+>>>>>>> theirs
         }
     }
 
@@ -491,12 +599,18 @@ public final class ExcitationSourceManager {
         s.targetY = (float) avg.y;
         s.targetZ = (float) avg.z;
 
+<<<<<<< ours
         // Leaf rustle: let the granular synthesis speak
         s.targetFilterGain = 0.8f;
         s.targetFilterGainHF = 0.7f;
 
         // Amplitude modulation: organic rustle character scales with wind
         s.modulationDepth = 0.4f * wind;
+=======
+        // Highpass-like: let HF through, attenuate broadband
+        s.targetFilterGain = 0.3f;
+        s.targetFilterGainHF = 1.0f;
+>>>>>>> theirs
     }
 
     // ── Grass ────────────────────────────────────────────────────────
@@ -520,9 +634,15 @@ public final class ExcitationSourceManager {
         s.targetY = (float) avg.y;
         s.targetZ = (float) avg.z;
 
+<<<<<<< ours
         // Grass swish: gentle, let synthesis character through
         s.targetFilterGain = 0.7f;
         s.targetFilterGainHF = 0.6f;
+=======
+        // Very high frequency — quiet overall, all HF
+        s.targetFilterGain = 0.15f;
+        s.targetFilterGainHF = 1.0f;
+>>>>>>> theirs
     }
 
     // ── Water ────────────────────────────────────────────────────────
@@ -537,17 +657,28 @@ public final class ExcitationSourceManager {
             return;
         }
 
+<<<<<<< ours
         // Self-excited — NOT wind-dependent, capped low
         float density = Math.min(waterCount / 8.0f, 1.0f);
         s.targetGain = density * 0.2f;
+=======
+        // Self-excited — NOT wind-dependent
+        float density = Math.min(waterCount / 8.0f, 1.0f);
+        s.targetGain = density;
+>>>>>>> theirs
 
         Vec3 avg = averagePositionOfMatchingTaps(taps, ExcitationSourceManager::isWaterBlock);
         s.targetX = (float) avg.x;
         s.targetY = (float) avg.y;
         s.targetZ = (float) avg.z;
 
+<<<<<<< ours
         // Water: let bubble synthesis speak, slight HF rolloff
         s.targetFilterGain = 0.8f;
+=======
+        // Broadband with moderate HF rolloff
+        s.targetFilterGain = 0.6f;
+>>>>>>> theirs
         s.targetFilterGainHF = 0.5f;
     }
 
@@ -563,18 +694,30 @@ public final class ExcitationSourceManager {
             return;
         }
 
+<<<<<<< ours
         // Self-excited — NOT wind-dependent, capped
         float density = Math.min(lavaCount / 6.0f, 1.0f);
         s.targetGain = density * 0.3f;
+=======
+        // Self-excited — NOT wind-dependent
+        float density = Math.min(lavaCount / 6.0f, 1.0f);
+        s.targetGain = density;
+>>>>>>> theirs
 
         Vec3 avg = averagePositionOfMatchingTaps(taps, ExcitationSourceManager::isLavaBlock);
         s.targetX = (float) avg.x;
         s.targetY = (float) avg.y;
         s.targetZ = (float) avg.z;
 
+<<<<<<< ours
         // Lava: let deep synthesis speak
         s.targetFilterGain = 0.9f;
         s.targetFilterGainHF = 0.4f;
+=======
+        // Low rumble
+        s.targetFilterGain = 0.8f;
+        s.targetFilterGainHF = 0.1f;
+>>>>>>> theirs
     }
 
     // ── Material checks ──────────────────────────────────────────────

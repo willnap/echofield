@@ -12,7 +12,10 @@ public final class ExcitationSource {
     // OpenAL resource handles (set once at construction, freed at shutdown)
     int sourceId;
     int filterId;
+<<<<<<< ours
     int[] sendFilterIds = new int[4]; // per-source aux send filters (avoids shared filter conflicts)
+=======
+>>>>>>> theirs
 
     // Current interpolated values (applied to OpenAL each tick)
     float currentGain;
@@ -26,10 +29,13 @@ public final class ExcitationSource {
     float targetFilterGain;
     float targetFilterGainHF;
 
+<<<<<<< ours
     // Amplitude modulation for transient character (foliage rustle)
     float modulationDepth;
     float modulationPhase;
 
+=======
+>>>>>>> theirs
     ExcitationSource(ExcitationType type) {
         this.type = type;
     }
