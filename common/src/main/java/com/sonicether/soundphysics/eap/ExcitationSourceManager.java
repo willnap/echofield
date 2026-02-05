@@ -14,8 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 <<<<<<< ours
+<<<<<<< ours
 import java.util.concurrent.ThreadLocalRandom;
 =======
+>>>>>>> theirs
+=======
+import java.util.concurrent.ThreadLocalRandom;
 >>>>>>> theirs
 
 /**
@@ -30,11 +34,16 @@ import java.util.concurrent.ThreadLocalRandom;
 public final class ExcitationSourceManager {
 
 <<<<<<< ours
+<<<<<<< ours
     /** Length of the shared noise buffer in samples (mono, 44100 Hz, 2 seconds). */
     private static final int NOISE_SAMPLES = 88200; // 2 seconds at 44.1 kHz — long enough to avoid audible looping
 =======
     /** Length of the shared noise buffer in samples (mono, 44100 Hz). */
     private static final int NOISE_SAMPLES = 44100; // 1 second at 44.1 kHz
+>>>>>>> theirs
+=======
+    /** Length of the shared noise buffer in samples (mono, 44100 Hz, 2 seconds). */
+    private static final int NOISE_SAMPLES = 88200; // 2 seconds at 44.1 kHz — long enough to avoid audible looping
 >>>>>>> theirs
     private static final int SAMPLE_RATE = 44100;
 
@@ -55,7 +64,11 @@ public final class ExcitationSourceManager {
     private int noiseBuffer;
 
     private float masterGain = 1.0f;
+<<<<<<< ours
     private float excitationVolume = 1.0f;
+>>>>>>> theirs
+=======
+    private float excitationVolume = 0.2f;
 >>>>>>> theirs
     private boolean enabled = true;
     private double playerX, playerY, playerZ;
@@ -352,6 +365,7 @@ public final class ExcitationSourceManager {
         for (ExcitationSource s : sources) {
             AL10.alSourceStop(s.sourceId);
 <<<<<<< ours
+<<<<<<< ours
             AL10.alSourcei(s.sourceId, AL10.AL_BUFFER, 0);
             AL10.alDeleteSources(s.sourceId);
             EXTEfx.alDeleteFilters(s.filterId);
@@ -363,6 +377,9 @@ public final class ExcitationSourceManager {
             if (buf != 0) AL10.alDeleteBuffers(buf);
         }
 =======
+=======
+            AL10.alSourcei(s.sourceId, AL10.AL_BUFFER, 0); // Unbind before delete to free buffer refcount
+>>>>>>> theirs
             AL10.alDeleteSources(s.sourceId);
             EXTEfx.alDeleteFilters(s.filterId);
         }
@@ -413,9 +430,13 @@ public final class ExcitationSourceManager {
      */
     public void update(EnvironmentProfile profile) {
 <<<<<<< ours
+<<<<<<< ours
         if (profile == null || !enabled) {
 =======
         if (!enabled) {
+>>>>>>> theirs
+=======
+        if (profile == null || !enabled) {
 >>>>>>> theirs
             silenceAll();
             return;
@@ -456,6 +477,9 @@ public final class ExcitationSourceManager {
             }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
             // Apply amplitude modulation if depth > 0 (foliage rustle per spec)
             float appliedGain = s.currentGain;
             if (s.modulationDepth > 0.001f) {
@@ -465,11 +489,16 @@ public final class ExcitationSourceManager {
                 appliedGain *= Math.max(0.0f, mod);
             }
 
+<<<<<<< ours
             // Apply to OpenAL
             AL10.alSourcef(s.sourceId, AL10.AL_GAIN, appliedGain);
 =======
             // Apply to OpenAL
             AL10.alSourcef(s.sourceId, AL10.AL_GAIN, s.currentGain);
+>>>>>>> theirs
+=======
+            // Apply to OpenAL
+            AL10.alSourcef(s.sourceId, AL10.AL_GAIN, appliedGain);
 >>>>>>> theirs
             AL10.alSource3f(s.sourceId, AL10.AL_POSITION,
                     s.currentX, s.currentY, s.currentZ);
@@ -514,11 +543,20 @@ public final class ExcitationSourceManager {
             s.targetGain = 0.0f;
 =======
             AL11.alSourcei(s.sourceId, EXTEfx.AL_DIRECT_FILTER, s.filterId);
+
+            // Safety: ensure source is still playing (could be stopped by OpenAL error)
+            int state = AL10.alGetSourcei(s.sourceId, AL10.AL_SOURCE_STATE);
+            if (state != AL10.AL_PLAYING) {
+                Loggers.log("ExcitationSourceManager: Source {} not playing (state={}), restarting",
+                        s.type, state);
+                AL10.alSourcePlay(s.sourceId);
+            }
         }
     }
 
     private void silenceAll() {
         for (ExcitationSource s : sources) {
+            s.targetGain = 0.0f;
             s.currentGain *= (1.0f - SMOOTH);
             if (s.currentGain < SILENCE) s.currentGain = 0.0f;
             AL10.alSourcef(s.sourceId, AL10.AL_GAIN, s.currentGain);
@@ -610,6 +648,12 @@ public final class ExcitationSourceManager {
         // Highpass-like: let HF through, attenuate broadband
         s.targetFilterGain = 0.3f;
         s.targetFilterGainHF = 1.0f;
+<<<<<<< ours
+>>>>>>> theirs
+=======
+
+        // Amplitude modulation: organic rustle character scales with wind
+        s.modulationDepth = 0.4f * wind;
 >>>>>>> theirs
     }
 

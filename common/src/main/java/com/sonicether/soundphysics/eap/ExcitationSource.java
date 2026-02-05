@@ -30,10 +30,16 @@ public final class ExcitationSource {
     float targetFilterGainHF;
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     // Amplitude modulation for transient character (foliage rustle)
     float modulationDepth;
     float modulationPhase;
 
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
     ExcitationSource(ExcitationType type) {
