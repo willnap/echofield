@@ -4,6 +4,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
+import com.sonicether.soundphysics.eap.EapSystem;
+import com.sonicether.soundphysics.eap.EnvironmentProfile;
 import com.sonicether.soundphysics.utils.RaycastUtils;
 import com.sonicether.soundphysics.utils.SoundRateManager;
 import net.minecraft.resources.Identifier;
@@ -626,32 +628,58 @@ public class SoundPhysics {
         if (!SoundPhysicsMod.CONFIG.enabled.get()) {
             return;
         }
+
+        // EAP reverb blending: modulate send gains based on environment profile
+        float sg0 = sendGain0, sg1 = sendGain1, sg2 = sendGain2, sg3 = sendGain3;
+        float sc0 = sendCutoff0, sc1 = sendCutoff1, sc2 = sendCutoff2, sc3 = sendCutoff3;
+
+        if (SoundPhysicsMod.EAP_CONFIG != null && SoundPhysicsMod.EAP_CONFIG.eapEnabled.get()) {
+            EapSystem eap = EapSystem.getInstanceOrNull();
+            if (eap != null) {
+                EnvironmentProfile profile = eap.getProfiler().getCurrentProfile();
+                float rt60 = profile.estimatedRT60();
+                float enclosure = profile.enclosureFactor();
+
+                // Boost late reverb sends in enclosed spaces with longer RT60
+                // Scale factor: 1.0 in open space, up to 1.5 in highly enclosed spaces
+                float reverbBoost = 1.0f + 0.5f * enclosure * Math.min(rt60 / 2.0f, 1.0f);
+
+                // Apply the boost to the later reverb sends (slots 2 and 3)
+                sg2 *= reverbBoost;
+                sg3 *= reverbBoost;
+
+                // Clamp to [0, 1]
+                sg2 = Math.min(sg2, 1.0f);
+                sg3 = Math.min(sg3, 1.0f);
+            }
+        }
+
         // Set reverb send filter values and set source to send to all reverb fx slots
 
         if (maxAuxSends >= 4) {
-            EXTEfx.alFilterf(sendFilter0, EXTEfx.AL_LOWPASS_GAIN, sendGain0);
-            EXTEfx.alFilterf(sendFilter0, EXTEfx.AL_LOWPASS_GAINHF, sendCutoff0);
+            EXTEfx.alFilterf(sendFilter0, EXTEfx.AL_LOWPASS_GAIN, sg0);
+            EXTEfx.alFilterf(sendFilter0, EXTEfx.AL_LOWPASS_GAINHF, sc0);
             AL11.alSource3i(sourceID, EXTEfx.AL_AUXILIARY_SEND_FILTER, auxFXSlot0, 3, sendFilter0);
             Loggers.logALError("Set environment filter0:");
         }
 
         if (maxAuxSends >= 3) {
-            EXTEfx.alFilterf(sendFilter1, EXTEfx.AL_LOWPASS_GAIN, sendGain1);
-            EXTEfx.alFilterf(sendFilter1, EXTEfx.AL_LOWPASS_GAINHF, sendCutoff1);
+            EXTEfx.alFilterf(sendFilter1, EXTEfx.AL_LOWPASS_GAIN, sg1);
+            EXTEfx.alFilterf(sendFilter1, EXTEfx.AL_LOWPASS_GAINHF, sc1);
             AL11.alSource3i(sourceID, EXTEfx.AL_AUXILIARY_SEND_FILTER, auxFXSlot1, 2, sendFilter1);
             Loggers.logALError("Set environment filter1:");
         }
 
         if (maxAuxSends >= 2) {
-            EXTEfx.alFilterf(sendFilter2, EXTEfx.AL_LOWPASS_GAIN, sendGain2);
-            EXTEfx.alFilterf(sendFilter2, EXTEfx.AL_LOWPASS_GAINHF, sendCutoff2);
+            EXTEfx.alFilterf(sendFilter2, EXTEfx.AL_LOWPASS_GAIN, sg2);
+            EXTEfx.alFilterf(sendFilter2, EXTEfx.AL_LOWPASS_GAINHF, sc2);
             AL11.alSource3i(sourceID, EXTEfx.AL_AUXILIARY_SEND_FILTER, auxFXSlot2, 1, sendFilter2);
             Loggers.logALError("Set environment filter2:");
         }
 
         if (maxAuxSends >= 1) {
-            EXTEfx.alFilterf(sendFilter3, EXTEfx.AL_LOWPASS_GAIN, sendGain3);
-            EXTEfx.alFilterf(sendFilter3, EXTEfx.AL_LOWPASS_GAINHF, sendCutoff3);
+            EXTEfx.alFilterf(sendFilter3, EXTEfx.AL_LOWPASS_GAIN, sg3);
+            EXTEfx.alFilterf(sendFilter3, EXTEfx.AL_LOWPASS_GAINHF, sc3);
             AL11.alSource3i(sourceID, EXTEfx.AL_AUXILIARY_SEND_FILTER, auxFXSlot3, 0, sendFilter3);
             Loggers.logALError("Set environment filter3:");
         }

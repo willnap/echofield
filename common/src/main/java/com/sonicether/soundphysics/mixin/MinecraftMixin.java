@@ -1,5 +1,6 @@
 package com.sonicether.soundphysics.mixin;
 
+import com.sonicether.soundphysics.eap.EapSystem;
 import com.sonicether.soundphysics.utils.LevelAccessUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -32,12 +33,22 @@ public class MinecraftMixin {
         if (player != null) {
             LevelAccessUtils.onLoadLevel(clientLevel);
         }
+        // Notify EAP system of level change
+        EapSystem eap = EapSystem.getInstanceOrNull();
+        if (eap != null) {
+            eap.onLevelChange();
+        }
     }
 
     @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;Z)V", at = @At("HEAD"))
     private void disconnect(Screen screen, boolean bl, CallbackInfo ci) {
         if (level != null) {
             LevelAccessUtils.onUnloadLevel(level);
+        }
+        // Notify EAP system of disconnect
+        EapSystem eap = EapSystem.getInstanceOrNull();
+        if (eap != null) {
+            eap.onLevelChange();
         }
     }
 

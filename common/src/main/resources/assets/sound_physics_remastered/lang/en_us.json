@@ -77,5 +77,26 @@
   "cloth_config.sound_physics_remastered.render_sound_bounces": "Render sound bounces",
   "cloth_config.sound_physics_remastered.render_sound_bounces.description": "If enabled, the path of the sound will be rendered in game.",
   "cloth_config.sound_physics_remastered.render_occlusion": "Render occlusion",
-  "cloth_config.sound_physics_remastered.render_occlusion.description": "If enabled, occlusion will be visualized in game."
+  "cloth_config.sound_physics_remastered.render_occlusion.description": "If enabled, occlusion will be visualized in game.",
+
+  "cloth_config.sound_physics_remastered.category.eap": "Environmental Audio Processing",
+
+  "cloth_config.sound_physics_remastered.eap_enabled": "Enable EAP",
+  "cloth_config.sound_physics_remastered.eap_enabled.description": "Enables/Disables the Environmental Audio Processing system, which adds ambient environmental sounds and early reflections.",
+  "cloth_config.sound_physics_remastered.eap_master_volume": "EAP master volume",
+  "cloth_config.sound_physics_remastered.eap_master_volume.description": "Master volume for all EAP audio sources, including excitation and early reflections.",
+  "cloth_config.sound_physics_remastered.excitation_volume": "Excitation volume",
+  "cloth_config.sound_physics_remastered.excitation_volume.description": "Volume of environmental excitation sources such as wind, water, foliage, and lava.",
+  "cloth_config.sound_physics_remastered.early_reflection_intensity": "Early reflection intensity",
+  "cloth_config.sound_physics_remastered.early_reflection_intensity.description": "Intensity of early reflections applied to game sounds based on the environment.",
+  "cloth_config.sound_physics_remastered.eap_ray_count": "EAP ray count",
+  "cloth_config.sound_physics_remastered.eap_ray_count.description": "Number of rays per profiling cycle. Snapped to 64, 96, or 128. Higher values provide more accurate environmental profiling.",
+  "cloth_config.sound_physics_remastered.eap_rays_per_tick": "EAP rays per tick",
+  "cloth_config.sound_physics_remastered.eap_rays_per_tick.description": "Number of rays cast per tick during environment profiling. Higher values complete cycles faster but use more CPU.",
+  "cloth_config.sound_physics_remastered.eap_debug_overlay": "EAP debug overlay",
+  "cloth_config.sound_physics_remastered.eap_debug_overlay.description": "Show EAP debug overlay with source state and environment information.",
+  "cloth_config.sound_physics_remastered.eap_debug_rays": "EAP debug rays",
+  "cloth_config.sound_physics_remastered.eap_debug_rays.description": "Render EAP profiling rays and source positions in the world.",
+  "cloth_config.sound_physics_remastered.eap_diagnostic_logging": "EAP diagnostic logging",
+  "cloth_config.sound_physics_remastered.eap_diagnostic_logging.description": "Enable detailed EAP diagnostic logging to the console every 5 seconds."
 }

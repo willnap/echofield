@@ -17,7 +17,11 @@ import java.util.List;
  */
 public final class AudioDiagnostics {
 
+<<<<<<< ours
     private static final Logger LOGGER = LogManager.getLogger("EchoField - EAP Diagnostics");
+=======
+    private static final Logger LOGGER = LogManager.getLogger("Sound Physics - EAP Diagnostics");
+>>>>>>> theirs
 
     private AudioDiagnostics() {
     }
@@ -32,11 +36,17 @@ public final class AudioDiagnostics {
         int state = AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_STATE);
         float gain = AL10.alGetSourcef(sourceId, AL10.AL_GAIN);
         int buffer = AL10.alGetSourcei(sourceId, AL10.AL_BUFFER);
+<<<<<<< ours
         float[] pos = new float[3];
         AL10.alGetSourcefv(sourceId, AL10.AL_POSITION, pos);
         float posX = pos[0];
         float posY = pos[1];
         float posZ = pos[2];
+=======
+        float posX = AL10.alGetSourcef(sourceId, AL10.AL_POSITION);
+        float posY = AL10.alGetSourcef(sourceId, AL10.AL_POSITION + 1);
+        float posZ = AL10.alGetSourcef(sourceId, AL10.AL_POSITION + 2);
+>>>>>>> theirs
 
         String stateName = switch (state) {
             case AL10.AL_INITIAL -> "INITIAL";

@@ -1,10 +1,14 @@
 package com.sonicether.soundphysics.eap;
 
+<<<<<<< ours
 import com.sonicether.soundphysics.eap.emitter.EmitterCategory;
+=======
+>>>>>>> theirs
 import de.maxhenkel.configbuilder.ConfigBuilder;
 import de.maxhenkel.configbuilder.entry.ConfigEntry;
 
 /**
+<<<<<<< ours
  * Configuration for EchoField. Accessible via Cloth Config GUI.
  * Settings correspond to spec section 8.5.
  */
@@ -214,4 +218,69 @@ public class EapConfig {
             case LAVA -> excitationLava.get();
         };
     }
+=======
+ * Configuration for the Environmental Audio Processing (EAP) system.
+ * Built using the same ConfigBuilder pattern as SoundPhysicsConfig.
+ */
+public class EapConfig {
+
+    public final ConfigEntry<Boolean> eapEnabled;
+    public final ConfigEntry<Float> eapMasterVolume;
+    public final ConfigEntry<Float> excitationVolume;
+    public final ConfigEntry<Float> earlyReflectionIntensity;
+    public final ConfigEntry<Integer> rayCount;
+    public final ConfigEntry<Integer> raysPerTick;
+    public final ConfigEntry<Boolean> debugOverlay;
+    public final ConfigEntry<Boolean> debugRays;
+    public final ConfigEntry<Boolean> diagnosticLogging;
+
+    public EapConfig(ConfigBuilder builder) {
+        eapEnabled = builder.booleanEntry("eap_enabled", true)
+                .comment("Enables/Disables the Environmental Audio Processing system");
+
+        eapMasterVolume = builder.floatEntry("eap_master_volume", 0.15f, 0f, 1f)
+                .comment("Master volume for all EAP audio sources");
+
+        excitationVolume = builder.floatEntry("excitation_volume", 0.2f, 0f, 1f)
+                .comment("Volume of environmental excitation sources (wind, water, foliage, etc.)");
+
+        earlyReflectionIntensity = builder.floatEntry("early_reflection_intensity", 0.3f, 0f, 1f)
+                .comment("Intensity of early reflections applied to game sounds");
+
+        rayCount = builder.integerEntry("ray_count", 128, 64, 128)
+                .comment(
+                        "Number of rays per profiling cycle",
+                        "Snapped to 64, 96, or 128"
+                );
+
+        raysPerTick = builder.integerEntry("rays_per_tick", 8, 4, 16)
+                .comment("Number of rays cast per tick during environment profiling");
+
+        debugOverlay = builder.booleanEntry("debug_overlay", false)
+                .comment("Show EAP debug overlay with source state and environment info");
+
+        debugRays = builder.booleanEntry("debug_rays", false)
+                .comment("Render EAP profiling rays in the world");
+
+        diagnosticLogging = builder.booleanEntry("diagnostic_logging", false)
+                .comment("Enable detailed EAP diagnostic logging to the console");
+    }
+
+    /**
+     * Snaps the configured ray count to one of three allowed values: 64, 96, or 128.
+     *
+     * @return 64 if rayCount &lt;= 80, 96 if rayCount &lt;= 112, otherwise 128
+     */
+    public int getSnappedRayCount() {
+        int raw = rayCount.get();
+        if (raw <= 80) {
+            return 64;
+        } else if (raw <= 112) {
+            return 96;
+        } else {
+            return 128;
+        }
+    }
+
+>>>>>>> theirs
 }

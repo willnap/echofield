@@ -224,12 +224,66 @@ public class ClothConfigIntegration {
                 SoundPhysicsMod.CONFIG.renderOcclusion
         ));
 
+        // EAP category
+        if (SoundPhysicsMod.EAP_CONFIG != null) {
+            ConfigCategory eap = builder.getOrCreateCategory(Component.translatable("cloth_config.sound_physics_remastered.category.eap"));
+
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_enabled"),
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_enabled.description"),
+                    SoundPhysicsMod.EAP_CONFIG.eapEnabled
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_master_volume"),
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_master_volume.description"),
+                    SoundPhysicsMod.EAP_CONFIG.eapMasterVolume
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_volume"),
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_volume.description"),
+                    SoundPhysicsMod.EAP_CONFIG.excitationVolume
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.early_reflection_intensity"),
+                    Component.translatable("cloth_config.sound_physics_remastered.early_reflection_intensity.description"),
+                    SoundPhysicsMod.EAP_CONFIG.earlyReflectionIntensity
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_ray_count"),
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_ray_count.description"),
+                    SoundPhysicsMod.EAP_CONFIG.rayCount
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_rays_per_tick"),
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_rays_per_tick.description"),
+                    SoundPhysicsMod.EAP_CONFIG.raysPerTick
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_debug_overlay"),
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_debug_overlay.description"),
+                    SoundPhysicsMod.EAP_CONFIG.debugOverlay
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_debug_rays"),
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_debug_rays.description"),
+                    SoundPhysicsMod.EAP_CONFIG.debugRays
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_diagnostic_logging"),
+                    Component.translatable("cloth_config.sound_physics_remastered.eap_diagnostic_logging.description"),
+                    SoundPhysicsMod.EAP_CONFIG.diagnosticLogging
+            ));
+        }
+
         builder.setSavingRunnable(() -> {
             Loggers.log("Saving configs");
             SoundPhysicsMod.CONFIG.enabled.save();
             SoundPhysicsMod.REFLECTIVITY_CONFIG.save();
             SoundPhysicsMod.OCCLUSION_CONFIG.save();
             SoundPhysicsMod.SOUND_RATE_CONFIG.save();
+            if (SoundPhysicsMod.EAP_CONFIG != null) {
+                SoundPhysicsMod.EAP_CONFIG.eapEnabled.save();
+            }
             SoundPhysicsMod.CONFIG.reloadClient();
         });
 

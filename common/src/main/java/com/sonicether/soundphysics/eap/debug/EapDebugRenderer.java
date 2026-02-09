@@ -1,6 +1,7 @@
 package com.sonicether.soundphysics.eap.debug;
 
 import com.sonicether.soundphysics.SoundPhysicsMod;
+<<<<<<< ours
 import com.sonicether.soundphysics.eap.EapSystem;
 import com.sonicether.soundphysics.eap.EarlyReflectionProcessor;
 import com.sonicether.soundphysics.eap.EnvironmentProfile;
@@ -19,6 +20,12 @@ import com.sonicether.soundphysics.eap.hyperreality.TerrainFeatureType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+=======
+import com.sonicether.soundphysics.eap.EnvironmentProfile;
+import com.sonicether.soundphysics.eap.ExcitationSourceManager;
+import com.sonicether.soundphysics.eap.ReflectionTap;
+import net.minecraft.client.Minecraft;
+>>>>>>> theirs
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.debug.DebugRenderer;
 import net.minecraft.gizmos.GizmoProperties;
@@ -50,6 +57,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     private static final int COLOR_TAP = 0xFFFFD700;       // Gold
     private static final int COLOR_TAP_DIM = 0xFFB8860B;   // Dark goldenrod
 
+<<<<<<< ours
     // Emitter category colors
     private static final int COLOR_EMITTER_WIND = 0xFF87CEEB;    // Sky blue
     private static final int COLOR_EMITTER_WATER = 0xFF4169E1;   // Royal blue
@@ -63,6 +71,10 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     private volatile EmitterManager emitterManagerRef;
     private volatile HyperrealitySystem hyperrealityRef;
     private volatile EnvironmentConditions conditionsRef;
+=======
+    private volatile ExcitationSourceManager excitationRef;
+    private volatile EnvironmentProfile profileRef;
+>>>>>>> theirs
 
     public void setExcitationManager(ExcitationSourceManager manager) {
         this.excitationRef = manager;
@@ -72,6 +84,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         this.profileRef = profile;
     }
 
+<<<<<<< ours
     public void setEmitterManager(EmitterManager manager) {
         this.emitterManagerRef = manager;
     }
@@ -84,6 +97,8 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         this.conditionsRef = conditions;
     }
 
+=======
+>>>>>>> theirs
     @Override
     public void emitGizmos(double camX, double camY, double camZ,
                            DebugValueAccess debugValueAccess, Frustum frustum, float partialTick) {
@@ -97,8 +112,11 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
 
         renderExcitationSources(camX, camY, camZ);
         renderReflectionTaps(camX, camY, camZ);
+<<<<<<< ours
         renderEmitterMarkers(camX, camY, camZ);
         renderHyperrealityFeatures(camX, camY, camZ);
+=======
+>>>>>>> theirs
     }
 
     private void renderExcitationSources(double camX, double camY, double camZ) {
@@ -164,6 +182,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         };
     }
 
+<<<<<<< ours
     // ── Emitter markers ────────────────────────────────────────────────
 
     /**
@@ -323,4 +342,6 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         }
     }
 
+=======
+>>>>>>> theirs
 }

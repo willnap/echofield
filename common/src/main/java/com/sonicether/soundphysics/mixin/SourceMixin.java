@@ -4,6 +4,7 @@ import com.mojang.blaze3d.audio.Channel;
 import com.sonicether.soundphysics.Loggers;
 import com.sonicether.soundphysics.SoundPhysics;
 import com.sonicether.soundphysics.SoundPhysicsMod;
+import com.sonicether.soundphysics.eap.EapSystem;
 import net.minecraft.world.phys.Vec3;
 import org.lwjgl.openal.AL10;
 import org.spongepowered.asm.mixin.Final;
@@ -37,6 +38,12 @@ public class SourceMixin {
         }
         SoundPhysics.onPlaySound(pos.x, pos.y, pos.z, source);
         Loggers.logALError("Sound play injector");
+
+        // EAP early reflection hook
+        EapSystem eap = EapSystem.getInstanceOrNull();
+        if (eap != null) {
+            eap.onSoundPlay(source, pos);
+        }
     }
 
     @ModifyVariable(method = "linearAttenuation", at = @At("HEAD"), ordinal = 0, argsOnly = true)

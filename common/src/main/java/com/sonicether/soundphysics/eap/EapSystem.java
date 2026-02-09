@@ -1,11 +1,15 @@
 package com.sonicether.soundphysics.eap;
 
 import com.sonicether.soundphysics.Loggers;
+<<<<<<< ours
 import com.sonicether.soundphysics.SoundPhysics;
+=======
+>>>>>>> theirs
 import com.sonicether.soundphysics.SoundPhysicsMod;
 import com.sonicether.soundphysics.eap.debug.AudioDiagnostics;
 import com.sonicether.soundphysics.eap.debug.AudioEnergyMeter;
 import com.sonicether.soundphysics.eap.debug.EapDebugRenderer;
+<<<<<<< ours
 import com.sonicether.soundphysics.eap.emitter.EmitterManager;
 import com.sonicether.soundphysics.eap.emitter.EnvironmentConditions;
 import com.sonicether.soundphysics.eap.install.InstallationManager;
@@ -14,12 +18,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import java.util.List;
+=======
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.phys.Vec3;
+>>>>>>> theirs
 
 /**
  * Top-level coordinator for the Environmental Audio Processing (EAP) system.
  * Manages the lifecycle of the EnvironmentProfiler, ExcitationSourceManager,
  * and EarlyReflectionProcessor. Called from Fabric mod initialization and
  * mixin hooks.
+<<<<<<< ours
  *
  * <p><strong>Thread model:</strong> In Minecraft Fabric 1.21.x, both the
  * {@code END_CLIENT_TICK} event and {@code Channel.play()} (where SourceMixin
@@ -40,11 +49,18 @@ public final class EapSystem {
 
     private static volatile EapSystem instance;
     private static volatile boolean soundEngineReady = false;
+=======
+ */
+public final class EapSystem {
+
+    private static EapSystem instance;
+>>>>>>> theirs
 
     private final EnvironmentProfiler profiler;
     private final ExcitationSourceManager excitation;
     private final EarlyReflectionProcessor reflections;
     private final EapDebugRenderer debugRenderer;
+<<<<<<< ours
     private final HrtfManager hrtfManager;
     private final PerSourceDRProcessor drProcessor;
     private final EmitterManager emitterManager;
@@ -63,6 +79,11 @@ public final class EapSystem {
 
     // Last-computed reverb parameters for diagnostic access (test mode)
     private volatile String lastReverbParamsJson = "{}";
+=======
+
+    private boolean initialized = false;
+    private int diagnosticTickCounter = 0;
+>>>>>>> theirs
 
     private EapSystem() {
         EapConfig config = SoundPhysicsMod.EAP_CONFIG;
@@ -77,6 +98,7 @@ public final class EapSystem {
         this.excitation = new ExcitationSourceManager();
         this.reflections = new EarlyReflectionProcessor();
         this.debugRenderer = new EapDebugRenderer();
+<<<<<<< ours
         this.energyMeter = new AudioEnergyMeter();
         this.hrtfManager = new HrtfManager();
         this.drProcessor = new PerSourceDRProcessor();
@@ -85,6 +107,8 @@ public final class EapSystem {
         this.airAbsorption = new AirAbsorptionProcessor();
         this.hyperreality = new HyperrealitySystem();
         this.installation = new InstallationManager();
+=======
+>>>>>>> theirs
 
         // Apply initial config values
         excitation.setMasterGain(config.eapMasterVolume.get());
@@ -94,6 +118,7 @@ public final class EapSystem {
 
         initialized = true;
         Loggers.log("EapSystem: initialized (rays={}, raysPerTick={})", snappedRays, rpt);
+<<<<<<< ours
 
         // Verify HRTF status — FATAL if not active
         long device = org.lwjgl.openal.ALC10.alcGetContextsDevice(
@@ -107,6 +132,8 @@ public final class EapSystem {
         org.lwjgl.openal.AL10.alDopplerFactor(1.0f);
         org.lwjgl.openal.AL11.alSpeedOfSound(343.0f);
         Loggers.log("EapSystem: Doppler configured (factor=1.0, speed=343 blocks/s)");
+=======
+>>>>>>> theirs
     }
 
     // ── Singleton access ────────────────────────────────────────────
@@ -115,7 +142,11 @@ public final class EapSystem {
      * Returns the singleton instance, creating it if necessary.
      * Must be called after SoundPhysicsMod.initClient() has run.
      */
+<<<<<<< ours
     public static synchronized EapSystem getInstance() {
+=======
+    public static EapSystem getInstance() {
+>>>>>>> theirs
         if (instance == null) {
             instance = new EapSystem();
         }
@@ -142,6 +173,7 @@ public final class EapSystem {
         }
 
         EapConfig config = SoundPhysicsMod.EAP_CONFIG;
+<<<<<<< ours
         if (config == null || !config.eapEnabled.get() || !SoundPhysicsMod.CONFIG.enabled.get()
                 || compareMode == CompareMode.VANILLA || minecraft.isPaused()) {
             excitation.setEnabled(false);
@@ -157,15 +189,24 @@ public final class EapSystem {
         if (!hrtfManager.isHrtfActive()) {
             excitation.setEnabled(false);
             excitation.silenceAll();
+=======
+        if (config == null || !config.eapEnabled.get()) {
+            excitation.setEnabled(false);
+>>>>>>> theirs
             reflections.muteAll();
             return;
         }
 
+<<<<<<< ours
+=======
+        excitation.setEnabled(true);
+>>>>>>> theirs
         reflections.unmuteAll();
 
         // Sync config values each tick (cheap reads)
         excitation.setMasterGain(config.eapMasterVolume.get());
         excitation.setExcitationVolume(config.excitationVolume.get());
+<<<<<<< ours
         for (ExcitationType t : ExcitationType.values()) {
             excitation.setTypeEnabled(t, config.isExcitationEnabled(t));
         }
@@ -177,6 +218,10 @@ public final class EapSystem {
         // Tick installation manager
         installation.setActive(config.installationMode.get());
         installation.tick(minecraft);
+=======
+        reflections.setMasterGain(config.eapMasterVolume.get());
+        reflections.setReflectionIntensity(config.earlyReflectionIntensity.get());
+>>>>>>> theirs
 
         // Update ray config if changed
         int snappedRays = config.getSnappedRayCount();
@@ -192,6 +237,7 @@ public final class EapSystem {
         Vec3 currentPos = minecraft.player.position();
         long currentTick = minecraft.level.getGameTime();
 
+<<<<<<< ours
         // B2: Teleportation detection — invalidate profiler and emitters on large position jumps
         if (lastPlayerPos != null && lastPlayerPos.distanceTo(currentPos) > 32.0) {
             Loggers.log("EapSystem: teleportation detected ({}m), invalidating profiler + emitters + hyperreality",
@@ -219,6 +265,8 @@ public final class EapSystem {
         boolean underwater = minecraft.player.isUnderWater();
         excitation.setEnabled(!underwater);
 
+=======
+>>>>>>> theirs
         // Update player position for excitation source positioning
         excitation.setPlayerPosition(currentPos.x, currentPos.y, currentPos.z);
 
@@ -228,6 +276,7 @@ public final class EapSystem {
         // Get the current profile (with crossfade)
         EnvironmentProfile profile = profiler.getCurrentProfile(currentTick);
 
+<<<<<<< ours
         // Update excitation sources from profile.
         // When Layer 1 (emitter system) is active, silence the 4 categories that
         // overlap with EmitterManager to prevent double audio and wasted sources.
@@ -279,10 +328,15 @@ public final class EapSystem {
 
         // Route excitation sources through SPR's reverb system
         applyReverbToExcitationSources(profile);
+=======
+        // Update excitation sources from profile
+        excitation.update(profile);
+>>>>>>> theirs
 
         // Tick early reflections (fires pending delayed plays, recycles slots)
         reflections.tick(currentTick);
 
+<<<<<<< ours
         // Update energy meter
         energyMeter.computeTotalEnergy(excitation, reflections);
 
@@ -685,6 +739,25 @@ public final class EapSystem {
                 Math.max(0.0f, Math.min(1.0f, scatter * 1.2f + 0.3f)));
     }
 
+=======
+        // Update debug renderer references
+        debugRenderer.setExcitationManager(excitation);
+        debugRenderer.setCurrentProfile(profile);
+
+        // Diagnostic logging (every 100 ticks = 5 seconds)
+        if (config.diagnosticLogging.get()) {
+            diagnosticTickCounter++;
+            if (diagnosticTickCounter >= 100) {
+                diagnosticTickCounter = 0;
+                AudioDiagnostics.logAllEapSources(excitation, reflections);
+                AudioDiagnostics.logEnvironmentProfile(profile);
+            }
+        } else {
+            diagnosticTickCounter = 0;
+        }
+    }
+
+>>>>>>> theirs
     // ── Sound play hook ─────────────────────────────────────────────
 
     /**
@@ -730,11 +803,15 @@ public final class EapSystem {
 
         Loggers.log("EapSystem: level change detected, invalidating profiler");
         profiler.invalidate();
+<<<<<<< ours
         excitation.silenceAll();
         reflections.muteAll();
         emitterManager.silenceAll();
         hyperreality.silenceAll();
         hyperreality.forceRescan();
+=======
+        reflections.muteAll();
+>>>>>>> theirs
     }
 
     // ── Shutdown ────────────────────────────────────────────────────
@@ -750,13 +827,17 @@ public final class EapSystem {
         Loggers.log("EapSystem: shutting down");
         excitation.shutdown();
         reflections.shutdown();
+<<<<<<< ours
         drProcessor.shutdown();
         emitterManager.shutdown();
         hyperreality.shutdown();
+=======
+>>>>>>> theirs
         initialized = false;
         instance = null;
     }
 
+<<<<<<< ours
     // ── A/B/C Compare Toggle ──────────────────────────────────────
 
     /**
@@ -820,6 +901,8 @@ public final class EapSystem {
         return soundEngineReady;
     }
 
+=======
+>>>>>>> theirs
     // ── Accessors ───────────────────────────────────────────────────
 
     public EnvironmentProfiler getProfiler() {
@@ -838,6 +921,7 @@ public final class EapSystem {
         return debugRenderer;
     }
 
+<<<<<<< ours
     public HrtfManager getHrtfManager() {
         return hrtfManager;
     }
@@ -870,6 +954,8 @@ public final class EapSystem {
         return lastReverbParamsJson;
     }
 
+=======
+>>>>>>> theirs
     /**
      * Returns a debug HUD string with key EAP metrics.
      */
@@ -882,6 +968,7 @@ public final class EapSystem {
             return "EAP: disabled";
         }
 
+<<<<<<< ours
         if (compareMode == CompareMode.VANILLA) {
             return "EAP: " + CompareMode.VANILLA.label;
         }
@@ -928,6 +1015,17 @@ public final class EapSystem {
      */
     public AudioEnergyMeter getEnergyMeter() {
         return energyMeter;
+=======
+        EnvironmentProfile profile = profiler.getCurrentProfile();
+        float totalEnergy = AudioEnergyMeter.totalExcitationEnergy(excitation);
+        int activeSlots = reflections.getActiveSlotCount();
+        float cycleProgress = profiler.getCycleProgress();
+
+        return String.format("EAP: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d cycle=%.0f%%",
+                profile.enclosureFactor(), profile.estimatedRT60(), profile.windExposure(),
+                totalEnergy, activeSlots, EarlyReflectionProcessor.POOL_SIZE,
+                cycleProgress * 100f);
+>>>>>>> theirs
     }
 
 }

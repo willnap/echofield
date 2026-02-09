@@ -4,6 +4,7 @@ import com.sonicether.soundphysics.config.SoundRateConfig;
 import com.sonicether.soundphysics.config.OcclusionConfig;
 import com.sonicether.soundphysics.config.ReflectivityConfig;
 import com.sonicether.soundphysics.config.SoundPhysicsConfig;
+import com.sonicether.soundphysics.eap.EapConfig;
 import de.maxhenkel.configbuilder.ConfigBuilder;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public abstract class SoundPhysicsMod {
     public static ReflectivityConfig REFLECTIVITY_CONFIG;
     public static OcclusionConfig OCCLUSION_CONFIG;
     public static SoundRateConfig SOUND_RATE_CONFIG;
+    public static EapConfig EAP_CONFIG;
 
     public void init() {
         initConfig();
@@ -34,6 +36,7 @@ public abstract class SoundPhysicsMod {
         REFLECTIVITY_CONFIG = new ReflectivityConfig(getConfigFolder().resolve(MODID).resolve("reflectivity.properties"));
         OCCLUSION_CONFIG = new OcclusionConfig(getConfigFolder().resolve(MODID).resolve("occlusion.properties"));
         SOUND_RATE_CONFIG = new SoundRateConfig(getConfigFolder().resolve(MODID).resolve("sound_rates.properties"));
+        EAP_CONFIG = ConfigBuilder.builder(EapConfig::new).path(getConfigFolder().resolve(MODID).resolve("eap.properties")).build();
     }
 
     private void initConfig() {
