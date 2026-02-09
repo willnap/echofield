@@ -16,10 +16,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 <<<<<<< ours
+<<<<<<< ours
 =======
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 
 /**
@@ -29,6 +32,9 @@ import java.util.concurrent.TimeUnit;
  * and the current {@link EnvironmentProfile}. It sorts the profile's {@link ReflectionTap}s
  * by energy (descending) and assigns the top taps to pool slots. Each slot is positioned at
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
  * the tap's world-space location, gain-scaled by the tap's energy, and played after a delay
  * corresponding to the acoustic propagation time.
  *
@@ -36,9 +42,12 @@ import java.util.concurrent.TimeUnit;
  * because all OpenAL calls must be made from a thread with a current OpenAL context (LWJGL
  * binds ALCapabilities per thread). The tick() method checks pending plays each tick (~50ms
  * resolution), which is acceptable for environmental reflection delays.
+<<<<<<< ours
 =======
  * the tap's world-space location, gain-scaled by the tap's energy, and scheduled for delayed
  * playback matching the tap's acoustic delay.
+>>>>>>> theirs
+=======
 >>>>>>> theirs
  *
  * <p>A priority-stealing system allows high-energy taps to reclaim slots from weaker ones.
@@ -54,10 +63,16 @@ public final class EarlyReflectionProcessor {
     private static final int MAX_PLAYBACK_TICKS = 100;
 
 <<<<<<< ours
+<<<<<<< ours
     /** Minimum tap energy to allocate a pool slot. */
     private static final double ENERGY_THRESHOLD = 0.001;
 
 =======
+>>>>>>> theirs
+=======
+    /** Minimum tap energy to allocate a pool slot. */
+    private static final double ENERGY_THRESHOLD = 0.001;
+
 >>>>>>> theirs
     // ── Inner class ──────────────────────────────────────────────────
 
@@ -66,6 +81,9 @@ public final class EarlyReflectionProcessor {
         int sourceId;
         int filterId;
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         volatile double energy;
         volatile long playbackEndTick;
         volatile boolean inUse;
@@ -73,10 +91,13 @@ public final class EarlyReflectionProcessor {
         // Tick-based delayed playback: nanoTime at which alSourcePlay should be called.
         // -1 means no pending play (already playing or not configured).
         volatile long scheduledPlayNanos = -1;
+<<<<<<< ours
 =======
         double energy;
         long playbackEndTick;
         boolean inUse;
+>>>>>>> theirs
+=======
 >>>>>>> theirs
     }
 
@@ -84,17 +105,24 @@ public final class EarlyReflectionProcessor {
 
     private final ReflectionSlot[] slots;
 <<<<<<< ours
+<<<<<<< ours
 =======
     private final ScheduledExecutorService scheduler;
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 
     private float reflectionIntensity = 1.0f;
     private float masterGain = 1.0f;
     private boolean muted = false;
 <<<<<<< ours
+<<<<<<< ours
     private volatile boolean initialized = false;
 =======
     private boolean initialized = false;
+>>>>>>> theirs
+=======
+    private volatile boolean initialized = false;
 >>>>>>> theirs
 
     // ── Construction (Task 15) ───────────────────────────────────────
@@ -139,6 +167,7 @@ public final class EarlyReflectionProcessor {
         }
 
 <<<<<<< ours
+<<<<<<< ours
 =======
         scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r, "EarlyReflection-Scheduler");
@@ -146,6 +175,8 @@ public final class EarlyReflectionProcessor {
             return t;
         });
 
+>>>>>>> theirs
+=======
 >>>>>>> theirs
         initialized = true;
         Loggers.log("EarlyReflectionProcessor: initialized {} reflection slots", POOL_SIZE);
@@ -155,10 +186,14 @@ public final class EarlyReflectionProcessor {
 
     /**
 <<<<<<< ours
+<<<<<<< ours
      * Stops all sources, unbinds buffers and filters, deletes OpenAL resources.
 =======
      * Stops all sources, unbinds buffers and filters, deletes OpenAL resources,
      * and shuts down the scheduler.
+>>>>>>> theirs
+=======
+     * Stops all sources, unbinds buffers and filters, deletes OpenAL resources.
 >>>>>>> theirs
      */
     public void shutdown() {
@@ -166,8 +201,12 @@ public final class EarlyReflectionProcessor {
 
         for (ReflectionSlot slot : slots) {
 <<<<<<< ours
+<<<<<<< ours
             slot.scheduledPlayNanos = -1;
 =======
+>>>>>>> theirs
+=======
+            slot.scheduledPlayNanos = -1;
 >>>>>>> theirs
             AL10.alSourceStop(slot.sourceId);
             AL10.alSourcei(slot.sourceId, AL10.AL_BUFFER, 0);
@@ -178,8 +217,11 @@ public final class EarlyReflectionProcessor {
         }
 
 <<<<<<< ours
+<<<<<<< ours
 =======
         scheduler.shutdownNow();
+>>>>>>> theirs
+=======
 >>>>>>> theirs
         Loggers.log("EarlyReflectionProcessor: shut down");
     }
@@ -221,10 +263,15 @@ public final class EarlyReflectionProcessor {
      * <p>Stops any current playback on the slot, binds the given buffer, positions the source
      * at the tap's world-space position, sets gain based on energy and master/intensity scaling,
 <<<<<<< ours
+<<<<<<< ours
      * applies spectral filtering from the tap's material, and schedules delayed playback via
      * tick-based timing (checked each tick in {@link #tick}).
 =======
      * applies spectral filtering from the tap's material, and schedules delayed playback.
+>>>>>>> theirs
+=======
+     * applies spectral filtering from the tap's material, and schedules delayed playback via
+     * tick-based timing (checked each tick in {@link #tick}).
 >>>>>>> theirs
      *
      * @param slotIdx        index into the pool
@@ -238,6 +285,7 @@ public final class EarlyReflectionProcessor {
         ReflectionSlot slot = slots[slotIdx];
 
 <<<<<<< ours
+<<<<<<< ours
         // Cancel any pending delayed play
         slot.scheduledPlayNanos = -1;
 
@@ -247,6 +295,13 @@ public final class EarlyReflectionProcessor {
         // Stop any current playback
         AL10.alSourceStop(slot.sourceId);
         Loggers.logALError("EarlyReflectionProcessor: alSourceStop slot " + slotIdx);
+>>>>>>> theirs
+=======
+        // Cancel any pending delayed play
+        slot.scheduledPlayNanos = -1;
+
+        // Stop any current playback
+        AL10.alSourceStop(slot.sourceId);
 >>>>>>> theirs
 
         // Unbind previous buffer before binding new one
@@ -272,6 +327,7 @@ public final class EarlyReflectionProcessor {
         applySpectralFilter(slot, tap);
 
 <<<<<<< ours
+<<<<<<< ours
         // Mark in-use: write playbackEndTick and energy BEFORE inUse (volatile publish)
         slot.energy = tap.energy();
         slot.playbackEndTick = currentTick + MAX_PLAYBACK_TICKS;
@@ -288,22 +344,30 @@ public final class EarlyReflectionProcessor {
             slot.scheduledPlayNanos = System.nanoTime() + delayNanos;
 =======
         // Mark in-use and track state
+=======
+        // Mark in-use: write playbackEndTick and energy BEFORE inUse (volatile publish)
+>>>>>>> theirs
         slot.energy = tap.energy();
-        slot.inUse = true;
         slot.playbackEndTick = currentTick + MAX_PLAYBACK_TICKS;
+        slot.inUse = true; // volatile write — publishes energy and playbackEndTick
 
-        // Schedule delayed playback
-        long delayMicros = (long) (tap.delay() * 1_000_000.0);
-        if (delayMicros <= 0) {
+        // Schedule delayed playback via tick-based timing
+        long delayNanos = (long) (tap.delay() * 1_000_000_000.0);
+        if (delayNanos <= 0) {
             // No delay — play immediately
             AL10.alSourcePlay(slot.sourceId);
-            Loggers.logALError("EarlyReflectionProcessor: immediate play slot " + slotIdx);
         } else {
+<<<<<<< ours
             final int sourceId = slot.sourceId;
             scheduler.schedule(() -> {
                 AL10.alSourcePlay(sourceId);
                 Loggers.logALError("EarlyReflectionProcessor: delayed play slot " + slotIdx);
             }, delayMicros, TimeUnit.MICROSECONDS);
+>>>>>>> theirs
+=======
+            // Store the nanoTime at which this source should start playing.
+            // tick() will call alSourcePlay when System.nanoTime() >= this value.
+            slot.scheduledPlayNanos = System.nanoTime() + delayNanos;
 >>>>>>> theirs
         }
     }
@@ -371,11 +435,17 @@ public final class EarlyReflectionProcessor {
             ReflectionTap tap = sorted.get(i);
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
             // Skip taps with negligible energy (sorted desc, so all remaining are also below)
             if (tap.energy() < ENERGY_THRESHOLD) {
                 break;
             }
 
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
             int slotIdx = findAvailableSlot();
@@ -413,8 +483,12 @@ public final class EarlyReflectionProcessor {
             // Stop the weakest slot and reclaim it
             double oldEnergy = slots[weakest].energy;
 <<<<<<< ours
+<<<<<<< ours
             slots[weakest].scheduledPlayNanos = -1; // Cancel pending play
 =======
+>>>>>>> theirs
+=======
+            slots[weakest].scheduledPlayNanos = -1; // Cancel pending play
 >>>>>>> theirs
             AL10.alSourceStop(slots[weakest].sourceId);
             AL10.alSourcei(slots[weakest].sourceId, AL10.AL_BUFFER, 0);
@@ -432,15 +506,21 @@ public final class EarlyReflectionProcessor {
 
     /**
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
      * Called once per game tick. Performs two duties:
      * <ol>
      *   <li>Fires any pending delayed plays whose scheduled time has elapsed</li>
      *   <li>Recycles slots whose playback has completed (STOPPED/INITIAL or expired)</li>
      * </ol>
+<<<<<<< ours
 =======
      * Called once per game tick. Recycles slots whose playback has completed —
      * either by OpenAL reporting STOPPED/INITIAL state or by exceeding the
      * playback end tick threshold.
+>>>>>>> theirs
+=======
 >>>>>>> theirs
      *
      * @param currentTick the current game tick
@@ -451,9 +531,14 @@ public final class EarlyReflectionProcessor {
         }
 
 <<<<<<< ours
+<<<<<<< ours
         long now = System.nanoTime();
 
 =======
+>>>>>>> theirs
+=======
+        long now = System.nanoTime();
+
 >>>>>>> theirs
         for (int i = 0; i < POOL_SIZE; i++) {
             ReflectionSlot slot = slots[i];
@@ -462,6 +547,9 @@ public final class EarlyReflectionProcessor {
             }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
             // Check for pending delayed plays
             long playAt = slot.scheduledPlayNanos;
             if (playAt >= 0 && now >= playAt) {
@@ -475,6 +563,9 @@ public final class EarlyReflectionProcessor {
             }
 
             // Check if playback has finished
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
             int state = AL10.alGetSourcei(slot.sourceId, AL10.AL_SOURCE_STATE);
@@ -557,16 +648,20 @@ public final class EarlyReflectionProcessor {
 =======
     // ── Setters (Task 16) ────────────────────────────────────────────
 
+<<<<<<< ours
     /**
      * Sets the reflection intensity multiplier applied to all reflection gains.
      *
      * @param intensity reflection intensity, typically in [0, 1]
      */
 >>>>>>> theirs
+=======
+>>>>>>> theirs
     public void setReflectionIntensity(float intensity) {
         this.reflectionIntensity = intensity;
     }
 
+<<<<<<< ours
 <<<<<<< ours
 =======
     /**
@@ -575,10 +670,13 @@ public final class EarlyReflectionProcessor {
      * @param gain master gain, typically in [0, 1]
      */
 >>>>>>> theirs
+=======
+>>>>>>> theirs
     public void setMasterGain(float gain) {
         this.masterGain = gain;
     }
 
+<<<<<<< ours
 <<<<<<< ours
     public void muteAll() {
         this.muted = true;
@@ -592,15 +690,24 @@ public final class EarlyReflectionProcessor {
         this.muted = true;
         for (ReflectionSlot slot : slots) {
 >>>>>>> theirs
+=======
+    public void muteAll() {
+        this.muted = true;
+        for (ReflectionSlot slot : slots) {
+            slot.scheduledPlayNanos = -1;
+>>>>>>> theirs
             AL10.alSourcef(slot.sourceId, AL10.AL_GAIN, 0.0f);
         }
     }
 
 <<<<<<< ours
+<<<<<<< ours
 =======
     /**
      * Unmutes all reflection sources (gains will be restored on next configureSlot call).
      */
+>>>>>>> theirs
+=======
 >>>>>>> theirs
     public void unmuteAll() {
         this.muted = false;
@@ -609,12 +716,15 @@ public final class EarlyReflectionProcessor {
     // ── Diagnostics (Task 17) ────────────────────────────────────────
 
 <<<<<<< ours
+<<<<<<< ours
 =======
     /**
      * Returns the OpenAL source IDs for all pool slots, for diagnostics and exclusion lists.
      *
      * @return array of {@value POOL_SIZE} source IDs
      */
+>>>>>>> theirs
+=======
 >>>>>>> theirs
     public int[] getPoolSourceIds() {
         int[] ids = new int[POOL_SIZE];
@@ -625,10 +735,13 @@ public final class EarlyReflectionProcessor {
     }
 
 <<<<<<< ours
+<<<<<<< ours
 =======
     /**
      * Returns the number of currently active (in-use) slots.
      */
+>>>>>>> theirs
+=======
 >>>>>>> theirs
     public int getActiveSlotCount() {
         int count = 0;
@@ -639,10 +752,13 @@ public final class EarlyReflectionProcessor {
     }
 
 <<<<<<< ours
+<<<<<<< ours
 =======
     /**
      * Returns whether the processor has been initialized and not yet shut down.
      */
+>>>>>>> theirs
+=======
 >>>>>>> theirs
     public boolean isInitialized() {
         return initialized;
@@ -655,12 +771,15 @@ public final class EarlyReflectionProcessor {
     ) {}
 
 <<<<<<< ours
+<<<<<<< ours
 =======
     /**
      * Returns a diagnostic snapshot of all pool slots.
      *
      * @return list of {@link SlotSnapshot} for each slot
      */
+>>>>>>> theirs
+=======
 >>>>>>> theirs
     public List<SlotSnapshot> getDiagnosticSnapshot() {
         List<SlotSnapshot> snapshots = new ArrayList<>(POOL_SIZE);
@@ -677,11 +796,14 @@ public final class EarlyReflectionProcessor {
     // ── Spectral filter diagnostics (Task 18) ────────────────────────
 
 <<<<<<< ours
+<<<<<<< ours
 =======
     /**
      * Logs detailed spectral filter parameters for all in-use slots.
      * Useful for verifying that material-based filtering is working correctly.
      */
+>>>>>>> theirs
+=======
 >>>>>>> theirs
     public void logSpectralFilterDiagnostics() {
         Loggers.logDebug("EarlyReflectionProcessor: spectral filter diagnostics ({} slots)", POOL_SIZE);
