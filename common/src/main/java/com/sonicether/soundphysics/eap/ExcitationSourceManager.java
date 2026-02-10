@@ -554,7 +554,7 @@ public final class ExcitationSourceManager {
         }
     }
 
-    private void silenceAll() {
+    public void silenceAll() {
         for (ExcitationSource s : sources) {
             s.targetGain = 0.0f;
             s.currentGain *= (1.0f - SMOOTH);

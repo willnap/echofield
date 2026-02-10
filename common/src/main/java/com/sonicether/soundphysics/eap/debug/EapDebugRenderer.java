@@ -2,8 +2,12 @@ package com.sonicether.soundphysics.eap.debug;
 
 import com.sonicether.soundphysics.SoundPhysicsMod;
 <<<<<<< ours
+<<<<<<< ours
 import com.sonicether.soundphysics.eap.EapSystem;
 import com.sonicether.soundphysics.eap.EarlyReflectionProcessor;
+=======
+import com.sonicether.soundphysics.eap.EapSystem;
+>>>>>>> theirs
 import com.sonicether.soundphysics.eap.EnvironmentProfile;
 import com.sonicether.soundphysics.eap.ExcitationSourceManager;
 import com.sonicether.soundphysics.eap.ReflectionTap;
@@ -20,11 +24,14 @@ import com.sonicether.soundphysics.eap.hyperreality.TerrainFeatureType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+<<<<<<< ours
 =======
 import com.sonicether.soundphysics.eap.EnvironmentProfile;
 import com.sonicether.soundphysics.eap.ExcitationSourceManager;
 import com.sonicether.soundphysics.eap.ReflectionTap;
 import net.minecraft.client.Minecraft;
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.debug.DebugRenderer;
@@ -183,6 +190,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     }
 
 <<<<<<< ours
+<<<<<<< ours
     // ── Emitter markers ────────────────────────────────────────────────
 
     /**
@@ -312,6 +320,8 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
                         cond.enclosure(), cond.roomSize());
     }
 
+=======
+>>>>>>> theirs
     // ── HUD overlay rendering ───────────────────────────────────────
 
     /**
@@ -342,6 +352,9 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         }
     }
 
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 }

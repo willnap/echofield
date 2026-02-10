@@ -98,5 +98,8 @@
   "cloth_config.sound_physics_remastered.eap_debug_rays": "EAP debug rays",
   "cloth_config.sound_physics_remastered.eap_debug_rays.description": "Render EAP profiling rays and source positions in the world.",
   "cloth_config.sound_physics_remastered.eap_diagnostic_logging": "EAP diagnostic logging",
-  "cloth_config.sound_physics_remastered.eap_diagnostic_logging.description": "Enable detailed EAP diagnostic logging to the console every 5 seconds."
+  "cloth_config.sound_physics_remastered.eap_diagnostic_logging.description": "Enable detailed EAP diagnostic logging to the console every 5 seconds.",
+
+  "key.sound_physics_remastered.eap_toggle": "Toggle EAP (A/B)",
+  "key.categories.sound_physics_remastered": "Sound Physics"
 }

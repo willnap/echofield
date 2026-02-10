@@ -37,15 +37,21 @@ public final class AudioDiagnostics {
         float gain = AL10.alGetSourcef(sourceId, AL10.AL_GAIN);
         int buffer = AL10.alGetSourcei(sourceId, AL10.AL_BUFFER);
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         float[] pos = new float[3];
         AL10.alGetSourcefv(sourceId, AL10.AL_POSITION, pos);
         float posX = pos[0];
         float posY = pos[1];
         float posZ = pos[2];
+<<<<<<< ours
 =======
         float posX = AL10.alGetSourcef(sourceId, AL10.AL_POSITION);
         float posY = AL10.alGetSourcef(sourceId, AL10.AL_POSITION + 1);
         float posZ = AL10.alGetSourcef(sourceId, AL10.AL_POSITION + 2);
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 
         String stateName = switch (state) {

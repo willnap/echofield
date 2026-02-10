@@ -53,7 +53,11 @@ public final class EapSystem {
  */
 public final class EapSystem {
 
+<<<<<<< ours
     private static EapSystem instance;
+>>>>>>> theirs
+=======
+    private static volatile EapSystem instance;
 >>>>>>> theirs
 
     private final EnvironmentProfiler profiler;
@@ -70,7 +74,10 @@ public final class EapSystem {
 
     private final AudioEnergyMeter energyMeter;
 
+    private final AudioEnergyMeter energyMeter;
+
     private boolean initialized = false;
+<<<<<<< ours
     private CompareMode compareMode = CompareMode.FULL;
     private int diagnosticTickCounter = 0;
     private int debugReverbCounter = 0;
@@ -83,6 +90,11 @@ public final class EapSystem {
 
     private boolean initialized = false;
     private int diagnosticTickCounter = 0;
+>>>>>>> theirs
+=======
+    private boolean eapToggleActive = true;
+    private int diagnosticTickCounter = 0;
+    private Vec3 lastPlayerPos;
 >>>>>>> theirs
 
     private EapSystem() {
@@ -99,6 +111,7 @@ public final class EapSystem {
         this.reflections = new EarlyReflectionProcessor();
         this.debugRenderer = new EapDebugRenderer();
 <<<<<<< ours
+<<<<<<< ours
         this.energyMeter = new AudioEnergyMeter();
         this.hrtfManager = new HrtfManager();
         this.drProcessor = new PerSourceDRProcessor();
@@ -108,6 +121,9 @@ public final class EapSystem {
         this.hyperreality = new HyperrealitySystem();
         this.installation = new InstallationManager();
 =======
+>>>>>>> theirs
+=======
+        this.energyMeter = new AudioEnergyMeter();
 >>>>>>> theirs
 
         // Apply initial config values
@@ -174,6 +190,7 @@ public final class EapSystem {
 
         EapConfig config = SoundPhysicsMod.EAP_CONFIG;
 <<<<<<< ours
+<<<<<<< ours
         if (config == null || !config.eapEnabled.get() || !SoundPhysicsMod.CONFIG.enabled.get()
                 || compareMode == CompareMode.VANILLA || minecraft.isPaused()) {
             excitation.setEnabled(false);
@@ -191,6 +208,9 @@ public final class EapSystem {
             excitation.silenceAll();
 =======
         if (config == null || !config.eapEnabled.get()) {
+=======
+        if (config == null || !config.eapEnabled.get() || !eapToggleActive) {
+>>>>>>> theirs
             excitation.setEnabled(false);
 >>>>>>> theirs
             reflections.muteAll();
@@ -198,8 +218,11 @@ public final class EapSystem {
         }
 
 <<<<<<< ours
+<<<<<<< ours
 =======
         excitation.setEnabled(true);
+>>>>>>> theirs
+=======
 >>>>>>> theirs
         reflections.unmuteAll();
 
@@ -238,6 +261,7 @@ public final class EapSystem {
         long currentTick = minecraft.level.getGameTime();
 
 <<<<<<< ours
+<<<<<<< ours
         // B2: Teleportation detection — invalidate profiler and emitters on large position jumps
         if (lastPlayerPos != null && lastPlayerPos.distanceTo(currentPos) > 32.0) {
             Loggers.log("EapSystem: teleportation detected ({}m), invalidating profiler + emitters + hyperreality",
@@ -261,10 +285,24 @@ public final class EapSystem {
         }
         prevPlayerPos = currentPos;
 
+=======
+        // B2: Teleportation detection — invalidate profiler on large position jumps
+        if (lastPlayerPos != null && lastPlayerPos.distanceTo(currentPos) > 32.0) {
+            Loggers.log("EapSystem: teleportation detected ({}m), invalidating profiler",
+                    (int) lastPlayerPos.distanceTo(currentPos));
+            profiler.invalidate(currentTick);
+            excitation.silenceAll();
+        }
+        lastPlayerPos = currentPos;
+
+>>>>>>> theirs
         // B3: Underwater excitation muting
         boolean underwater = minecraft.player.isUnderWater();
         excitation.setEnabled(!underwater);
 
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
         // Update player position for excitation source positioning
@@ -336,6 +374,7 @@ public final class EapSystem {
         // Tick early reflections (fires pending delayed plays, recycles slots)
         reflections.tick(currentTick);
 
+<<<<<<< ours
 <<<<<<< ours
         // Update energy meter
         energyMeter.computeTotalEnergy(excitation, reflections);
@@ -740,6 +779,11 @@ public final class EapSystem {
     }
 
 =======
+=======
+        // Update energy meter
+        energyMeter.computeTotalEnergy(excitation, reflections);
+
+>>>>>>> theirs
         // Update debug renderer references
         debugRenderer.setExcitationManager(excitation);
         debugRenderer.setCurrentProfile(profile);
@@ -804,12 +848,16 @@ public final class EapSystem {
         Loggers.log("EapSystem: level change detected, invalidating profiler");
         profiler.invalidate();
 <<<<<<< ours
+<<<<<<< ours
         excitation.silenceAll();
         reflections.muteAll();
         emitterManager.silenceAll();
         hyperreality.silenceAll();
         hyperreality.forceRescan();
 =======
+=======
+        excitation.silenceAll();
+>>>>>>> theirs
         reflections.muteAll();
 >>>>>>> theirs
     }
@@ -837,6 +885,7 @@ public final class EapSystem {
         instance = null;
     }
 
+<<<<<<< ours
 <<<<<<< ours
     // ── A/B/C Compare Toggle ──────────────────────────────────────
 
@@ -902,6 +951,34 @@ public final class EapSystem {
     }
 
 =======
+>>>>>>> theirs
+=======
+    // ── A/B Toggle ──────────────────────────────────────────────────
+
+    /**
+     * Toggles the EAP system on/off for A/B comparison.
+     * When toggled off, silences all excitation and mutes reflections.
+     * When toggled on, re-enables excitation and unmutes reflections.
+     */
+    public void toggleEnabled() {
+        eapToggleActive = !eapToggleActive;
+        Loggers.log("EapSystem: A/B toggle -> {}", eapToggleActive ? "ON" : "OFF");
+        if (!eapToggleActive) {
+            excitation.silenceAll();
+            reflections.muteAll();
+        } else {
+            excitation.setEnabled(true);
+            reflections.unmuteAll();
+        }
+    }
+
+    /**
+     * Returns whether the A/B toggle is currently active (EAP enabled).
+     */
+    public boolean isToggleActive() {
+        return eapToggleActive;
+    }
+
 >>>>>>> theirs
     // ── Accessors ───────────────────────────────────────────────────
 
@@ -969,6 +1046,7 @@ public final class EapSystem {
         }
 
 <<<<<<< ours
+<<<<<<< ours
         if (compareMode == CompareMode.VANILLA) {
             return "EAP: " + CompareMode.VANILLA.label;
         }
@@ -1016,15 +1094,32 @@ public final class EapSystem {
     public AudioEnergyMeter getEnergyMeter() {
         return energyMeter;
 =======
+=======
+        if (!eapToggleActive) {
+            return "EAP: toggled OFF (A/B)";
+        }
+
+>>>>>>> theirs
         EnvironmentProfile profile = profiler.getCurrentProfile();
-        float totalEnergy = AudioEnergyMeter.totalExcitationEnergy(excitation);
+        float totalEnergy = energyMeter.getLatestEnergy();
         int activeSlots = reflections.getActiveSlotCount();
         float cycleProgress = profiler.getCycleProgress();
 
-        return String.format("EAP: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d cycle=%.0f%%",
+        return String.format("EAP: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d cycle=%.0f%%\n%s",
                 profile.enclosureFactor(), profile.estimatedRT60(), profile.windExposure(),
                 totalEnergy, activeSlots, EarlyReflectionProcessor.POOL_SIZE,
+<<<<<<< ours
                 cycleProgress * 100f);
+>>>>>>> theirs
+=======
+                cycleProgress * 100f, energyMeter.getFormattedEnergy());
+    }
+
+    /**
+     * Returns the energy meter instance for external access.
+     */
+    public AudioEnergyMeter getEnergyMeter() {
+        return energyMeter;
 >>>>>>> theirs
     }
 

@@ -639,18 +639,39 @@ public class SoundPhysics {
                 EnvironmentProfile profile = eap.getProfiler().getCurrentProfile();
                 float rt60 = profile.estimatedRT60();
                 float enclosure = profile.enclosureFactor();
+                float scatter = profile.scatteringDensity();
+                float[] spectral = profile.spectralProfile();
+                float hfAbsorption = spectral[2]; // high-frequency band
 
-                // Boost late reverb sends in enclosed spaces with longer RT60
-                // Scale factor: 1.0 in open space, up to 1.5 in highly enclosed spaces
-                float reverbBoost = 1.0f + 0.5f * enclosure * Math.min(rt60 / 2.0f, 1.0f);
+                // 1. RT60 -> late reverb boost (slots 2 and 3)
+                float rt60Factor = Math.min(rt60 / 2.0f, 1.0f);
+                sg2 += rt60Factor * 0.3f * 0.5f;
+                sg3 += rt60Factor * 0.3f * 0.5f;
 
-                // Apply the boost to the later reverb sends (slots 2 and 3)
-                sg2 *= reverbBoost;
-                sg3 *= reverbBoost;
+                // 2. HF absorption -> sendCutoff scaling (all slots)
+                float hfScale = (1.0f - 0.3f) + 0.3f * (1.0f - hfAbsorption);
+                sc0 *= hfScale;
+                sc1 *= hfScale;
+                sc2 *= hfScale;
+                sc3 *= hfScale;
 
-                // Clamp to [0, 1]
+                // 3. Enclosure -> reverb density (slots 0 and 1)
+                sg0 += enclosure * 0.3f * 0.2f;
+                sg1 += enclosure * 0.3f * 0.2f;
+
+                // 4. Scattering -> diffusion (slots 1 and 2)
+                sg1 += scatter * 0.3f * 0.15f;
+                sg2 += scatter * 0.3f * 0.15f;
+
+                // Clamp all gains to [0, 1]
+                sg0 = Math.min(sg0, 1.0f);
+                sg1 = Math.min(sg1, 1.0f);
                 sg2 = Math.min(sg2, 1.0f);
                 sg3 = Math.min(sg3, 1.0f);
+                sc0 = Math.max(0.0f, Math.min(sc0, 1.0f));
+                sc1 = Math.max(0.0f, Math.min(sc1, 1.0f));
+                sc2 = Math.max(0.0f, Math.min(sc2, 1.0f));
+                sc3 = Math.max(0.0f, Math.min(sc3, 1.0f));
             }
         }
 
