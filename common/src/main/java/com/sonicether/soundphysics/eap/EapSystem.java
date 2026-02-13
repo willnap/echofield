@@ -191,8 +191,12 @@ public final class EapSystem {
         EapConfig config = SoundPhysicsMod.EAP_CONFIG;
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
         if (config == null || !config.eapEnabled.get() || !SoundPhysicsMod.CONFIG.enabled.get()
                 || compareMode == CompareMode.VANILLA || minecraft.isPaused()) {
+=======
+        if (config == null || !config.eapEnabled.get() || !eapToggleActive || minecraft.isPaused()) {
+>>>>>>> theirs
             excitation.setEnabled(false);
             excitation.silenceAll();
             reflections.muteAll();
