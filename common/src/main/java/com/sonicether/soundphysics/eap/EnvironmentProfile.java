@@ -178,6 +178,9 @@ public final class EnvironmentProfile {
     public float canopyCoverage() { return canopyCoverage; }
     public Vec3 mostOpenSkyDirection() { return mostOpenSkyDirection; }
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
 
     /**
      * Estimates room volume from enclosure factor and average return distance.
@@ -194,6 +197,9 @@ public final class EnvironmentProfile {
     public float criticalDistance() {
         return RoomGeometry.criticalDistance(estimatedVolume(), estimatedRT60);
     }
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 }
