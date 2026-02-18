@@ -99,6 +99,10 @@ public final class EapSystem {
     private boolean eapToggleActive = true;
     private int diagnosticTickCounter = 0;
     private Vec3 lastPlayerPos;
+<<<<<<< ours
+>>>>>>> theirs
+=======
+    private Vec3 prevPlayerPos;
 >>>>>>> theirs
 
     private EapSystem() {
@@ -155,11 +159,17 @@ public final class EapSystem {
             Loggers.log("EapSystem: HRTF not active — all audio processing will be skipped");
         }
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
 
         // Configure Doppler effect — pitch shift on moving sources
         org.lwjgl.openal.AL10.alDopplerFactor(1.0f);
         org.lwjgl.openal.AL11.alSpeedOfSound(343.0f);
         Loggers.log("EapSystem: Doppler configured (factor=1.0, speed=343 blocks/s)");
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 =======
@@ -324,6 +334,19 @@ public final class EapSystem {
             excitation.silenceAll();
         }
         lastPlayerPos = currentPos;
+
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        // Update listener velocity for Doppler effect
+        if (prevPlayerPos != null) {
+            float vx = (float) (currentPos.x - prevPlayerPos.x) * 20.0f;
+            float vy = (float) (currentPos.y - prevPlayerPos.y) * 20.0f;
+            float vz = (float) (currentPos.z - prevPlayerPos.z) * 20.0f;
+            org.lwjgl.openal.AL10.alListener3f(
+                    org.lwjgl.openal.AL10.AL_VELOCITY, vx, vy, vz);
+        }
+        prevPlayerPos = currentPos;
 
 >>>>>>> theirs
         // B3: Underwater excitation muting
