@@ -65,6 +65,7 @@ public final class EapSystem {
     private final EarlyReflectionProcessor reflections;
     private final EapDebugRenderer debugRenderer;
 <<<<<<< ours
+<<<<<<< ours
     private final HrtfManager hrtfManager;
     private final PerSourceDRProcessor drProcessor;
     private final EmitterManager emitterManager;
@@ -73,6 +74,9 @@ public final class EapSystem {
     private final InstallationManager installation;
 
     private final AudioEnergyMeter energyMeter;
+=======
+    private final HrtfManager hrtfManager;
+>>>>>>> theirs
 
     private final AudioEnergyMeter energyMeter;
 
@@ -124,6 +128,10 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
         this.energyMeter = new AudioEnergyMeter();
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        this.hrtfManager = new HrtfManager();
 >>>>>>> theirs
 
         // Apply initial config values
@@ -135,6 +143,9 @@ public final class EapSystem {
         initialized = true;
         Loggers.log("EapSystem: initialized (rays={}, raysPerTick={})", snappedRays, rpt);
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
 
         // Verify HRTF status — FATAL if not active
         long device = org.lwjgl.openal.ALC10.alcGetContextsDevice(
@@ -143,11 +154,14 @@ public final class EapSystem {
         if (!hrtfManager.isHrtfActive()) {
             Loggers.log("EapSystem: HRTF not active — all audio processing will be skipped");
         }
+<<<<<<< ours
 
         // Configure Doppler effect — pitch shift on moving sources
         org.lwjgl.openal.AL10.alDopplerFactor(1.0f);
         org.lwjgl.openal.AL11.alSpeedOfSound(343.0f);
         Loggers.log("EapSystem: Doppler configured (factor=1.0, speed=343 blocks/s)");
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
     }
@@ -223,10 +237,22 @@ public final class EapSystem {
 
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
 =======
         excitation.setEnabled(true);
 >>>>>>> theirs
 =======
+>>>>>>> theirs
+=======
+        // HRTF gate — refuse to process without binaural cues
+        hrtfManager.tick();
+        if (!hrtfManager.isHrtfActive()) {
+            excitation.setEnabled(false);
+            excitation.silenceAll();
+            reflections.muteAll();
+            return;
+        }
+
 >>>>>>> theirs
         reflections.unmuteAll();
 
@@ -1003,10 +1029,14 @@ public final class EapSystem {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     public HrtfManager getHrtfManager() {
         return hrtfManager;
     }
 
+<<<<<<< ours
     public PerSourceDRProcessor getDRProcessor() {
         return drProcessor;
     }
@@ -1035,6 +1065,8 @@ public final class EapSystem {
         return lastReverbParamsJson;
     }
 
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
     /**
@@ -1109,7 +1141,9 @@ public final class EapSystem {
         int activeSlots = reflections.getActiveSlotCount();
         float cycleProgress = profiler.getCycleProgress();
 
-        return String.format("EAP: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d cycle=%.0f%%\n%s",
+        String hrtfStatus = hrtfManager.getStatusText();
+        return String.format("%s | EAP: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d cycle=%.0f%%\n%s",
+                hrtfStatus,
                 profile.enclosureFactor(), profile.estimatedRT60(), profile.windExposure(),
                 totalEnergy, activeSlots, EarlyReflectionProcessor.POOL_SIZE,
 <<<<<<< ours
