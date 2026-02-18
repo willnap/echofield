@@ -19,7 +19,11 @@ public final class Emitter {
     int filterId;
 
     // Current state (smoothed toward targets each tick)
+<<<<<<< ours
     public float currentGain;
+=======
+    float currentGain;
+>>>>>>> theirs
     float targetGain;
     float currentFilterGainHF = 1.0f;
     float targetFilterGainHF = 1.0f;
@@ -29,6 +33,7 @@ public final class Emitter {
     long lastActiveTick;    // for fade-out timing
     float fadeProgress = 1.0f; // 0=fading out, 1=fully on
 
+<<<<<<< ours
     // Distance from listener (updated each tick; MAX_VALUE until first cull pass)
     float distanceToListener = Float.MAX_VALUE;
 
@@ -41,13 +46,20 @@ public final class Emitter {
     // Sample-based audio: subcategory and no-repeat history
     SampleSubcategory subcategory;
     final int[] sampleHistory = new int[]{-1, -1, -1};
+=======
+    // Distance from listener (updated each tick)
+    float distanceToListener;
+>>>>>>> theirs
 
     public Emitter(EmitterCategory category, int blockX, int blockY, int blockZ) {
         this.category = category;
         this.blockX = blockX;
         this.blockY = blockY;
         this.blockZ = blockZ;
+<<<<<<< ours
         this.speciesVariant = ((blockX * 73 + blockZ * 37 + blockY * 11) >>> 4) & 7; // 0-7
+=======
+>>>>>>> theirs
     }
 
     /**
@@ -68,7 +80,10 @@ public final class Emitter {
 
         float appliedGain = currentGain * masterGain * fadeProgress;
         AL10.alSourcef(sourceId, AL10.AL_GAIN, appliedGain);
+<<<<<<< ours
         AL10.alSourcef(sourceId, AL10.AL_PITCH, pitch);
+=======
+>>>>>>> theirs
         // Position at block center
         AL10.alSource3f(sourceId, AL10.AL_POSITION,
                 blockX + 0.5f, blockY + 0.5f, blockZ + 0.5f);
