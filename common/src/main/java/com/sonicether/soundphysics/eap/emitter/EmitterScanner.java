@@ -1,13 +1,19 @@
 package com.sonicether.soundphysics.eap.emitter;
 
 import net.minecraft.core.BlockPos;
+<<<<<<< ours
 import net.minecraft.core.Direction;
+=======
+>>>>>>> theirs
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+<<<<<<< ours
 import net.minecraft.world.level.material.FluidState;
+=======
+>>>>>>> theirs
 import net.minecraft.world.level.LightLayer;
 
 import java.util.ArrayList;
@@ -69,6 +75,7 @@ public final class EmitterScanner {
     }
 
     private EmitterCategory classifyBlock(BlockState state, Level level, BlockPos pos) {
+<<<<<<< ours
         // Avalanche-quality hash: murmurhash3 finalizer ensures uniform distribution
         // regardless of coordinate region. The old linear hash (x*73+z*37+y*11)
         // produced non-uniform distributions for specific coordinate ranges.
@@ -88,10 +95,17 @@ public final class EmitterScanner {
             if (above.is(BlockTags.LEAVES)) {
                 if (hash < 20) return EmitterCategory.WIND_LEAF; // ~8% of interior leaves
                 return null;
+=======
+        if (state.is(BlockTags.LEAVES)) {
+            BlockState above = level.getBlockState(pos.above());
+            if (above.isAir() || above.is(BlockTags.LEAVES)) {
+                return EmitterCategory.WIND_LEAF;
+>>>>>>> theirs
             }
             return null;
         }
 
+<<<<<<< ours
         if (state.is(Blocks.GRASS_BLOCK) && level.getBlockState(pos.above()).isAir()
                 && level.getBrightness(LightLayer.SKY, pos.above()) > 8) {
             if (hash < 8) return EmitterCategory.INSECT;     // ~3% of outdoor grass
@@ -101,11 +115,17 @@ public final class EmitterScanner {
         String blockId = state.getBlock().getDescriptionId();
         if ((blockId.contains("grass") && !blockId.contains("grass_block"))
                 || blockId.contains("fern") || blockId.contains("tall_grass")) {
+=======
+        String blockId = state.getBlock().getDescriptionId();
+        if ((blockId.contains("grass") && !blockId.contains("grass_block"))
+                || blockId.contains("fern") || blockId.contains("tallgrass")) {
+>>>>>>> theirs
             return EmitterCategory.WIND_GRASS;
         }
 
         if (state.getFluidState().is(FluidTags.WATER)
                 && level.getBlockState(pos.above()).isAir()) {
+<<<<<<< ours
             if (hasAdjacentSolid(level, pos) && hash < 4) {
                 return EmitterCategory.FROG;                  // ~1.5% of shoreline water
             }
@@ -114,6 +134,8 @@ public final class EmitterScanner {
                 if (hash < 8) return EmitterCategory.WATER_STILL; // ~3% of still water surfaces
                 return null;
             }
+=======
+>>>>>>> theirs
             return EmitterCategory.WATER_FLOW;
         }
 
@@ -134,6 +156,7 @@ public final class EmitterScanner {
 
         if (state.isAir()
                 && level.getBrightness(LightLayer.SKY, pos) == 0
+<<<<<<< ours
                 && level.getBrightness(LightLayer.BLOCK, pos) < 8) {
             if (hash < 4) {
                 return EmitterCategory.CAVE_AMBIENT;
@@ -142,6 +165,12 @@ public final class EmitterScanner {
             if (hash >= 4 && hash < 9) {
                 return EmitterCategory.CAVE_DRONE;
             }
+=======
+                && level.getBrightness(LightLayer.BLOCK, pos) < 4) {
+            if (((pos.getX() * 73 + pos.getZ() * 37 + pos.getY() * 11) & 0xFF) < 4) {
+                return EmitterCategory.CAVE_AMBIENT;
+            }
+>>>>>>> theirs
         }
 
         if (state.is(Blocks.FURNACE) || state.is(Blocks.BLAST_FURNACE)
@@ -155,6 +184,7 @@ public final class EmitterScanner {
         return null;
     }
 
+<<<<<<< ours
     private static boolean hasAdjacentFlow(Level level, BlockPos pos) {
         for (Direction dir : Direction.Plane.HORIZONTAL) {
             FluidState adjacent = level.getFluidState(pos.relative(dir));
@@ -170,6 +200,8 @@ public final class EmitterScanner {
                 || level.getBlockState(pos.west()).isSolidRender();
     }
 
+=======
+>>>>>>> theirs
     private boolean hasAdjacentWater(Level level, BlockPos pos) {
         return level.getBlockState(pos.north()).getFluidState().is(FluidTags.WATER)
                 || level.getBlockState(pos.south()).getFluidState().is(FluidTags.WATER)

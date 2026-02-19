@@ -20,6 +20,7 @@ public final class EmitterPool {
     private static final float FADE_OUT_TICKS = 4; // 200ms at 20 tps (≥50ms per spec 2.4.1)
     private static final float SMOOTH_FACTOR = 0.15f;
 
+<<<<<<< ours
     private SamplePoolLoader samplePoolLoader;
 
     void setSamplePoolLoader(SamplePoolLoader loader) {
@@ -27,6 +28,9 @@ public final class EmitterPool {
     }
 
     private int maxSources;
+=======
+    private final int maxSources;
+>>>>>>> theirs
     private final List<Emitter> activeEmitters = new ArrayList<>();
 
     // Pre-allocated OpenAL source IDs
@@ -35,10 +39,15 @@ public final class EmitterPool {
     private final boolean[] sourceInUse;
 
     public EmitterPool(int maxSources) {
+<<<<<<< ours
+=======
+        this.maxSources = maxSources;
+>>>>>>> theirs
         this.sourceIds = new int[maxSources];
         this.filterIds = new int[maxSources];
         this.sourceInUse = new boolean[maxSources];
 
+<<<<<<< ours
         int allocated = 0;
         for (int i = 0; i < maxSources; i++) {
             sourceIds[i] = AL10.alGenSources();
@@ -53,22 +62,37 @@ public final class EmitterPool {
                 Loggers.log("EmitterPool: alGenFilters failed at slot {}, stopping", i);
                 break;
             }
+=======
+        for (int i = 0; i < maxSources; i++) {
+            sourceIds[i] = AL10.alGenSources();
+            filterIds[i] = EXTEfx.alGenFilters();
+>>>>>>> theirs
             EXTEfx.alFilteri(filterIds[i], EXTEfx.AL_FILTER_TYPE,
                     EXTEfx.AL_FILTER_LOWPASS);
 
             // Configure source defaults
             AL10.alSourcef(sourceIds[i], AL10.AL_GAIN, 0.0f);
+<<<<<<< ours
             AL10.alSourcef(sourceIds[i], AL10.AL_ROLLOFF_FACTOR, 0.0f);
+=======
+            AL10.alSourcef(sourceIds[i], AL10.AL_ROLLOFF_FACTOR, 1.0f);
+>>>>>>> theirs
             AL10.alSourcef(sourceIds[i], AL10.AL_REFERENCE_DISTANCE, 2.0f);
             AL10.alSourcef(sourceIds[i], AL10.AL_MAX_DISTANCE, 48.0f);
             AL10.alSourcei(sourceIds[i], AL10.AL_SOURCE_RELATIVE, AL10.AL_FALSE);
 
             sourceInUse[i] = false;
+<<<<<<< ours
             allocated++;
         }
         this.maxSources = allocated;
 
         Loggers.log("EmitterPool: allocated {} sources (requested {})", allocated, maxSources);
+=======
+        }
+
+        Loggers.log("EmitterPool: allocated {} sources", maxSources);
+>>>>>>> theirs
     }
 
     /**
@@ -96,8 +120,12 @@ public final class EmitterPool {
         }
 
         if (weakest != null && emitter.priorityScore() > weakest.priorityScore()) {
+<<<<<<< ours
             // Synchronous release: immediately stop and free the slot
             forceRelease(weakest);
+=======
+            deallocate(weakest);
+>>>>>>> theirs
             // Find the now-free slot
             for (int i = 0; i < maxSources; i++) {
                 if (!sourceInUse[i]) {
@@ -116,7 +144,10 @@ public final class EmitterPool {
         emitter.filterId = filterIds[slotIdx];
         emitter.active = true;
         emitter.currentGain = 0f; // Fade in from silence
+<<<<<<< ours
         emitter.currentFilterGainHF = 1.0f; // Reset filter state
+=======
+>>>>>>> theirs
         emitter.fadeProgress = 0f;
         activeEmitters.add(emitter);
     }
@@ -131,6 +162,7 @@ public final class EmitterPool {
     }
 
     /**
+<<<<<<< ours
      * Immediately stops and releases an emitter's source (synchronous).
      * Used by priority stealing where we need the slot back NOW.
      */
@@ -155,6 +187,8 @@ public final class EmitterPool {
     }
 
     /**
+=======
+>>>>>>> theirs
      * Updates all active emitters: smooth parameters, apply to OpenAL,
      * handle fade-in/fade-out, recycle finished sample-based emitters.
      */
@@ -169,6 +203,7 @@ public final class EmitterPool {
                 if (e.currentGain < 0.001f) {
                     AL10.alSourceStop(e.sourceId);
                     AL10.alSourcef(e.sourceId, AL10.AL_GAIN, 0f);
+<<<<<<< ours
                     // Delete dynamically-generated buffers for sample-based emitters
                     if (e.category.sampleBased) {
                         int buf = AL10.alGetSourcei(e.sourceId, AL10.AL_BUFFER);
@@ -179,6 +214,9 @@ public final class EmitterPool {
                     } else {
                         AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, 0);
                     }
+=======
+                    AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, 0);
+>>>>>>> theirs
                     for (int i = 0; i < maxSources; i++) {
                         if (sourceIds[i] == e.sourceId) { sourceInUse[i] = false; break; }
                     }
@@ -200,6 +238,7 @@ public final class EmitterPool {
             e.applyToOpenAL(masterGain);
             e.lastActiveTick = currentTick;
 
+<<<<<<< ours
             // Recycle finished one-shot sources, deleting dynamic buffers.
             // AL_INITIAL means "never played" (awaiting trigger) — do NOT recycle.
             // Only recycle AL_STOPPED (playback completed).
@@ -212,6 +251,14 @@ public final class EmitterPool {
                     if (buf != 0 && (samplePoolLoader == null || !samplePoolLoader.isPooledBuffer(buf))) {
                         AL10.alDeleteBuffers(buf);
                     }
+=======
+            // Recycle finished one-shot sources
+            if (e.category.sampleBased && e.active) {
+                int state = AL10.alGetSourcei(e.sourceId, AL10.AL_SOURCE_STATE);
+                if (state == AL10.AL_STOPPED || state == AL10.AL_INITIAL) {
+                    AL10.alSourcef(e.sourceId, AL10.AL_GAIN, 0f);
+                    AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, 0);
+>>>>>>> theirs
                     for (int i = 0; i < maxSources; i++) {
                         if (sourceIds[i] == e.sourceId) { sourceInUse[i] = false; break; }
                     }
@@ -231,21 +278,29 @@ public final class EmitterPool {
     }
 
     public List<Emitter> getActiveEmitters() {
+<<<<<<< ours
         return new ArrayList<>(activeEmitters);
+=======
+        return activeEmitters;
+>>>>>>> theirs
     }
 
     public void silenceAll() {
         for (Emitter e : activeEmitters) {
             e.targetGain = 0f;
+<<<<<<< ours
             e.currentGain = 0f;
             if (e.sourceId != 0) {
                 AL10.alSourcef(e.sourceId, AL10.AL_GAIN, 0f);
                 AL10.alSourceStop(e.sourceId);
             }
+=======
+>>>>>>> theirs
         }
     }
 
     public void shutdown() {
+<<<<<<< ours
         // Stop all sources and delete any dynamic buffers before releasing resources
         for (Emitter e : activeEmitters) {
             if (e.sourceId != 0) {
@@ -265,6 +320,12 @@ public final class EmitterPool {
         activeEmitters.clear();
         for (int i = 0; i < maxSources; i++) {
             sourceInUse[i] = false;
+=======
+        for (Emitter e : new ArrayList<>(activeEmitters)) {
+            deallocate(e);
+        }
+        for (int i = 0; i < maxSources; i++) {
+>>>>>>> theirs
             if (sourceIds[i] != 0) AL10.alDeleteSources(sourceIds[i]);
             if (filterIds[i] != 0) EXTEfx.alDeleteFilters(filterIds[i]);
         }

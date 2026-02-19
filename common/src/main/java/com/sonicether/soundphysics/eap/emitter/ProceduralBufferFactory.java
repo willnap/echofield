@@ -20,6 +20,7 @@ public final class ProceduralBufferFactory {
     private static final int BUFFER_SECONDS = 6;
     private static final int BUFFER_SAMPLES = SAMPLE_RATE * BUFFER_SECONDS;
 
+<<<<<<< ours
     private static final int BUFFER_VARIANTS = 4;
     private final Map<EmitterCategory, int[]> buffers = new EnumMap<>(EmitterCategory.class);
     // Reusable direct ByteBuffer for triggered emitters — avoids per-trigger allocateDirect
@@ -154,11 +155,52 @@ public final class ProceduralBufferFactory {
                     grainLp2 += (grainLp1 - grainLp2) * grainLpA;
                     out[start + i] += amp * window2 * grainLp2;
                 }
+=======
+    private final Map<EmitterCategory, Integer> buffers = new EnumMap<>(EmitterCategory.class);
+
+    public int getBuffer(EmitterCategory category) {
+        if (category.sampleBased) return 0;
+        return buffers.computeIfAbsent(category, this::generate);
+    }
+
+    private int generate(EmitterCategory category) {
+        float[] samples = new float[BUFFER_SAMPLES];
+        Random rng = new Random(42 + category.ordinal());
+
+        switch (category) {
+            case WIND_LEAF -> generateLeafRustle(samples, rng);
+            case WIND_GRASS -> generateGrassSwish(samples, rng);
+            case WIND_WHISTLE -> generateWhistle(samples, rng);
+            case WATER_FLOW -> generateWaterFlow(samples, rng);
+            case LAVA -> generateLava(samples, rng);
+            default -> generateWhiteNoise(samples, rng);
+        }
+
+        applyCrossfade(samples);
+        return createBuffer(samples, category.name());
+    }
+
+    private void generateLeafRustle(float[] out, Random rng) {
+        int numGrains = BUFFER_SECONDS * 2000;
+        for (int g = 0; g < numGrains; g++) {
+            int start = rng.nextInt(out.length);
+            int len = 132 + rng.nextInt(308);
+            float amp = 0.008f + rng.nextFloat() * 0.02f;
+            float freq = 1200 + rng.nextFloat() * 4000;
+
+            for (int i = 0; i < len && start + i < out.length; i++) {
+                float t = (float) i / SAMPLE_RATE;
+                float window = 0.5f * (1f - (float) Math.cos(2 * Math.PI * i / len));
+                float noise = rng.nextFloat() * 2f - 1f;
+                out[start + i] += amp * window * noise
+                        * (float) Math.sin(2 * Math.PI * freq * t);
+>>>>>>> theirs
             }
         }
     }
 
     private void generateGrassSwish(float[] out, Random rng) {
+<<<<<<< ours
         float[] wind = computeWindEnvelope(rng);
 
         // Two-pole dynamic bandpass (12 dB/oct slopes) — softer than leaves
@@ -226,11 +268,27 @@ public final class ProceduralBufferFactory {
                     grainLp2 += (grainLp1 - grainLp2) * grainLpA;
                     out[start + i] += amp * window2 * grainLp2;
                 }
+=======
+        int numGrains = BUFFER_SECONDS * 1250;
+        for (int g = 0; g < numGrains; g++) {
+            int start = rng.nextInt(out.length);
+            int len = 176 + rng.nextInt(352);
+            float amp = 0.004f + rng.nextFloat() * 0.010f;
+            float freq = 400 + rng.nextFloat() * 1600;
+
+            for (int i = 0; i < len && start + i < out.length; i++) {
+                float t = (float) i / SAMPLE_RATE;
+                float window = 0.5f * (1f - (float) Math.cos(2 * Math.PI * i / len));
+                float noise = rng.nextFloat() * 2f - 1f;
+                out[start + i] += amp * window * noise
+                        * (float) Math.sin(2 * Math.PI * freq * t);
+>>>>>>> theirs
             }
         }
     }
 
     private void generateWhistle(float[] out, Random rng) {
+<<<<<<< ours
         float[] wind = computeWindEnvelope(rng);
 
         // Aeolian tone physical model
@@ -306,10 +364,20 @@ public final class ProceduralBufferFactory {
             bp1 = Math.max(-2f, Math.min(2f, bp1));
 
             out[i] = filtered * effectiveWind * 0.7f;
+=======
+        float filterState = 0;
+        for (int i = 0; i < out.length; i++) {
+            float white = rng.nextFloat() * 2f - 1f;
+            filterState += white * 0.03f;
+            filterState *= 0.992f;
+            filterState = Math.max(-1f, Math.min(1f, filterState));
+            out[i] = filterState;
+>>>>>>> theirs
         }
     }
 
     private void generateWaterFlow(float[] out, Random rng) {
+<<<<<<< ours
         // Perlin-modulated flow envelope for temporal variation
         PerlinNoise flowNoise = new PerlinNoise(rng.nextLong());
 
@@ -426,12 +494,38 @@ public final class ProceduralBufferFactory {
             for (int i = 0; i < burstLen && start + i < out.length; i++) {
                 float env = burstAmp * (1f - (float) i / burstLen);
                 out[start + i] += env * (rng.nextFloat() * 2f - 1f);
+=======
+        float flowState = 0;
+        for (int i = 0; i < out.length; i++) {
+            float white = rng.nextFloat() * 2f - 1f;
+            flowState += white * 0.012f;
+            flowState *= 0.998f;
+            flowState = Math.max(-1f, Math.min(1f, flowState));
+            out[i] = flowState * 0.25f;
+        }
+        int numBubbles = BUFFER_SECONDS * 1500;
+        for (int b = 0; b < numBubbles; b++) {
+            int start = rng.nextInt(out.length);
+            float freq = 80 + rng.nextFloat() * rng.nextFloat() * 2900;
+            float decay = 30 + rng.nextFloat() * 120;
+            float amp = 0.006f + rng.nextFloat() * 0.016f;
+            int dur = Math.min((int) (5f / decay * SAMPLE_RATE), 4410);
+
+            for (int i = 0; i < dur && start + i < out.length; i++) {
+                float t = (float) i / SAMPLE_RATE;
+                float env = amp * (float) Math.exp(-decay * t);
+                float chirpFreq = freq * (1f - 0.15f * t * decay / 50f);
+                out[start + i] += env * (float) Math.sin(2 * Math.PI * chirpFreq * t);
+>>>>>>> theirs
             }
         }
     }
 
     private void generateLava(float[] out, Random rng) {
+<<<<<<< ours
         // Brownian noise base for deep viscous rumble
+=======
+>>>>>>> theirs
         float brownState = 0;
         for (int i = 0; i < out.length; i++) {
             float t = (float) i / SAMPLE_RATE;
@@ -440,6 +534,7 @@ public final class ProceduralBufferFactory {
             brownState *= 0.999f;
             brownState = Math.max(-1f, Math.min(1f, brownState));
             out[i] = brownState * 0.3f;
+<<<<<<< ours
             // Sub-bass drone at 20-60 Hz (two detuned tones)
             out[i] += 0.15f * (float) Math.sin(2 * Math.PI * 25 * t);
             out[i] += 0.10f * (float) Math.sin(2 * Math.PI * 38 * t);
@@ -1154,6 +1249,25 @@ public final class ProceduralBufferFactory {
         for (int i = sampleCount; i < out.length; i++) {
             out[i] = 0f;
         }
+=======
+            out[i] += 0.15f * (float) Math.sin(2 * Math.PI * 25 * t);
+            out[i] += 0.10f * (float) Math.sin(2 * Math.PI * 38 * t);
+        }
+        int numBubbles = BUFFER_SECONDS * 300;
+        for (int b = 0; b < numBubbles; b++) {
+            int start = rng.nextInt(out.length);
+            float freq = 20 + rng.nextFloat() * 180;
+            float decay = 8 + rng.nextFloat() * 30;
+            float amp = 0.03f + rng.nextFloat() * 0.06f;
+            int dur = Math.min((int) (5f / decay * SAMPLE_RATE), 22050);
+
+            for (int i = 0; i < dur && start + i < out.length; i++) {
+                float t = (float) i / SAMPLE_RATE;
+                float env = amp * (float) Math.exp(-decay * t);
+                out[start + i] += env * (float) Math.sin(2 * Math.PI * freq * t);
+            }
+        }
+>>>>>>> theirs
     }
 
     private void generateWhiteNoise(float[] out, Random rng) {
@@ -1163,6 +1277,7 @@ public final class ProceduralBufferFactory {
     }
 
     private void applyCrossfade(float[] out) {
+<<<<<<< ours
         int len = SAMPLE_RATE / 5; // 200ms for smoother loop
         for (int i = 0; i < len; i++) {
             float t = (float) i / len;
@@ -1171,13 +1286,24 @@ public final class ProceduralBufferFactory {
             float fadeIn = (float) Math.sin(t * Math.PI * 0.5);
             out[out.length - len + i] =
                     out[out.length - len + i] * fadeOut + out[i] * fadeIn;
+=======
+        int len = SAMPLE_RATE / 10;
+        for (int i = 0; i < len; i++) {
+            float t = (float) i / len;
+            out[out.length - len + i] =
+                    out[out.length - len + i] * (1f - t) + out[i] * t;
+>>>>>>> theirs
         }
     }
 
     private int createBuffer(float[] samples, String name) {
         float peak = 0.001f;
         for (float s : samples) peak = Math.max(peak, Math.abs(s));
+<<<<<<< ours
         float norm = 0.75f / peak;
+=======
+        float norm = 0.85f / peak;
+>>>>>>> theirs
 
         ByteBuffer data = ByteBuffer.allocateDirect(BUFFER_SAMPLES * 2)
                 .order(ByteOrder.nativeOrder());
@@ -1192,6 +1318,7 @@ public final class ProceduralBufferFactory {
         return buf;
     }
 
+<<<<<<< ours
     /**
      * Create a one-shot OpenAL buffer from pre-generated samples. Not cached.
      * Used by EmitterManager for triggered (sample-based) emitters where each
@@ -1229,6 +1356,11 @@ public final class ProceduralBufferFactory {
             for (int buf : ids) {
                 if (buf != 0) AL10.alDeleteBuffers(buf);
             }
+=======
+    public void shutdown() {
+        for (int buf : buffers.values()) {
+            if (buf != 0) AL10.alDeleteBuffers(buf);
+>>>>>>> theirs
         }
         buffers.clear();
     }
