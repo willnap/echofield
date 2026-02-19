@@ -5,6 +5,7 @@ import com.sonicether.soundphysics.Loggers;
 import com.sonicether.soundphysics.SoundPhysics;
 import com.sonicether.soundphysics.SoundPhysicsMod;
 import com.sonicether.soundphysics.eap.EapSystem;
+import com.sonicether.soundphysics.eap.EnvironmentProfile;
 import net.minecraft.world.phys.Vec3;
 import org.lwjgl.openal.AL10;
 import org.spongepowered.asm.mixin.Final;
@@ -43,6 +44,21 @@ public class SourceMixin {
         EapSystem eap = EapSystem.getInstanceOrNull();
         if (eap != null) {
             eap.onSoundPlay(source, pos);
+
+            // Per-source D/R ratio override
+            if (eap.getDRProcessor().isEnabled()) {
+                net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+                if (mc.player != null && mc.level != null) {
+                    EnvironmentProfile profile = eap.getProfiler().getCurrentProfile();
+                    float critDist = profile.criticalDistance();
+                    long tick = mc.level.getGameTime();
+                    eap.getDRProcessor().applyDR(source,
+                            (float) pos.x, (float) pos.y, (float) pos.z,
+                            (float) mc.player.getX(), (float) mc.player.getY(),
+                            (float) mc.player.getZ(),
+                            critDist, tick);
+                }
+            }
         }
     }
 

@@ -76,6 +76,10 @@ public final class EapSystem {
     private final AudioEnergyMeter energyMeter;
 =======
     private final HrtfManager hrtfManager;
+<<<<<<< ours
+>>>>>>> theirs
+=======
+    private final PerSourceDRProcessor drProcessor;
 >>>>>>> theirs
 
     private final AudioEnergyMeter energyMeter;
@@ -136,6 +140,11 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
         this.hrtfManager = new HrtfManager();
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        this.drProcessor = new PerSourceDRProcessor();
+        this.drProcessor.init();
 >>>>>>> theirs
 
         // Apply initial config values
@@ -284,6 +293,10 @@ public final class EapSystem {
 =======
         reflections.setMasterGain(config.eapMasterVolume.get());
         reflections.setReflectionIntensity(config.earlyReflectionIntensity.get());
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        drProcessor.setEnabled(config.perSourceDR.get());
 >>>>>>> theirs
 
         // Update ray config if changed
@@ -448,12 +461,16 @@ public final class EapSystem {
             if (config.diagnosticLogging.get()) {
                 AudioDiagnostics.logAllEapSources(excitation, reflections);
                 AudioDiagnostics.logEnvironmentProfile(profile);
+<<<<<<< ours
                 Loggers.log("EapSystem reverb: enc={} rt60={} vol={} abs={} | {}",
                         String.format("%.2f", profile.enclosureFactor()),
                         String.format("%.3f", profile.estimatedRT60()),
                         String.format("%.0f", profile.estimatedVolume()),
                         String.format("%.4f", profile.averageAbsorption()),
                         lastReverbParamsJson);
+=======
+                drProcessor.cleanupStale(currentTick);
+>>>>>>> theirs
             }
         }
     }
@@ -929,10 +946,14 @@ public final class EapSystem {
         excitation.shutdown();
         reflections.shutdown();
 <<<<<<< ours
+<<<<<<< ours
         drProcessor.shutdown();
         emitterManager.shutdown();
         hyperreality.shutdown();
 =======
+>>>>>>> theirs
+=======
+        drProcessor.shutdown();
 >>>>>>> theirs
         initialized = false;
         instance = null;
@@ -1060,10 +1081,14 @@ public final class EapSystem {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     public PerSourceDRProcessor getDRProcessor() {
         return drProcessor;
     }
 
+<<<<<<< ours
     public EmitterManager getEmitterManager() {
         return emitterManager;
     }
@@ -1088,6 +1113,8 @@ public final class EapSystem {
         return lastReverbParamsJson;
     }
 
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 =======
