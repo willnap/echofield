@@ -10,10 +10,14 @@ import com.sonicether.soundphysics.eap.debug.AudioDiagnostics;
 import com.sonicether.soundphysics.eap.debug.AudioEnergyMeter;
 import com.sonicether.soundphysics.eap.debug.EapDebugRenderer;
 <<<<<<< ours
+<<<<<<< ours
 import com.sonicether.soundphysics.eap.emitter.EmitterManager;
 import com.sonicether.soundphysics.eap.emitter.EnvironmentConditions;
 import com.sonicether.soundphysics.eap.install.InstallationManager;
 import com.sonicether.soundphysics.eap.hyperreality.HyperrealitySystem;
+=======
+import com.sonicether.soundphysics.eap.emitter.EmitterManager;
+>>>>>>> theirs
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
@@ -69,9 +73,12 @@ public final class EapSystem {
     private final HrtfManager hrtfManager;
     private final PerSourceDRProcessor drProcessor;
     private final EmitterManager emitterManager;
+<<<<<<< ours
     private final AirAbsorptionProcessor airAbsorption;
     private final HyperrealitySystem hyperreality;
     private final InstallationManager installation;
+=======
+>>>>>>> theirs
 
     private final AudioEnergyMeter energyMeter;
 =======
@@ -149,6 +156,10 @@ public final class EapSystem {
 =======
         this.drProcessor = new PerSourceDRProcessor();
         this.drProcessor.init();
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        this.emitterManager = new EmitterManager();
 >>>>>>> theirs
 
         // Apply initial config values
@@ -436,6 +447,13 @@ public final class EapSystem {
                     String.format("%.3f", profile.scatteringDensity()),
                     String.format("%.4f", profile.averageAbsorption()),
                     profile.taps().size());
+        }
+
+        // Layer 1: positioned environmental emitters
+        if (config.layer1Enabled.get()) {
+            emitterManager.setMasterGain(config.eapMasterVolume.get());
+            emitterManager.setDensity(config.emitterDensity.get());
+            emitterManager.tick(minecraft, profile);
         }
 
         // Route excitation sources through SPR's reverb system
@@ -937,6 +955,10 @@ public final class EapSystem {
         excitation.silenceAll();
 >>>>>>> theirs
         reflections.muteAll();
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        emitterManager.silenceAll();
 >>>>>>> theirs
     }
 
@@ -957,11 +979,14 @@ public final class EapSystem {
 <<<<<<< ours
         drProcessor.shutdown();
         emitterManager.shutdown();
+<<<<<<< ours
         hyperreality.shutdown();
 =======
 >>>>>>> theirs
 =======
         drProcessor.shutdown();
+>>>>>>> theirs
+=======
 >>>>>>> theirs
         initialized = false;
         instance = null;
@@ -1106,10 +1131,14 @@ public final class EapSystem {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     public EmitterManager getEmitterManager() {
         return emitterManager;
     }
 
+<<<<<<< ours
     public AirAbsorptionProcessor getAirAbsorption() {
         return airAbsorption;
     }
@@ -1130,6 +1159,8 @@ public final class EapSystem {
         return lastReverbParamsJson;
     }
 
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 =======
@@ -1213,15 +1244,22 @@ public final class EapSystem {
         int activeSlots = reflections.getActiveSlotCount();
         float cycleProgress = profiler.getCycleProgress();
 
+        int emitterActive = emitterManager.getActiveCount();
+        int emitterTracked = emitterManager.getTotalTracked();
+
         String hrtfStatus = hrtfManager.getStatusText();
-        return String.format("%s | EAP: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d cycle=%.0f%%\n%s",
-                hrtfStatus,
+        return String.format("%s | EAP[%s]: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d emit=%d/%d cycle=%.0f%%\n%s",
+                hrtfStatus, compareMode.label,
                 profile.enclosureFactor(), profile.estimatedRT60(), profile.windExposure(),
                 totalEnergy, activeSlots, EarlyReflectionProcessor.POOL_SIZE,
+<<<<<<< ours
 <<<<<<< ours
                 cycleProgress * 100f);
 >>>>>>> theirs
 =======
+=======
+                emitterActive, emitterTracked,
+>>>>>>> theirs
                 cycleProgress * 100f, energyMeter.getFormattedEnergy());
     }
 
