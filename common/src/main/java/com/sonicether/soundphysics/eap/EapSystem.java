@@ -86,6 +86,7 @@ public final class EapSystem {
 
     private boolean initialized = false;
 <<<<<<< ours
+<<<<<<< ours
     private CompareMode compareMode = CompareMode.FULL;
     private int diagnosticTickCounter = 0;
     private int debugReverbCounter = 0;
@@ -101,6 +102,9 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
     private boolean eapToggleActive = true;
+=======
+    private CompareMode compareMode = CompareMode.FULL;
+>>>>>>> theirs
     private int diagnosticTickCounter = 0;
     private Vec3 lastPlayerPos;
 <<<<<<< ours
@@ -225,6 +229,7 @@ public final class EapSystem {
 <<<<<<< ours
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
         if (config == null || !config.eapEnabled.get() || !SoundPhysicsMod.CONFIG.enabled.get()
                 || compareMode == CompareMode.VANILLA || minecraft.isPaused()) {
 =======
@@ -241,6 +246,9 @@ public final class EapSystem {
         // HRTF gate — refuse to process without binaural cues
         hrtfManager.tick();
         if (!hrtfManager.isHrtfActive()) {
+=======
+        if (config == null || !config.eapEnabled.get() || compareMode == CompareMode.VANILLA || minecraft.isPaused()) {
+>>>>>>> theirs
             excitation.setEnabled(false);
             excitation.silenceAll();
 =======
@@ -961,6 +969,9 @@ public final class EapSystem {
 
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     // ── A/B/C Compare Toggle ──────────────────────────────────────
 
     /**
@@ -968,10 +979,13 @@ public final class EapSystem {
      * VANILLA silences all EAP processing; PHYSICS and FULL re-enable.
      */
     public void toggleEnabled() {
+<<<<<<< ours
         if (installation.isActive() && !installation.isComparisonAllowed()) {
             Loggers.log("EapSystem: A/B/C toggle locked — installation stage: {}", installation.getCurrentStage().label);
             return;
         }
+=======
+>>>>>>> theirs
         compareMode = compareMode.next();
         Loggers.log("EapSystem: compare mode -> {}", compareMode.label);
         switch (compareMode) {
@@ -979,7 +993,10 @@ public final class EapSystem {
                 excitation.silenceAll();
                 reflections.muteAll();
                 drProcessor.setEnabled(false);
+<<<<<<< ours
                 hyperreality.silenceAll();
+=======
+>>>>>>> theirs
             }
             case PHYSICS, FULL -> {
                 excitation.setEnabled(true);
@@ -1133,6 +1150,7 @@ public final class EapSystem {
 
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
         if (compareMode == CompareMode.VANILLA) {
             return "EAP: " + CompareMode.VANILLA.label;
         }
@@ -1183,6 +1201,10 @@ public final class EapSystem {
 =======
         if (!eapToggleActive) {
             return "EAP: toggled OFF (A/B)";
+=======
+        if (compareMode == CompareMode.VANILLA) {
+            return "EAP: " + CompareMode.VANILLA.label;
+>>>>>>> theirs
         }
 
 >>>>>>> theirs
