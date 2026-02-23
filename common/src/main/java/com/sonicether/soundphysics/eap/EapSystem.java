@@ -74,6 +74,7 @@ public final class EapSystem {
     private final PerSourceDRProcessor drProcessor;
     private final EmitterManager emitterManager;
 <<<<<<< ours
+<<<<<<< ours
     private final AirAbsorptionProcessor airAbsorption;
     private final HyperrealitySystem hyperreality;
     private final InstallationManager installation;
@@ -87,6 +88,9 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
     private final PerSourceDRProcessor drProcessor;
+>>>>>>> theirs
+=======
+    private final AirAbsorptionProcessor airAbsorption;
 >>>>>>> theirs
 
     private final AudioEnergyMeter energyMeter;
@@ -160,6 +164,10 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
         this.emitterManager = new EmitterManager();
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        this.airAbsorption = new AirAbsorptionProcessor();
 >>>>>>> theirs
 
         // Apply initial config values
@@ -316,6 +324,10 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
         drProcessor.setEnabled(config.perSourceDR.get());
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        airAbsorption.setEnabled(config.airAbsorptionEnabled.get());
 >>>>>>> theirs
 
         // Update ray config if changed
@@ -1139,10 +1151,14 @@ public final class EapSystem {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     public AirAbsorptionProcessor getAirAbsorption() {
         return airAbsorption;
     }
 
+<<<<<<< ours
     public HyperrealitySystem getHyperreality() {
         return hyperreality;
     }
@@ -1159,6 +1175,8 @@ public final class EapSystem {
         return lastReverbParamsJson;
     }
 
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 =======
