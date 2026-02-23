@@ -4,8 +4,12 @@ import com.sonicether.soundphysics.Loggers;
 import com.sonicether.soundphysics.SoundPhysicsMod;
 import com.sonicether.soundphysics.eap.math.SpectralFilter;
 <<<<<<< ours
+<<<<<<< ours
 import net.minecraft.client.Minecraft;
 =======
+>>>>>>> theirs
+=======
+import net.minecraft.client.Minecraft;
 >>>>>>> theirs
 import net.minecraft.world.phys.Vec3;
 import org.lwjgl.openal.AL10;
@@ -407,6 +411,9 @@ public final class EarlyReflectionProcessor {
         sorted.sort(Comparator.comparingDouble(ReflectionTap::energy).reversed());
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         // Precedence window: filter to 1-50ms
         sorted.removeIf(tap -> {
             double delayMs = tap.delay() * 1000.0;
@@ -427,6 +434,9 @@ public final class EarlyReflectionProcessor {
             });
         }
 
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
         // Assign top POOL_SIZE taps to slots
@@ -627,6 +637,9 @@ public final class EarlyReflectionProcessor {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     // ── Lateral fraction helper ──────────────────────────────────────
 
     /**
