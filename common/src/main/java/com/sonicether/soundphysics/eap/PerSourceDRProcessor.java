@@ -15,9 +15,12 @@ import java.util.Map;
  * this controls how much each source sends to reverb based on distance
  * relative to critical distance.
  *
+<<<<<<< ours
  * Each tracked source gets its own set of 4 lowpass filters (one per aux send)
  * to avoid cross-contamination when multiple sources are processed per tick.
  *
+=======
+>>>>>>> theirs
  * Smoothed with 100ms time constant, max 3dB change per tick (spec 2.4.1).
  * Called AFTER SPR's setEnvironment() on each sound play.
  */
@@ -29,6 +32,7 @@ public final class PerSourceDRProcessor {
     private static final float SMOOTH_FACTOR = 0.5f;
     /** Cleanup: remove tracking for sources not seen in this many ticks. */
     private static final int STALE_TICKS = 100;
+<<<<<<< ours
     /** Max tracked sources — prevents unbounded filter allocation. */
     private static final int MAX_TRACKED_SOURCES = 64;
 
@@ -62,6 +66,31 @@ public final class PerSourceDRProcessor {
     public void init() {
         initialized = true;
         Loggers.log("PerSourceDRProcessor: initialized (per-source filter allocation)");
+=======
+
+    private boolean enabled = true;
+
+    private final Map<Integer, SourceDRState> sourceStates = new HashMap<>();
+
+    private final int[] overrideFilters = new int[4];
+    private boolean filtersInitialized = false;
+
+    private static class SourceDRState {
+        float currentMultiplier = 0.5f;
+        long lastSeenTick;
+    }
+
+    public void init() {
+        for (int i = 0; i < 4; i++) {
+            overrideFilters[i] = EXTEfx.alGenFilters();
+            EXTEfx.alFilteri(overrideFilters[i], EXTEfx.AL_FILTER_TYPE,
+                    EXTEfx.AL_FILTER_LOWPASS);
+            EXTEfx.alFilterf(overrideFilters[i], EXTEfx.AL_LOWPASS_GAIN, 1.0f);
+            EXTEfx.alFilterf(overrideFilters[i], EXTEfx.AL_LOWPASS_GAINHF, 1.0f);
+        }
+        filtersInitialized = true;
+        Loggers.log("PerSourceDRProcessor: initialized {} override filters", 4);
+>>>>>>> theirs
     }
 
     /**
@@ -82,12 +111,19 @@ public final class PerSourceDRProcessor {
 
     /**
      * Overrides reverb send gains for a game sound source.
+<<<<<<< ours
      * Each source gets its own set of 4 OpenAL filters to avoid cross-contamination.
+=======
+>>>>>>> theirs
      */
     public void applyDR(int sourceId, float sourceX, float sourceY, float sourceZ,
                         float listenerX, float listenerY, float listenerZ,
                         float criticalDist, long currentTick) {
+<<<<<<< ours
         if (!enabled || !initialized) return;
+=======
+        if (!enabled || !filtersInitialized) return;
+>>>>>>> theirs
 
         int maxSends = SoundPhysics.getMaxAuxSends();
         if (maxSends < 1) return;
@@ -99,10 +135,13 @@ public final class PerSourceDRProcessor {
 
         float targetMult = RoomGeometry.reverbSendMultiplier(distance, criticalDist);
 
+<<<<<<< ours
         // Cap tracked sources to prevent unbounded filter allocation
         if (!sourceStates.containsKey(sourceId) && sourceStates.size() >= MAX_TRACKED_SOURCES) {
             return;
         }
+=======
+>>>>>>> theirs
         SourceDRState state = sourceStates.computeIfAbsent(sourceId, k -> new SourceDRState());
         state.currentMultiplier = smoothMultiplier(state.currentMultiplier, targetMult);
         state.lastSeenTick = currentTick;
@@ -113,20 +152,32 @@ public final class PerSourceDRProcessor {
             int auxSlot = SoundPhysics.getAuxFXSlot(i);
             if (auxSlot == 0) continue;
 
+<<<<<<< ours
             EXTEfx.alFilterf(state.filterIds[i], EXTEfx.AL_LOWPASS_GAIN, multiplier);
             EXTEfx.alFilterf(state.filterIds[i], EXTEfx.AL_LOWPASS_GAINHF, 1.0f);
 
             AL11.alSource3i(sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER,
                     auxSlot, i, state.filterIds[i]);
+=======
+            EXTEfx.alFilterf(overrideFilters[i], EXTEfx.AL_LOWPASS_GAIN, multiplier);
+            EXTEfx.alFilterf(overrideFilters[i], EXTEfx.AL_LOWPASS_GAINHF, 1.0f);
+
+            AL11.alSource3i(sourceId, EXTEfx.AL_AUXILIARY_SEND_FILTER,
+                    auxSlot, i, overrideFilters[i]);
+>>>>>>> theirs
         }
     }
 
     public void cleanupStale(long currentTick) {
         Iterator<Map.Entry<Integer, SourceDRState>> it = sourceStates.entrySet().iterator();
         while (it.hasNext()) {
+<<<<<<< ours
             Map.Entry<Integer, SourceDRState> entry = it.next();
             if (currentTick - entry.getValue().lastSeenTick > STALE_TICKS) {
                 entry.getValue().deleteFilters();
+=======
+            if (currentTick - it.next().getValue().lastSeenTick > STALE_TICKS) {
+>>>>>>> theirs
                 it.remove();
             }
         }
@@ -141,10 +192,20 @@ public final class PerSourceDRProcessor {
     }
 
     public void shutdown() {
+<<<<<<< ours
         for (SourceDRState state : sourceStates.values()) {
             state.deleteFilters();
         }
         sourceStates.clear();
         initialized = false;
+=======
+        if (filtersInitialized) {
+            for (int fid : overrideFilters) {
+                if (fid != 0) EXTEfx.alDeleteFilters(fid);
+            }
+            filtersInitialized = false;
+        }
+        sourceStates.clear();
+>>>>>>> theirs
     }
 }
