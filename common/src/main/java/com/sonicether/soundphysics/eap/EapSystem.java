@@ -13,6 +13,7 @@ import com.sonicether.soundphysics.eap.debug.EapDebugRenderer;
 <<<<<<< ours
 import com.sonicether.soundphysics.eap.emitter.EmitterManager;
 <<<<<<< ours
+<<<<<<< ours
 import com.sonicether.soundphysics.eap.emitter.EnvironmentConditions;
 import com.sonicether.soundphysics.eap.install.InstallationManager;
 import com.sonicether.soundphysics.eap.hyperreality.HyperrealitySystem;
@@ -25,6 +26,9 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 =======
 =======
+=======
+import com.sonicether.soundphysics.eap.install.InstallationManager;
+>>>>>>> theirs
 import com.sonicether.soundphysics.eap.spatial.SpatialFieldProcessor;
 >>>>>>> theirs
 import net.minecraft.client.Minecraft;
@@ -99,6 +103,10 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
     private final SpatialFieldProcessor spatialField;
+<<<<<<< ours
+>>>>>>> theirs
+=======
+    private final InstallationManager installation;
 >>>>>>> theirs
 
     private final AudioEnergyMeter energyMeter;
@@ -180,6 +188,10 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
         this.spatialField = new SpatialFieldProcessor();
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        this.installation = new InstallationManager();
 >>>>>>> theirs
 
         // Apply initial config values
@@ -329,6 +341,7 @@ public final class EapSystem {
         // Tick installation manager
         installation.setActive(config.installationMode.get());
         installation.tick(minecraft);
+<<<<<<< ours
 =======
         reflections.setMasterGain(config.eapMasterVolume.get());
         reflections.setReflectionIntensity(config.earlyReflectionIntensity.get());
@@ -340,6 +353,8 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
         airAbsorption.setEnabled(config.airAbsorptionEnabled.get());
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 
         // Update ray config if changed
@@ -481,7 +496,8 @@ public final class EapSystem {
         }
 
         // Layer 3: spatial field — continuous broadband field from surface clusters
-        if (config.spatialFieldEnabled.get() && compareMode == CompareMode.FULL) {
+        boolean spatialAllowed = installation.isSpatialFieldAllowed();
+        if (config.spatialFieldEnabled.get() && compareMode == CompareMode.FULL && spatialAllowed) {
             spatialField.setIntensity(config.augmentationIntensity.get());
             float sceneEnergy = emitterManager.getSceneEnergy() + energyMeter.getLatestEnergy();
             spatialField.tick(profile, config.eapMasterVolume.get(), sceneEnergy, currentPos);
@@ -1046,10 +1062,16 @@ public final class EapSystem {
      */
     public void toggleEnabled() {
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         if (installation.isActive() && !installation.isComparisonAllowed()) {
             Loggers.log("EapSystem: A/B/C toggle locked — installation stage: {}", installation.getCurrentStage().label);
             return;
         }
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
         compareMode = compareMode.next();
@@ -1224,6 +1246,13 @@ public final class EapSystem {
         return spatialField;
     }
 
+<<<<<<< ours
+>>>>>>> theirs
+=======
+    public InstallationManager getInstallation() {
+        return installation;
+    }
+
 >>>>>>> theirs
     /**
      * Returns a debug HUD string with key EAP metrics.
@@ -1308,7 +1337,17 @@ public final class EapSystem {
         int spatialTotal = spatialField.getSourceCount();
 
         String hrtfStatus = hrtfManager.getStatusText();
-        return String.format("%s | EAP[%s]: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d emit=%d/%d spatial=%d/%d cycle=%.0f%%\n%s",
+        String installInfo = "";
+        if (installation.isActive()) {
+            installInfo = "\nInstall: " + installation.getCurrentStage().label
+                    + " (" + installation.getSecondsRemaining() + "s remaining)";
+            if (installation.getMetrics().isRecording()) {
+                installInfo += String.format(" | Recording: %d ticks, %d collisions",
+                        installation.getMetrics().getRecordedTicks(),
+                        installation.getMetrics().getWallCollisions());
+            }
+        }
+        return String.format("%s | EAP[%s]: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d emit=%d/%d spatial=%d/%d cycle=%.0f%%\n%s%s",
                 hrtfStatus, compareMode.label,
                 profile.enclosureFactor(), profile.estimatedRT60(), profile.windExposure(),
                 totalEnergy, activeSlots, EarlyReflectionProcessor.POOL_SIZE,
@@ -1323,8 +1362,12 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
                 spatialActive, spatialTotal,
+<<<<<<< ours
 >>>>>>> theirs
                 cycleProgress * 100f, energyMeter.getFormattedEnergy());
+=======
+                cycleProgress * 100f, energyMeter.getFormattedEnergy(), installInfo);
+>>>>>>> theirs
     }
 
     /**

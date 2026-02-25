@@ -159,10 +159,17 @@ public final class InstallationManager {
     }
 
     /**
+<<<<<<< ours
      * Returns whether hyperreality should be active for the current stage.
      * Hyperreality is only allowed in AUGMENTED, BLINDFOLD, and COMPARISON stages.
      */
     public boolean isHyperrealityAllowed() {
+=======
+     * Returns whether the spatial field should be active for the current stage.
+     * The spatial field is only allowed in AUGMENTED, BLINDFOLD, and COMPARISON stages.
+     */
+    public boolean isSpatialFieldAllowed() {
+>>>>>>> theirs
         if (!active) return true; // If installation mode is off, no restriction
         return currentStage != Stage.PLAY;
     }
