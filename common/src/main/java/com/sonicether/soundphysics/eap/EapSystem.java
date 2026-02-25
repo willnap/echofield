@@ -12,6 +12,7 @@ import com.sonicether.soundphysics.eap.debug.EapDebugRenderer;
 <<<<<<< ours
 <<<<<<< ours
 import com.sonicether.soundphysics.eap.emitter.EmitterManager;
+<<<<<<< ours
 import com.sonicether.soundphysics.eap.emitter.EnvironmentConditions;
 import com.sonicether.soundphysics.eap.install.InstallationManager;
 import com.sonicether.soundphysics.eap.hyperreality.HyperrealitySystem;
@@ -23,6 +24,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import java.util.List;
 =======
+=======
+import com.sonicether.soundphysics.eap.spatial.SpatialFieldProcessor;
+>>>>>>> theirs
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.Vec3;
 >>>>>>> theirs
@@ -91,6 +95,10 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
     private final AirAbsorptionProcessor airAbsorption;
+<<<<<<< ours
+>>>>>>> theirs
+=======
+    private final SpatialFieldProcessor spatialField;
 >>>>>>> theirs
 
     private final AudioEnergyMeter energyMeter;
@@ -168,6 +176,10 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
         this.airAbsorption = new AirAbsorptionProcessor();
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        this.spatialField = new SpatialFieldProcessor();
 >>>>>>> theirs
 
         // Apply initial config values
@@ -466,6 +478,15 @@ public final class EapSystem {
             emitterManager.setMasterGain(config.eapMasterVolume.get());
             emitterManager.setDensity(config.emitterDensity.get());
             emitterManager.tick(minecraft, profile);
+        }
+
+        // Layer 3: spatial field — continuous broadband field from surface clusters
+        if (config.spatialFieldEnabled.get() && compareMode == CompareMode.FULL) {
+            spatialField.setIntensity(config.augmentationIntensity.get());
+            float sceneEnergy = emitterManager.getSceneEnergy() + energyMeter.getLatestEnergy();
+            spatialField.tick(profile, config.eapMasterVolume.get(), sceneEnergy, currentPos);
+        } else {
+            spatialField.silenceAll();
         }
 
         // Route excitation sources through SPR's reverb system
@@ -971,6 +992,10 @@ public final class EapSystem {
 >>>>>>> theirs
 =======
         emitterManager.silenceAll();
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        spatialField.silenceAll();
 >>>>>>> theirs
     }
 
@@ -992,6 +1017,7 @@ public final class EapSystem {
         drProcessor.shutdown();
         emitterManager.shutdown();
 <<<<<<< ours
+<<<<<<< ours
         hyperreality.shutdown();
 =======
 >>>>>>> theirs
@@ -999,6 +1025,9 @@ public final class EapSystem {
         drProcessor.shutdown();
 >>>>>>> theirs
 =======
+>>>>>>> theirs
+=======
+        spatialField.shutdown();
 >>>>>>> theirs
         initialized = false;
         instance = null;
@@ -1031,8 +1060,12 @@ public final class EapSystem {
                 reflections.muteAll();
                 drProcessor.setEnabled(false);
 <<<<<<< ours
+<<<<<<< ours
                 hyperreality.silenceAll();
 =======
+>>>>>>> theirs
+=======
+                spatialField.silenceAll();
 >>>>>>> theirs
             }
             case PHYSICS, FULL -> {
@@ -1159,6 +1192,7 @@ public final class EapSystem {
     }
 
 <<<<<<< ours
+<<<<<<< ours
     public HyperrealitySystem getHyperreality() {
         return hyperreality;
     }
@@ -1184,6 +1218,12 @@ public final class EapSystem {
 =======
 >>>>>>> theirs
 =======
+>>>>>>> theirs
+=======
+    public SpatialFieldProcessor getSpatialField() {
+        return spatialField;
+    }
+
 >>>>>>> theirs
     /**
      * Returns a debug HUD string with key EAP metrics.
@@ -1264,9 +1304,11 @@ public final class EapSystem {
 
         int emitterActive = emitterManager.getActiveCount();
         int emitterTracked = emitterManager.getTotalTracked();
+        int spatialActive = spatialField.getActiveCount();
+        int spatialTotal = spatialField.getSourceCount();
 
         String hrtfStatus = hrtfManager.getStatusText();
-        return String.format("%s | EAP[%s]: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d emit=%d/%d cycle=%.0f%%\n%s",
+        return String.format("%s | EAP[%s]: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d emit=%d/%d spatial=%d/%d cycle=%.0f%%\n%s",
                 hrtfStatus, compareMode.label,
                 profile.enclosureFactor(), profile.estimatedRT60(), profile.windExposure(),
                 totalEnergy, activeSlots, EarlyReflectionProcessor.POOL_SIZE,
@@ -1277,6 +1319,10 @@ public final class EapSystem {
 =======
 =======
                 emitterActive, emitterTracked,
+<<<<<<< ours
+>>>>>>> theirs
+=======
+                spatialActive, spatialTotal,
 >>>>>>> theirs
                 cycleProgress * 100f, energyMeter.getFormattedEnergy());
     }
