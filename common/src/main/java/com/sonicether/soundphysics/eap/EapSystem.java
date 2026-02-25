@@ -1337,6 +1337,7 @@ public final class EapSystem {
         int spatialTotal = spatialField.getSourceCount();
 
         String hrtfStatus = hrtfManager.getStatusText();
+        String sourceBudget = debugRenderer.getSourceBudgetText(emitterManager, spatialField, reflections);
         String installInfo = "";
         if (installation.isActive()) {
             installInfo = "\nInstall: " + installation.getCurrentStage().label
@@ -1347,7 +1348,7 @@ public final class EapSystem {
                         installation.getMetrics().getWallCollisions());
             }
         }
-        return String.format("%s | EAP[%s]: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d emit=%d/%d spatial=%d/%d cycle=%.0f%%\n%s%s",
+        return String.format("%s | EAP[%s]: enc=%.2f rt60=%.2f wind=%.2f energy=%.3f refl=%d/%d emit=%d/%d spatial=%d/%d cycle=%.0f%%\n%s\n%s%s",
                 hrtfStatus, compareMode.label,
                 profile.enclosureFactor(), profile.estimatedRT60(), profile.windExposure(),
                 totalEnergy, activeSlots, EarlyReflectionProcessor.POOL_SIZE,
@@ -1363,10 +1364,15 @@ public final class EapSystem {
 =======
                 spatialActive, spatialTotal,
 <<<<<<< ours
+<<<<<<< ours
 >>>>>>> theirs
                 cycleProgress * 100f, energyMeter.getFormattedEnergy());
 =======
                 cycleProgress * 100f, energyMeter.getFormattedEnergy(), installInfo);
+>>>>>>> theirs
+=======
+                cycleProgress * 100f, energyMeter.getFormattedEnergy(),
+                sourceBudget, installInfo);
 >>>>>>> theirs
     }
 

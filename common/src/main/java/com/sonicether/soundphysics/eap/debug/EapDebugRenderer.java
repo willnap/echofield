@@ -5,6 +5,7 @@ import com.sonicether.soundphysics.SoundPhysicsMod;
 <<<<<<< ours
 import com.sonicether.soundphysics.eap.EapSystem;
 import com.sonicether.soundphysics.eap.EarlyReflectionProcessor;
+<<<<<<< ours
 =======
 import com.sonicether.soundphysics.eap.EapSystem;
 >>>>>>> theirs
@@ -21,6 +22,14 @@ import com.sonicether.soundphysics.eap.hyperreality.HyperrealitySource;
 import com.sonicether.soundphysics.eap.hyperreality.HyperrealitySystem;
 import com.sonicether.soundphysics.eap.hyperreality.TerrainFeature;
 import com.sonicether.soundphysics.eap.hyperreality.TerrainFeatureType;
+=======
+import com.sonicether.soundphysics.eap.EnvironmentProfile;
+import com.sonicether.soundphysics.eap.ExcitationSourceManager;
+import com.sonicether.soundphysics.eap.ReflectionTap;
+import com.sonicether.soundphysics.eap.emitter.EmitterCategory;
+import com.sonicether.soundphysics.eap.emitter.EmitterManager;
+import com.sonicether.soundphysics.eap.spatial.SpatialFieldProcessor;
+>>>>>>> theirs
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -65,6 +74,9 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     private static final int COLOR_TAP_DIM = 0xFFB8860B;   // Dark goldenrod
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     // Emitter category colors
     private static final int COLOR_EMITTER_WIND = 0xFF87CEEB;    // Sky blue
     private static final int COLOR_EMITTER_WATER = 0xFF4169E1;   // Royal blue
@@ -72,6 +84,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     private static final int COLOR_EMITTER_FAUNA = 0xFF90EE90;   // Light green
     private static final int COLOR_EMITTER_CAVE = 0xFF9370DB;    // Medium purple
     private static final int COLOR_EMITTER_MECH = 0xFFCD853F;    // Peru
+<<<<<<< ours
 
     private volatile ExcitationSourceManager excitationRef;
     private volatile EnvironmentProfile profileRef;
@@ -79,6 +92,10 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     private volatile HyperrealitySystem hyperrealityRef;
     private volatile EnvironmentConditions conditionsRef;
 =======
+=======
+    private static final int COLOR_SPATIAL = 0xFFFF69B4;         // Hot pink
+
+>>>>>>> theirs
     private volatile ExcitationSourceManager excitationRef;
     private volatile EnvironmentProfile profileRef;
 >>>>>>> theirs
@@ -191,6 +208,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
 
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
     // ── Emitter markers ────────────────────────────────────────────────
 
     /**
@@ -249,6 +267,20 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     // ── Source budget ─────────────────────────────────────────────────
 
     public String getSourceBudgetText(EmitterManager emitters, HyperrealitySystem hyperreality,
+=======
+    // ── Source budget ─────────────────────────────────────────────────
+
+    /**
+     * Returns a formatted string showing the OpenAL source budget across all EAP subsystems.
+     * Format: "Sources: excitation=5 refl=3/8 emit=12/64 spatial=4/8 total=24"
+     *
+     * @param emitters  the emitter manager (Layer 1)
+     * @param spatial   the spatial field processor (Layer 3)
+     * @param reflections the early reflection processor
+     * @return formatted budget string
+     */
+    public String getSourceBudgetText(EmitterManager emitters, SpatialFieldProcessor spatial,
+>>>>>>> theirs
                                        EarlyReflectionProcessor reflections) {
         ExcitationSourceManager excitation = this.excitationRef;
         int excitationCount = (excitation != null) ? excitation.getActiveSourceInfo().size() : 0;
@@ -256,6 +288,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         int reflTotal = EarlyReflectionProcessor.POOL_SIZE;
         int emitActive = emitters.getActiveCount();
         int emitTotal = emitters.getTotalTracked();
+<<<<<<< ours
         int hyperActive = hyperreality.getActiveCount();
         int hyperTotal = hyperreality.getSourceCount();
         int totalActive = excitationCount + reflActive + emitActive + hyperActive;
@@ -284,6 +317,15 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         return String.format("Sources: excite=%d refl=%d/%d emit=%d/%d hyper=%d/%d%s total=%d",
                 excitationCount, reflActive, reflTotal, emitActive, emitTotal,
                 hyperActive, hyperTotal, breakdown, totalActive);
+=======
+        int spatialActive = spatial.getActiveCount();
+        int spatialTotal = spatial.getSourceCount();
+        int totalActive = excitationCount + reflActive + emitActive + spatialActive;
+
+        return String.format("Sources: excite=%d refl=%d/%d emit=%d/%d spatial=%d/%d total=%d",
+                excitationCount, reflActive, reflTotal, emitActive, emitTotal,
+                spatialActive, spatialTotal, totalActive);
+>>>>>>> theirs
     }
 
     /**
@@ -295,14 +337,22 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     public static int getColorForEmitterCategory(EmitterCategory category) {
         return switch (category) {
             case WIND_LEAF, WIND_GRASS, WIND_WHISTLE -> COLOR_EMITTER_WIND;
+<<<<<<< ours
             case WATER_FLOW, WATER_DRIP, WATER_RAIN, WATER_STILL -> COLOR_EMITTER_WATER;
             case LAVA -> COLOR_EMITTER_LAVA;
             case BIRD, INSECT, FROG, BAT -> COLOR_EMITTER_FAUNA;
             case CAVE_AMBIENT, CAVE_DRONE -> COLOR_EMITTER_CAVE;
+=======
+            case WATER_FLOW, WATER_DRIP, WATER_RAIN -> COLOR_EMITTER_WATER;
+            case LAVA -> COLOR_EMITTER_LAVA;
+            case BIRD, INSECT, FROG, BAT -> COLOR_EMITTER_FAUNA;
+            case CAVE_AMBIENT -> COLOR_EMITTER_CAVE;
+>>>>>>> theirs
             case MECHANICAL -> COLOR_EMITTER_MECH;
         };
     }
 
+<<<<<<< ours
     // ── Environment conditions text ──────────────────────────────────
 
     /**
@@ -320,6 +370,8 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
                         cond.enclosure(), cond.roomSize());
     }
 
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
     // ── HUD overlay rendering ───────────────────────────────────────
