@@ -43,7 +43,7 @@ public final class EmitterManager {
  */
 public final class EmitterManager {
 
-    private static final int POOL_SIZE = 64;
+    private static final int POOL_SIZE = 16;
     private static final int RESCAN_INTERVAL_TICKS = 100;
 >>>>>>> theirs
 

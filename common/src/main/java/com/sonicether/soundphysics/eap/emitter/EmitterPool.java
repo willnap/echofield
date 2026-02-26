@@ -21,6 +21,7 @@ public final class EmitterPool {
     private static final float SMOOTH_FACTOR = 0.15f;
 
 <<<<<<< ours
+<<<<<<< ours
     private SamplePoolLoader samplePoolLoader;
 
     void setSamplePoolLoader(SamplePoolLoader loader) {
@@ -31,6 +32,9 @@ public final class EmitterPool {
 =======
     private final int maxSources;
 >>>>>>> theirs
+=======
+    private int maxSources;
+>>>>>>> theirs
     private final List<Emitter> activeEmitters = new ArrayList<>();
 
     // Pre-allocated OpenAL source IDs
@@ -40,14 +44,20 @@ public final class EmitterPool {
 
     public EmitterPool(int maxSources) {
 <<<<<<< ours
+<<<<<<< ours
 =======
         this.maxSources = maxSources;
+>>>>>>> theirs
+=======
 >>>>>>> theirs
         this.sourceIds = new int[maxSources];
         this.filterIds = new int[maxSources];
         this.sourceInUse = new boolean[maxSources];
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         int allocated = 0;
         for (int i = 0; i < maxSources; i++) {
             sourceIds[i] = AL10.alGenSources();
@@ -62,10 +72,13 @@ public final class EmitterPool {
                 Loggers.log("EmitterPool: alGenFilters failed at slot {}, stopping", i);
                 break;
             }
+<<<<<<< ours
 =======
         for (int i = 0; i < maxSources; i++) {
             sourceIds[i] = AL10.alGenSources();
             filterIds[i] = EXTEfx.alGenFilters();
+>>>>>>> theirs
+=======
 >>>>>>> theirs
             EXTEfx.alFilteri(filterIds[i], EXTEfx.AL_FILTER_TYPE,
                     EXTEfx.AL_FILTER_LOWPASS);
@@ -83,15 +96,24 @@ public final class EmitterPool {
 
             sourceInUse[i] = false;
 <<<<<<< ours
+<<<<<<< ours
             allocated++;
         }
         this.maxSources = allocated;
 
         Loggers.log("EmitterPool: allocated {} sources (requested {})", allocated, maxSources);
 =======
+=======
+            allocated++;
+>>>>>>> theirs
         }
+        this.maxSources = allocated;
 
+<<<<<<< ours
         Loggers.log("EmitterPool: allocated {} sources", maxSources);
+>>>>>>> theirs
+=======
+        Loggers.log("EmitterPool: allocated {} sources (requested {})", allocated, maxSources);
 >>>>>>> theirs
     }
 

@@ -181,12 +181,22 @@ public final class ProceduralBufferFactory {
     }
 
     private void generateLeafRustle(float[] out, Random rng) {
-        int numGrains = BUFFER_SECONDS * 2000;
+        // Broadband base: gentle filtered noise for body
+        float filterState = 0;
+        for (int i = 0; i < out.length; i++) {
+            float white = rng.nextFloat() * 2f - 1f;
+            filterState += white * 0.02f;
+            filterState *= 0.996f;
+            out[i] = filterState * 0.15f;
+        }
+
+        // Granular rustling: lower frequency range (400-2800Hz) for realism
+        int numGrains = BUFFER_SECONDS * 1500;
         for (int g = 0; g < numGrains; g++) {
             int start = rng.nextInt(out.length);
-            int len = 132 + rng.nextInt(308);
-            float amp = 0.008f + rng.nextFloat() * 0.02f;
-            float freq = 1200 + rng.nextFloat() * 4000;
+            int len = 220 + rng.nextInt(440);
+            float amp = 0.006f + rng.nextFloat() * 0.012f;
+            float freq = 400 + rng.nextFloat() * 2400;
 
             for (int i = 0; i < len && start + i < out.length; i++) {
                 float t = (float) i / SAMPLE_RATE;
@@ -200,6 +210,7 @@ public final class ProceduralBufferFactory {
     }
 
     private void generateGrassSwish(float[] out, Random rng) {
+<<<<<<< ours
 <<<<<<< ours
         float[] wind = computeWindEnvelope(rng);
 
@@ -270,11 +281,24 @@ public final class ProceduralBufferFactory {
                 }
 =======
         int numGrains = BUFFER_SECONDS * 1250;
+=======
+        // Gentle broadband base
+        float filterState = 0;
+        for (int i = 0; i < out.length; i++) {
+            float white = rng.nextFloat() * 2f - 1f;
+            filterState += white * 0.015f;
+            filterState *= 0.997f;
+            out[i] = filterState * 0.1f;
+        }
+
+        // Softer, lower-frequency swish grains (200-1400Hz)
+        int numGrains = BUFFER_SECONDS * 1000;
+>>>>>>> theirs
         for (int g = 0; g < numGrains; g++) {
             int start = rng.nextInt(out.length);
-            int len = 176 + rng.nextInt(352);
-            float amp = 0.004f + rng.nextFloat() * 0.010f;
-            float freq = 400 + rng.nextFloat() * 1600;
+            int len = 220 + rng.nextInt(440);
+            float amp = 0.003f + rng.nextFloat() * 0.007f;
+            float freq = 200 + rng.nextFloat() * 1200;
 
             for (int i = 0; i < len && start + i < out.length; i++) {
                 float t = (float) i / SAMPLE_RATE;
@@ -377,6 +401,7 @@ public final class ProceduralBufferFactory {
     }
 
     private void generateWaterFlow(float[] out, Random rng) {
+<<<<<<< ours
 <<<<<<< ours
         // Perlin-modulated flow envelope for temporal variation
         PerlinNoise flowNoise = new PerlinNoise(rng.nextLong());
@@ -496,25 +521,36 @@ public final class ProceduralBufferFactory {
                 out[start + i] += env * (rng.nextFloat() * 2f - 1f);
 =======
         float flowState = 0;
+=======
+        // Deep brownian noise base — strong low-frequency rumble like real water
+        float brownState = 0;
+        float pinkState = 0;
+>>>>>>> theirs
         for (int i = 0; i < out.length; i++) {
             float white = rng.nextFloat() * 2f - 1f;
-            flowState += white * 0.012f;
-            flowState *= 0.998f;
-            flowState = Math.max(-1f, Math.min(1f, flowState));
-            out[i] = flowState * 0.25f;
+            // Brownian: very slow random walk for deep bass
+            brownState += white * 0.008f;
+            brownState *= 0.9995f;
+            brownState = Math.max(-1f, Math.min(1f, brownState));
+            // Pink-ish mid-range layer
+            pinkState += white * 0.025f;
+            pinkState *= 0.993f;
+            pinkState = Math.max(-1f, Math.min(1f, pinkState));
+            out[i] = brownState * 0.4f + pinkState * 0.2f;
         }
-        int numBubbles = BUFFER_SECONDS * 1500;
+        // Subtle low-frequency bubbles — fewer, lower, softer
+        int numBubbles = BUFFER_SECONDS * 400;
         for (int b = 0; b < numBubbles; b++) {
             int start = rng.nextInt(out.length);
-            float freq = 80 + rng.nextFloat() * rng.nextFloat() * 2900;
-            float decay = 30 + rng.nextFloat() * 120;
-            float amp = 0.006f + rng.nextFloat() * 0.016f;
-            int dur = Math.min((int) (5f / decay * SAMPLE_RATE), 4410);
+            float freq = 40 + rng.nextFloat() * rng.nextFloat() * 600;
+            float decay = 12 + rng.nextFloat() * 50;
+            float amp = 0.004f + rng.nextFloat() * 0.008f;
+            int dur = Math.min((int) (5f / decay * SAMPLE_RATE), 8820);
 
             for (int i = 0; i < dur && start + i < out.length; i++) {
                 float t = (float) i / SAMPLE_RATE;
                 float env = amp * (float) Math.exp(-decay * t);
-                float chirpFreq = freq * (1f - 0.15f * t * decay / 50f);
+                float chirpFreq = freq * (1f - 0.08f * t * decay / 30f);
                 out[start + i] += env * (float) Math.sin(2 * Math.PI * chirpFreq * t);
 >>>>>>> theirs
             }
