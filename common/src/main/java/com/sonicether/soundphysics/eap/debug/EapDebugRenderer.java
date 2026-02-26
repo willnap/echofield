@@ -26,9 +26,14 @@ import com.sonicether.soundphysics.eap.hyperreality.TerrainFeatureType;
 import com.sonicether.soundphysics.eap.EnvironmentProfile;
 import com.sonicether.soundphysics.eap.ExcitationSourceManager;
 import com.sonicether.soundphysics.eap.ReflectionTap;
+import com.sonicether.soundphysics.eap.emitter.Emitter;
 import com.sonicether.soundphysics.eap.emitter.EmitterCategory;
 import com.sonicether.soundphysics.eap.emitter.EmitterManager;
 import com.sonicether.soundphysics.eap.spatial.SpatialFieldProcessor;
+<<<<<<< ours
+>>>>>>> theirs
+=======
+import com.sonicether.soundphysics.eap.spatial.SurfaceCluster;
 >>>>>>> theirs
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -98,6 +103,11 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
 >>>>>>> theirs
     private volatile ExcitationSourceManager excitationRef;
     private volatile EnvironmentProfile profileRef;
+<<<<<<< ours
+>>>>>>> theirs
+=======
+    private volatile EmitterManager emitterManagerRef;
+    private volatile SpatialFieldProcessor spatialFieldRef;
 >>>>>>> theirs
 
     public void setExcitationManager(ExcitationSourceManager manager) {
@@ -109,10 +119,14 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     public void setEmitterManager(EmitterManager manager) {
         this.emitterManagerRef = manager;
     }
 
+<<<<<<< ours
     public void setHyperrealitySystem(HyperrealitySystem system) {
         this.hyperrealityRef = system;
     }
@@ -122,6 +136,12 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     }
 
 =======
+>>>>>>> theirs
+=======
+    public void setSpatialField(SpatialFieldProcessor field) {
+        this.spatialFieldRef = field;
+    }
+
 >>>>>>> theirs
     @Override
     public void emitGizmos(double camX, double camY, double camZ,
@@ -137,9 +157,14 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         renderExcitationSources(camX, camY, camZ);
         renderReflectionTaps(camX, camY, camZ);
 <<<<<<< ours
+<<<<<<< ours
         renderEmitterMarkers(camX, camY, camZ);
         renderHyperrealityFeatures(camX, camY, camZ);
 =======
+>>>>>>> theirs
+=======
+        renderEmitterMarkers(camX, camY, camZ);
+        renderSpatialFieldClusters(camX, camY, camZ);
 >>>>>>> theirs
     }
 
@@ -209,6 +234,9 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
 <<<<<<< ours
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     // ── Emitter markers ────────────────────────────────────────────────
 
     /**
@@ -235,16 +263,30 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         }
     }
 
+<<<<<<< ours
     private void renderHyperrealityFeatures(double camX, double camY, double camZ) {
         HyperrealitySystem system = this.hyperrealityRef;
         if (system == null || system.getActiveCount() == 0) return;
 
         HyperrealityPool pool = system.getPool();
         if (pool == null) return;
+=======
+    // ── Spatial field clusters ────────────────────────────────────────
+
+    /**
+     * Renders lines from player to spatial field cluster centroids.
+     * Color intensity proportional to cluster energy.
+     */
+    private void renderSpatialFieldClusters(double camX, double camY, double camZ) {
+        SpatialFieldProcessor field = this.spatialFieldRef;
+        EnvironmentProfile profile = this.profileRef;
+        if (field == null || profile == null || field.getActiveCount() == 0) return;
+>>>>>>> theirs
 
         Vec3 cam = new Vec3(camX, camY, camZ);
         Vec3 playerPos = mc.gameRenderer.getMainCamera().position();
 
+<<<<<<< ours
         for (HyperrealitySource src : pool.getSources()) {
             if (!src.isActive() || src.getCurrentGain() < 0.001f) continue;
 
@@ -259,15 +301,33 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
             int color = (alpha << 24) | (baseColor & 0x00FFFFFF);
 
             GizmoProperties line = Gizmos.line(playerPos, featurePos, color);
+=======
+        List<SurfaceCluster> clusters = com.sonicether.soundphysics.eap.spatial.ClusterDetector.detect(
+                profile.taps(), playerPos);
+
+        for (int i = 0; i < Math.min(clusters.size(), field.getSourceCount()); i++) {
+            SurfaceCluster c = clusters.get(i);
+            float gain = c.computeGain(0.5f);
+            if (gain < 0.0001f) continue;
+            if (cam.distanceTo(c.centroid()) > 64.0) continue;
+
+            int alpha = (int) (Math.min(gain * 5f, 1f) * 255);
+            int color = (alpha << 24) | (COLOR_SPATIAL & 0x00FFFFFF);
+
+            GizmoProperties line = Gizmos.line(playerPos, c.centroid(), color);
+>>>>>>> theirs
             line.persistForMillis(100);
             line.fadeOut();
         }
     }
 
+<<<<<<< ours
     // ── Source budget ─────────────────────────────────────────────────
 
     public String getSourceBudgetText(EmitterManager emitters, HyperrealitySystem hyperreality,
 =======
+=======
+>>>>>>> theirs
     // ── Source budget ─────────────────────────────────────────────────
 
     /**

@@ -20,9 +20,13 @@ public final class Emitter {
 
     // Current state (smoothed toward targets each tick)
 <<<<<<< ours
+<<<<<<< ours
     public float currentGain;
 =======
     float currentGain;
+>>>>>>> theirs
+=======
+    public float currentGain;
 >>>>>>> theirs
     float targetGain;
     float currentFilterGainHF = 1.0f;

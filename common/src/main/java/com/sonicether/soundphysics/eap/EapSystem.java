@@ -932,6 +932,8 @@ public final class EapSystem {
         // Update debug renderer references
         debugRenderer.setExcitationManager(excitation);
         debugRenderer.setCurrentProfile(profile);
+        debugRenderer.setEmitterManager(emitterManager);
+        debugRenderer.setSpatialField(spatialField);
 
         // Diagnostic logging (every 100 ticks = 5 seconds)
         if (config.diagnosticLogging.get()) {
