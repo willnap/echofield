@@ -261,6 +261,9 @@ public final class EmitterPool {
             e.lastActiveTick = currentTick;
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
             // Recycle finished one-shot sources, deleting dynamic buffers.
             // AL_INITIAL means "never played" (awaiting trigger) — do NOT recycle.
             // Only recycle AL_STOPPED (playback completed).

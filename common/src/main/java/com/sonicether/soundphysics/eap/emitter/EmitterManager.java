@@ -69,7 +69,10 @@ public final class EmitterManager {
     private java.util.Map<EmitterCategory, Boolean> categoryEnabled = new java.util.EnumMap<>(EmitterCategory.class);
     private float faunaVolume = 0.5f;
     private boolean underwater = false;
+<<<<<<< ours
     private float lastScanX, lastScanY, lastScanZ;
+=======
+>>>>>>> theirs
 
 =======
     private int ticksSinceRescan = 0;
@@ -102,12 +105,17 @@ public final class EmitterManager {
         }
 
 <<<<<<< ours
+<<<<<<< ours
         samplePoolLoader.loadAll();
         pool.setSamplePoolLoader(samplePoolLoader);
 
         this.underwater = minecraft.player.isUnderWater();
 
 =======
+>>>>>>> theirs
+=======
+        this.underwater = minecraft.player.isUnderWater();
+
 >>>>>>> theirs
         long currentTick = minecraft.level.getGameTime();
         float playerX = (float) minecraft.player.getX();
@@ -581,9 +589,15 @@ public final class EmitterManager {
                         float outdoorGate = cond.enclosure() > 0.6f
                                 ? Math.max(0f, 1.0f - (cond.enclosure() - 0.6f) * 2.5f) : 1.0f;
                         float timeGate = cond.daylight() > 0.15f ? 1.0f : 0.0f;
+<<<<<<< ours
                         float dawnBoost = 1.0f + cond.dawnChorus() * 2.5f;
                         float forestBoost = cond.isForest() ? 1.3f : 1.0f;
                         yield Math.min(1.0f, 0.65f * timeGate * dawnBoost * forestBoost * outdoorGate);
+=======
+                        float dawnBoost = 1.0f + cond.dawnChorus() * 1.5f;
+                        float forestBoost = cond.isForest() ? 1.3f : 1.0f;
+                        yield 0.4f * timeGate * dawnBoost * forestBoost;
+>>>>>>> theirs
                     }
                     case INSECT -> {
                         float outdoorGate = cond.enclosure() > 0.6f
@@ -685,9 +699,24 @@ public final class EmitterManager {
 
             e.targetGain = distGain * categoryGain;
 
-            // HF filter: more distance = darker sound
+            // Underwater: mute wind/fauna, heavily attenuate everything else
+            if (underwater) {
+                boolean isAerial = e.category == EmitterCategory.WIND_LEAF
+                        || e.category == EmitterCategory.WIND_GRASS
+                        || e.category == EmitterCategory.WIND_WHISTLE
+                        || isFaunaCategory(e.category);
+                e.targetGain *= isAerial ? 0f : 0.15f;
+            }
+
+            // HF filter: more distance = darker sound (+ underwater darkening)
             float hfRolloff = 1.0f - (dist / maxRange) * 0.5f;
             e.targetFilterGainHF = Math.max(0.2f, Math.min(1f, hfRolloff));
+<<<<<<< ours
+>>>>>>> theirs
+=======
+            if (underwater) {
+                e.targetFilterGainHF *= 0.3f; // Heavy LPF underwater
+            }
 >>>>>>> theirs
         }
     }
