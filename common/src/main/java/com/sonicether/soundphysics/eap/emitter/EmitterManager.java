@@ -221,7 +221,10 @@ public final class EmitterManager {
 
         for (Emitter e : emittersByPos.values()) {
             if (!e.category.sampleBased) continue;
+<<<<<<< ours
             if (e.category == EmitterCategory.BAT) continue; // No synthesis for BAT yet
+=======
+>>>>>>> theirs
             if (e.targetGain < 0.001f) continue;
 
             // If currently has a source and is playing, skip
@@ -230,10 +233,16 @@ public final class EmitterManager {
                 if (state == AL10.AL_PLAYING) continue;
             }
 
+<<<<<<< ours
             // Frog chorus: Felix Hess eagerness model — eagerness is the SOLE trigger
             // (no scheduler gate, avoids double-gating that caused ~8 min delays)
             if (e.category == EmitterCategory.FROG) {
                 e.eagerness += 0.015f;
+=======
+            // Frog chorus: Felix Hess eagerness model (ticks even without a source)
+            if (e.category == EmitterCategory.FROG) {
+                e.eagerness += 0.01f;
+>>>>>>> theirs
 
                 // Hearing a nearby calling frog boosts eagerness
                 for (Emitter other : pool.getActiveEmitters()) {
@@ -242,7 +251,11 @@ public final class EmitterManager {
                             && currentTick - other.lastCallTick < 40
                             && Math.abs(other.blockX - e.blockX) < 20
                             && Math.abs(other.blockZ - e.blockZ) < 20) {
+<<<<<<< ours
                         e.eagerness += 0.025f;
+=======
+                        e.eagerness += 0.02f;
+>>>>>>> theirs
                         break;
                     }
                 }
@@ -250,10 +263,21 @@ public final class EmitterManager {
                 float threshold = 0.8f + triggeredRng.nextFloat() * 0.4f;
                 if (e.eagerness < threshold) continue;
                 e.eagerness = 0f;
+<<<<<<< ours
                 // Fall through to allocation and playback — skip scheduler
             } else {
                 // All non-frog triggered emitters use the scheduler
                 if (!scheduler.shouldTrigger(e, conditions, triggeredRng)) continue;
+=======
+>>>>>>> theirs
+            }
+
+            // --- Trigger fires: allocate source on-demand if needed ---
+            if (!e.active || e.sourceId == 0) {
+                if (!pool.allocate(e)) continue; // Pool full
+                // Set immediate gain (no fade-in for triggered sounds)
+                e.currentGain = e.targetGain;
+                e.fadeProgress = 1.0f;
             }
 
             // --- Trigger fires: allocate source on-demand if needed ---
@@ -274,11 +298,19 @@ public final class EmitterManager {
                 continue;
             }
 
+<<<<<<< ours
             // Clean up old buffer if any (but never delete pooled sample buffers)
             int oldBuffer = AL10.alGetSourcei(e.sourceId, AL10.AL_BUFFER);
             AL10.alSourceStop(e.sourceId);
             AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, 0);
             if (oldBuffer != 0 && !samplePoolLoader.isPooledBuffer(oldBuffer)) {
+=======
+            // Clean up old buffer if any
+            int oldBuffer = AL10.alGetSourcei(e.sourceId, AL10.AL_BUFFER);
+            AL10.alSourceStop(e.sourceId);
+            AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, 0);
+            if (oldBuffer != 0) {
+>>>>>>> theirs
                 AL10.alDeleteBuffers(oldBuffer);
             }
 
@@ -287,6 +319,7 @@ public final class EmitterManager {
             AL10.alSourcei(e.sourceId, AL10.AL_LOOPING, AL10.AL_FALSE);
 
             if (e.category == EmitterCategory.BIRD) {
+<<<<<<< ours
                 // Full 8-species pitch spread + per-call randomization
                 float pitchBase = 0.75f + (e.speciesVariant * 0.06f); // 0.75-1.17 across 8 species
                 float pitchJitter = 0.96f + triggeredRng.nextFloat() * 0.08f; // ±4% per call
@@ -303,6 +336,9 @@ public final class EmitterManager {
                 float gainVar = (float) Math.pow(10.0, (-2.0 + triggeredRng.nextFloat() * 4.0) / 20.0);  // ±2 dB
                 e.pitch = pitchVar;
                 e.targetGain *= gainVar;
+=======
+                e.pitch = 0.85f + (e.speciesVariant & 3) * 0.1f;
+>>>>>>> theirs
             }
 
             e.applyToOpenAL(masterGain);
@@ -765,9 +801,8 @@ public final class EmitterManager {
      */
     private void allocateNewEmitters() {
         for (Emitter e : emittersByPos.values()) {
-            if (e.active || e.targetGain < 0.001f) {
-                continue;
-            }
+            if (e.active || e.targetGain < 0.001f) continue;
+            if (e.category.sampleBased) continue; // Triggered emitters allocate on-demand
 
             if (pool.allocate(e)) {
                 bindBuffer(e);

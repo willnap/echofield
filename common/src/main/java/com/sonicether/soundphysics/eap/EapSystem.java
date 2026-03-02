@@ -496,8 +496,10 @@ public final class EapSystem {
         }
 
         // Layer 3: spatial field — continuous broadband field from surface clusters
+        // Silence underwater (broadband noise becomes "wind tunnel" effect)
         boolean spatialAllowed = installation.isSpatialFieldAllowed();
-        if (config.spatialFieldEnabled.get() && compareMode == CompareMode.FULL && spatialAllowed) {
+        if (config.spatialFieldEnabled.get() && compareMode == CompareMode.FULL
+                && spatialAllowed && !underwater) {
             spatialField.setIntensity(config.augmentationIntensity.get());
             float sceneEnergy = emitterManager.getSceneEnergy() + energyMeter.getLatestEnergy();
             spatialField.tick(profile, config.eapMasterVolume.get(), sceneEnergy, currentPos);
