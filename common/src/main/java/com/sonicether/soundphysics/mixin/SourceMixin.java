@@ -50,13 +50,15 @@ public class SourceMixin {
                 net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
                 if (mc.player != null && mc.level != null) {
                     EnvironmentProfile profile = eap.getProfiler().getCurrentProfile();
-                    float critDist = profile.criticalDistance();
-                    long tick = mc.level.getGameTime();
-                    eap.getDRProcessor().applyDR(source,
-                            (float) pos.x, (float) pos.y, (float) pos.z,
-                            (float) mc.player.getX(), (float) mc.player.getY(),
-                            (float) mc.player.getZ(),
-                            critDist, tick);
+                    if (profile != null) {
+                        float critDist = profile.criticalDistance();
+                        long tick = mc.level.getGameTime();
+                        eap.getDRProcessor().applyDR(source,
+                                (float) pos.x, (float) pos.y, (float) pos.z,
+                                (float) mc.player.getX(), (float) mc.player.getY(),
+                                (float) mc.player.getZ(),
+                                critDist, tick);
+                    }
                 }
             }
         }

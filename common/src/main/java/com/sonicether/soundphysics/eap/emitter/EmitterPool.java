@@ -304,9 +304,13 @@ public final class EmitterPool {
 
     public List<Emitter> getActiveEmitters() {
 <<<<<<< ours
+<<<<<<< ours
         return new ArrayList<>(activeEmitters);
 =======
         return activeEmitters;
+>>>>>>> theirs
+=======
+        return new ArrayList<>(activeEmitters);
 >>>>>>> theirs
     }
 

@@ -252,11 +252,20 @@ public class SoundPhysics {
 
         // Direct sound occlusion
 
+        if (minecraft.gameRenderer == null) {
+            setDefaultEnvironment(sourceID, auxOnly);
+            return null;
+        }
         Vec3 playerPos = minecraft.gameRenderer.getMainCamera().position();
         Vec3 normalToPlayer = playerPos.subtract(soundPos).normalize();
 
         BlockPos soundBlockPos = BlockPos.containing(soundPos);
-        FluidState soundFluidState = getLevelProxy().getFluidState(soundBlockPos);
+        ClientLevelProxy levelProxy = getLevelProxy();
+        if (levelProxy == null) {
+            setDefaultEnvironment(sourceID, auxOnly);
+            return null;
+        }
+        FluidState soundFluidState = levelProxy.getFluidState(soundBlockPos);
         boolean sourceIsUnderwater = soundFluidState.is(FluidTags.WATER);
 
         Loggers.logDebug("Player pos: {}, {}, {} \tSound Pos: {}, {}, {} \tTo player vector: {}, {}, {}", playerPos.x, playerPos.y, playerPos.z, soundPos.x, soundPos.y, soundPos.z, normalToPlayer.x, normalToPlayer.y, normalToPlayer.z);

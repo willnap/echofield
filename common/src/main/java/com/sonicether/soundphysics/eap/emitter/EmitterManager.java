@@ -167,6 +167,9 @@ public final class EmitterManager {
         updateGains(playerX, playerY, playerZ, profile);
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         // Tick pool FIRST (smooth parameters, handle fades, recycle finished sources).
         pool.tick(masterGain, currentTick);
 
@@ -222,8 +225,12 @@ public final class EmitterManager {
         for (Emitter e : emittersByPos.values()) {
             if (!e.category.sampleBased) continue;
 <<<<<<< ours
+<<<<<<< ours
             if (e.category == EmitterCategory.BAT) continue; // No synthesis for BAT yet
 =======
+>>>>>>> theirs
+=======
+            if (e.category == EmitterCategory.BAT) continue; // No synthesis for BAT yet
 >>>>>>> theirs
             if (e.targetGain < 0.001f) continue;
 
@@ -320,10 +327,14 @@ public final class EmitterManager {
 
             if (e.category == EmitterCategory.BIRD) {
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
                 // Full 8-species pitch spread + per-call randomization
                 float pitchBase = 0.75f + (e.speciesVariant * 0.06f); // 0.75-1.17 across 8 species
                 float pitchJitter = 0.96f + triggeredRng.nextFloat() * 0.08f; // ±4% per call
                 e.pitch = pitchBase * pitchJitter;
+<<<<<<< ours
             }
 
             // Per-play pitch and gain variation for sample-based emitter categories.
@@ -338,6 +349,8 @@ public final class EmitterManager {
                 e.targetGain *= gainVar;
 =======
                 e.pitch = 0.85f + (e.speciesVariant & 3) * 0.1f;
+>>>>>>> theirs
+=======
 >>>>>>> theirs
             }
 

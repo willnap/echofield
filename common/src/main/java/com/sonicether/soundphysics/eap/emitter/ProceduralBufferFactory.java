@@ -163,6 +163,7 @@ public final class ProceduralBufferFactory {
         return buffers.computeIfAbsent(category, this::generate);
     }
 
+<<<<<<< ours
     private int generate(EmitterCategory category) {
         float[] samples = new float[BUFFER_SAMPLES];
         Random rng = new Random(42 + category.ordinal());
@@ -189,14 +190,38 @@ public final class ProceduralBufferFactory {
             filterState *= 0.996f;
             out[i] = filterState * 0.15f;
         }
+=======
+            out[i] = lpState * smoothWind * 0.25f;
+        }
+
+        // Granular rustling: density and pitch driven by wind envelope
+        // More wind = denser rustling grains, higher pitch (Strouhal: f proportional to v)
+        int baseGrains = BUFFER_SECONDS * 700;
+        int maxExtraGrains = BUFFER_SECONDS * 3000;
+        // Compute average wind for grain count
+        float avgWind = 0;
+        for (float w : wind) avgWind += w;
+        avgWind /= wind.length;
+        int numGrains = baseGrains + (int) (maxExtraGrains * avgWind);
+>>>>>>> theirs
 
         // Granular rustling: lower frequency range (400-2800Hz) for realism
         int numGrains = BUFFER_SECONDS * 1500;
         for (int g = 0; g < numGrains; g++) {
             int start = rng.nextInt(out.length);
+<<<<<<< ours
             int len = 220 + rng.nextInt(440);
             float amp = 0.006f + rng.nextFloat() * 0.012f;
             float freq = 400 + rng.nextFloat() * 2400;
+=======
+            float localWind = wind[start];
+            // Grain length: shorter when windier (snappier rustles)
+            int len = (int) (440 * (1f - localWind * 0.5f)) + 50;
+            float amp = (0.008f + rng.nextFloat() * 0.014f) * (0.3f + localWind * 0.7f);
+            // Strouhal-driven pitch: frequency rises with wind speed
+            float baseFreq = 400f + localWind * 1800f; // 400-2200 Hz base
+            float freq = baseFreq + rng.nextFloat() * 800f;
+>>>>>>> theirs
 
             for (int i = 0; i < len && start + i < out.length; i++) {
                 float t = (float) i / SAMPLE_RATE;
@@ -388,6 +413,7 @@ public final class ProceduralBufferFactory {
             bp1 = Math.max(-2f, Math.min(2f, bp1));
 
             out[i] = filtered * effectiveWind * 0.7f;
+<<<<<<< ours
 =======
         float filterState = 0;
         for (int i = 0; i < out.length; i++) {
@@ -396,6 +422,8 @@ public final class ProceduralBufferFactory {
             filterState *= 0.992f;
             filterState = Math.max(-1f, Math.min(1f, filterState));
             out[i] = filterState;
+>>>>>>> theirs
+=======
 >>>>>>> theirs
         }
     }
@@ -417,6 +445,7 @@ public final class ProceduralBufferFactory {
             float flowMod = 0.6f + 0.4f * flowNoise.sample(t * 1.5f);
 
             float white = rng.nextFloat() * 2f - 1f;
+<<<<<<< ours
             // 2-pole HP at 30 Hz
             turbHp1 += (white - turbHp1) * turbHpAlpha;
             float hp = white - turbHp1;
@@ -426,6 +455,17 @@ public final class ProceduralBufferFactory {
             turbLp1 += (hp - turbLp1) * turbLpAlpha;
             turbLp2 += (turbLp1 - turbLp2) * turbLpAlpha;
             out[i] = turbLp2 * 0.45f * flowMod; // Boosted from 0.25
+=======
+            // Brownian: very slow random walk for deep bass
+            brownState += white * 0.008f;
+            brownState *= 0.9995f;
+            brownState = Math.max(-1f, Math.min(1f, brownState));
+            // Pink-ish mid-range layer
+            pinkState += white * 0.025f;
+            pinkState *= 0.993f;
+            pinkState = Math.max(-1f, Math.min(1f, pinkState));
+            out[i] = brownState * 0.15f + pinkState * 0.25f;
+>>>>>>> theirs
         }
 
         // Layer 1b: Mid-frequency turbulence (200-800 Hz) for body
@@ -452,11 +492,21 @@ public final class ProceduralBufferFactory {
         int totalBubbles = BUFFER_SECONDS * bubblesPerSecond;
         for (int b = 0; b < totalBubbles; b++) {
             int start = rng.nextInt(out.length);
+<<<<<<< ours
             // Wider radius range: 0.3-8mm for diverse frequencies (400-10000 Hz)
             float radiusMm = (float) Math.exp(Math.log(2.0) + 0.6 * rng.nextGaussian());
             radiusMm = Math.max(0.3f, Math.min(radiusMm, 8f));
             float decay = 40f + rng.nextFloat() * 100f;
             float amp = 0.2f + rng.nextFloat() * 0.3f; // Loud enough to pop above turbulence
+=======
+            // Log-normal bubble radius: mean 2-5mm for streams
+            // log-normal: exp(mu + sigma * N(0,1)), mu=ln(3.5), sigma=0.4
+            float radiusMm = (float) Math.exp(Math.log(2.0) + 0.25 * rng.nextGaussian());
+            radiusMm = Math.max(0.5f, Math.min(radiusMm, 3f)); // audible range: 1-7 kHz
+            // Decay: longer ring for audibility — 30-110
+            float decay = 30f + rng.nextFloat() * 80f;
+            float amp = 0.08f + rng.nextFloat() * 0.12f; // 10-15x louder: audible above noise
+>>>>>>> theirs
             addMinnaertBubble(out, start, radiusMm, decay, amp, 0.05f, 998f);
         }
 
@@ -1336,9 +1386,13 @@ public final class ProceduralBufferFactory {
         float peak = 0.001f;
         for (float s : samples) peak = Math.max(peak, Math.abs(s));
 <<<<<<< ours
+<<<<<<< ours
         float norm = 0.75f / peak;
 =======
         float norm = 0.85f / peak;
+>>>>>>> theirs
+=======
+        float norm = 0.75f / peak;
 >>>>>>> theirs
 
         ByteBuffer data = ByteBuffer.allocateDirect(BUFFER_SAMPLES * 2)

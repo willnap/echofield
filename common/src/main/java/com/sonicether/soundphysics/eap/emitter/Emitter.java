@@ -38,6 +38,9 @@ public final class Emitter {
     float fadeProgress = 1.0f; // 0=fading out, 1=fully on
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     // Distance from listener (updated each tick; MAX_VALUE until first cull pass)
     float distanceToListener = Float.MAX_VALUE;
 
