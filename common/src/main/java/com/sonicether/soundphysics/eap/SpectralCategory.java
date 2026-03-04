@@ -8,6 +8,7 @@ import java.util.Map;
 /** Maps SoundTypes to acoustic hardness categories with 3-band absorption multipliers. */
 public enum SpectralCategory {
 <<<<<<< ours
+<<<<<<< ours
     //                     lowMult midMult highMult lfDecay lfGain   lowAbs midAbs highAbs
     HARD(1.0f, 1.0f, 1.0f, 1.0f, 1.0f,           0.02f, 0.03f, 0.05f),  // stone/metal: very reflective
     SOFT(0.5f, 1.0f, 2.0f, 0.7f, 0.7f,            0.25f, 0.40f, 0.55f),  // wool/snow: porous absorber
@@ -29,17 +30,29 @@ public enum SpectralCategory {
     FOLIAGE(0.3f, 1.2f, 1.8f),
     WOOD(0.7f, 1.0f, 1.3f),
     DEFAULT(1.0f, 1.0f, 1.0f);
+=======
+    HARD(1.0f, 1.0f, 1.0f, 1.0f, 1.0f),      // uniform decay, full LF input
+    SOFT(0.5f, 1.0f, 2.0f, 0.7f, 0.7f),       // lows decay faster (porous absorber), less LF in
+    FOLIAGE(0.3f, 1.2f, 1.8f, 1.1f, 0.9f),    // lows persist (transparent to LF), slight LF reduction
+    WOOD(0.7f, 1.0f, 1.3f, 0.9f, 0.85f),      // slight LF absorption (membrane absorber)
+    DEFAULT(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);    // uniform
+>>>>>>> theirs
 
-    private final float lowMult, midMult, highMult;
+    private final float lowMult, midMult, highMult, lfDecayRatio, lfGain;
 
-    SpectralCategory(float low, float mid, float high) {
+    SpectralCategory(float low, float mid, float high, float lfDecayRatio, float lfGain) {
         this.lowMult = low; this.midMult = mid; this.highMult = high;
+<<<<<<< ours
+>>>>>>> theirs
+=======
+        this.lfDecayRatio = lfDecayRatio; this.lfGain = lfGain;
 >>>>>>> theirs
     }
 
     public float lowMult() { return lowMult; }
     public float midMult() { return midMult; }
     public float highMult() { return highMult; }
+<<<<<<< ours
 <<<<<<< ours
     public float lfDecayRatio() { return lfDecayRatio; }
     public float lfGain() { return lfGain; }
@@ -118,6 +131,10 @@ public enum SpectralCategory {
         }
         return LOOKUP;
 =======
+=======
+    public float lfDecayRatio() { return lfDecayRatio; }
+    public float lfGain() { return lfGain; }
+>>>>>>> theirs
 
     private static final Map<SoundType, SpectralCategory> LOOKUP = new IdentityHashMap<>();
 
