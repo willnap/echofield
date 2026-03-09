@@ -273,6 +273,105 @@ public class ClothConfigIntegration {
                     Component.translatable("cloth_config.sound_physics_remastered.eap_diagnostic_logging.description"),
                     SoundPhysicsMod.EAP_CONFIG.diagnosticLogging
             ));
+
+            // Per-excitation type toggles
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_wind"),
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_wind.description"),
+                    SoundPhysicsMod.EAP_CONFIG.excitationWind
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_foliage"),
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_foliage.description"),
+                    SoundPhysicsMod.EAP_CONFIG.excitationFoliage
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_grass"),
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_grass.description"),
+                    SoundPhysicsMod.EAP_CONFIG.excitationGrass
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_water"),
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_water.description"),
+                    SoundPhysicsMod.EAP_CONFIG.excitationWater
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_lava"),
+                    Component.translatable("cloth_config.sound_physics_remastered.excitation_lava.description"),
+                    SoundPhysicsMod.EAP_CONFIG.excitationLava
+            ));
+
+            // Per-emitter category toggles
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_bird"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_bird.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterBird
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_insect"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_insect.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterInsect
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_frog"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_frog.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterFrog
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_bat"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_bat.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterBat
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_wind_leaf"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_wind_leaf.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterWindLeaf
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_wind_grass"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_wind_grass.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterWindGrass
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_wind_whistle"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_wind_whistle.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterWindWhistle
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_water_flow"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_water_flow.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterWaterFlow
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_water_drip"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_water_drip.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterWaterDrip
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_water_rain"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_water_rain.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterWaterRain
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_lava"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_lava.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterLava
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_cave_ambient"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_cave_ambient.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterCaveAmbient
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_cave_drone"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_cave_drone.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterCaveDrone
+            ));
+            eap.addEntry(fromConfigEntry(entryBuilder,
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_mechanical"),
+                    Component.translatable("cloth_config.sound_physics_remastered.emitter_mechanical.description"),
+                    SoundPhysicsMod.EAP_CONFIG.emitterMechanical
+            ));
         }
 
         builder.setSavingRunnable(() -> {
