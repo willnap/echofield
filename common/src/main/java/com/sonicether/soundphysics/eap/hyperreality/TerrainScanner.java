@@ -65,7 +65,10 @@ public final class TerrainScanner {
     // ── constructors ─────────────────────────────────────────────────────
 
     public TerrainScanner() {
+<<<<<<< ours
         this.cycleComplete = true; // no cycle in progress initially
+=======
+>>>>>>> theirs
         allocateGrids();
     }
 
@@ -285,6 +288,7 @@ public final class TerrainScanner {
     static List<TerrainFeature> detectHeightFeatures(int[][] floor, int[][] ceiling,
             int scanSize, int worldOriginX, int worldOriginZ, int playerY,
             SpectralCategory[][] floorMaterials) {
+<<<<<<< ours
         List<TerrainFeature> features = new ArrayList<>();
         // Cardinal neighbor offsets: +x, -x, +z, -z
         int[] dx = {1, -1, 0, 0};
@@ -364,11 +368,15 @@ public final class TerrainScanner {
             }
         }
         return features;
+=======
+        return List.of(); // Task 5
+>>>>>>> theirs
     }
 
     static List<TerrainFeature> detectWalls(boolean[][] solid, int scanSize,
             int worldOriginX, int worldOriginZ, int playerY,
             int[][] wallHeights, SpectralCategory[][] wallMaterials) {
+<<<<<<< ours
         List<TerrainFeature> features = new ArrayList<>();
         int[] dx = {1, -1, 0, 0};
         int[] dz = {0, 0, 1, -1};
@@ -409,11 +417,15 @@ public final class TerrainScanner {
             }
         }
         return features;
+=======
+        return List.of(); // Task 6
+>>>>>>> theirs
     }
 
     static List<TerrainFeature> detectSolidObjects(boolean[][] solid, int scanSize,
             int worldOriginX, int worldOriginZ, int playerY,
             int[][] objectHeights, SpectralCategory[][] objectMaterials) {
+<<<<<<< ours
         List<TerrainFeature> features = new ArrayList<>();
         int[] dx = {1, -1, 0, 0};
         int[] dz = {0, 0, 1, -1};
@@ -500,11 +512,15 @@ public final class TerrainScanner {
             }
         }
         return size;
+=======
+        return List.of(); // Task 6
+>>>>>>> theirs
     }
 
     static List<TerrainFeature> detectCeilings(int[][] ceiling, int scanSize,
             int worldOriginX, int worldOriginZ, int playerY,
             SpectralCategory[][] ceilingMaterials) {
+<<<<<<< ours
         List<TerrainFeature> features = new ArrayList<>();
         for (int x = 0; x < scanSize; x++) {
             for (int z = 0; z < scanSize; z++) {
@@ -580,10 +596,18 @@ public final class TerrainScanner {
         }
 
         return dist;
+=======
+        return List.of(); // Task 6
+    }
+
+    static int[][] chebyshevDistanceTransform(boolean[][] solid, int w, int h) {
+        return new int[w][h]; // Task 7
+>>>>>>> theirs
     }
 
     static List<TerrainFeature> detectPassages(int[][] dist, int scanSize,
             int worldOriginX, int worldOriginZ, int playerY) {
+<<<<<<< ours
         List<TerrainFeature> features = new ArrayList<>();
         float constrictionThreshold = 3.0f;
         float openThreshold = 4.0f;
@@ -829,6 +853,21 @@ public final class TerrainScanner {
         if (features.size() <= cap) return features;
         features.sort((a, b) -> Float.compare(b.saliency(), a.saliency()));
         return new ArrayList<>(features.subList(0, cap));
+=======
+        return List.of(); // Task 7
+    }
+
+    static List<TerrainFeature> coalesceWalls(List<TerrainFeature> rawWalls) {
+        return rawWalls; // Task 8
+    }
+
+    static List<TerrainFeature> deduplicateFeatures(List<TerrainFeature> features) {
+        return features; // Task 8
+    }
+
+    static List<TerrainFeature> applyDensityCaps(List<TerrainFeature> features) {
+        return features; // Task 8
+>>>>>>> theirs
     }
 
     // ── internal helpers ─────────────────────────────────────────────────

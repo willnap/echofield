@@ -5,12 +5,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+<<<<<<< ours
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.sonicether.soundphysics.eap.SpectralCategory;
 
+=======
+import java.util.List;
+
+>>>>>>> theirs
 import static org.junit.jupiter.api.Assertions.*;
 
 class TerrainScannerTest {
@@ -180,6 +185,7 @@ class TerrainScannerTest {
             assertEquals(200, scanner.gridToWorldZ(24));
         }
     }
+<<<<<<< ours
 
     // ── Task 5: height feature detection ─────────────────────────────────
 
@@ -1232,4 +1238,6 @@ class TerrainScannerTest {
                     "Density caps should limit total features to 48, got " + features.size());
         }
     }
+=======
+>>>>>>> theirs
 }
