@@ -1,3 +1,7 @@
+<<<<<<< ours
+=======
+// $TEST/TerrainBufferFactoryTest.java
+>>>>>>> theirs
 package com.sonicether.soundphysics.eap.hyperreality;
 
 import org.junit.jupiter.api.Test;
@@ -195,6 +199,7 @@ class TerrainBufferFactoryTest {
                 "Higher Q variant should have narrower band: v0 ratio=" + v0ratio + ", v2 ratio=" + v2ratio);
     }
 
+<<<<<<< ours
     // ---- Surface buffer generation ----
 
     @Test
@@ -410,6 +415,8 @@ class TerrainBufferFactoryTest {
         }
     }
 
+=======
+>>>>>>> theirs
     // ---- Helpers ----
 
     /**

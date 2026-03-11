@@ -2,8 +2,11 @@ package com.sonicether.soundphysics.eap.hyperreality;
 
 import com.sonicether.soundphysics.eap.emitter.PerlinNoise;
 
+<<<<<<< ours
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+=======
+>>>>>>> theirs
 import java.util.Random;
 
 /**
@@ -25,6 +28,7 @@ public final class TerrainBufferFactory {
     public static final int CROSSFADE_SAMPLES = 4410; // 100ms
     public static final int VARIANTS_PER_FAMILY = 4;
 
+<<<<<<< ours
     /** Family count — matches {@link TerrainFeatureType.Family} ordinals: VOID=0, SURFACE=1, GROUND=2. */
     private static final int FAMILY_COUNT = 3;
 
@@ -39,6 +43,10 @@ public final class TerrainBufferFactory {
     private boolean initialized = false;
 
     // ---- Pure DSP utilities (static, testable without OpenAL) ----
+=======
+    /** [3 families][4 variants] — OpenAL buffer IDs, populated by {@link #init()}. */
+    private final int[][] bufferIds = new int[3][VARIANTS_PER_FAMILY];
+>>>>>>> theirs
 
     /**
      * Normalizes samples so the peak absolute value equals {@code ceiling}.
@@ -129,7 +137,11 @@ public final class TerrainBufferFactory {
 
     /**
      * Applies a 4-pole (24 dB/oct) lowpass filter using two cascaded 2-pole sections.
+<<<<<<< ours
      * Uses a one-pole approximation pattern for efficient real-time filtering.
+=======
+     * Uses the same one-pole approximation pattern as {@code SpatialFieldProcessor}.
+>>>>>>> theirs
      *
      * @param samples    sample buffer to filter in-place
      * @param cutoffHz   cutoff frequency in Hz
@@ -149,8 +161,11 @@ public final class TerrainBufferFactory {
         }
     }
 
+<<<<<<< ours
     // ---- Family-specific synthesis methods ----
 
+=======
+>>>>>>> theirs
     /**
      * Generates void family samples (for EDGE, DROP, PASSAGE features).
      *
@@ -161,7 +176,13 @@ public final class TerrainBufferFactory {
      * @return 264,600 float samples
      */
     static float[] generateVoidSamples(int variantIndex) {
+<<<<<<< ours
         long seed = (long) FAMILY_VOID * 100003L + (long) variantIndex * 7919L;
+=======
+        // Deterministic seed: same formula used across all families
+        int familyIndex = 0; // VOID
+        long seed = (long) familyIndex * 100003L + (long) variantIndex * 7919L;
+>>>>>>> theirs
         Random rng = new Random(seed);
 
         // Generate white noise
@@ -175,7 +196,12 @@ public final class TerrainBufferFactory {
         applyBiquadBandpass(samples, 400f, q, SAMPLE_RATE);
 
         // Amplitude modulation: Perlin noise at 0.5 Hz, +/-3 dB
+<<<<<<< ours
         // +/-3 dB = factor of 10^(+/-3/20) = 0.708 to 1.413 around unity
+=======
+        // +/-3 dB = factor of 0.708 to 1.413 around unity
+        // Using: gain = 10^(modDb/20) where modDb = noise * 3.0
+>>>>>>> theirs
         PerlinNoise amNoise = new PerlinNoise(seed + 99991L);
         for (int i = 0; i < BUFFER_SAMPLES; i++) {
             float t = (float) i / SAMPLE_RATE;
@@ -191,6 +217,7 @@ public final class TerrainBufferFactory {
         return samples;
     }
 
+<<<<<<< ours
     /**
      * Generates surface family samples (for WALL, CEILING, SOLID_OBJECT features).
      *
@@ -292,12 +319,16 @@ public final class TerrainBufferFactory {
     }
 
     // ---- OpenAL lifecycle ----
+=======
+    // ---- OpenAL lifecycle (not tested in unit tests) ----
+>>>>>>> theirs
 
     /**
      * Generates all 12 buffers and uploads them to OpenAL.
      * Called once at system initialization on the render thread.
      */
     public void init() {
+<<<<<<< ours
         if (initialized) return;
 
         for (int variant = 0; variant < VARIANTS_PER_FAMILY; variant++) {
@@ -307,6 +338,9 @@ public final class TerrainBufferFactory {
         }
 
         initialized = true;
+=======
+        // Stub — implemented in Task 10
+>>>>>>> theirs
     }
 
     /**
@@ -316,18 +350,27 @@ public final class TerrainBufferFactory {
      * @param family the terrain feature family
      * @param blockX world X coordinate
      * @param blockZ world Z coordinate
+<<<<<<< ours
      * @return OpenAL buffer ID, or 0 if not initialized
      */
     public int getBufferId(TerrainFeatureType.Family family, int blockX, int blockZ) {
         if (!initialized) return 0;
         int variant = variantForPosition(blockX, blockZ);
         return bufferIds[family.ordinal()][variant];
+=======
+     * @return OpenAL buffer ID
+     */
+    public int getBufferId(TerrainFeatureType.Family family, int blockX, int blockZ) {
+        // Stub — implemented in Task 10
+        return 0;
+>>>>>>> theirs
     }
 
     /**
      * Deletes all OpenAL buffers. Called on system shutdown.
      */
     public void shutdown() {
+<<<<<<< ours
         if (!initialized) return;
         for (int f = 0; f < FAMILY_COUNT; f++) {
             for (int v = 0; v < VARIANTS_PER_FAMILY; v++) {
@@ -357,5 +400,8 @@ public final class TerrainBufferFactory {
         int buf = org.lwjgl.openal.AL10.alGenBuffers();
         org.lwjgl.openal.AL10.alBufferData(buf, org.lwjgl.openal.AL10.AL_FORMAT_MONO16, pcm, SAMPLE_RATE);
         return buf;
+=======
+        // Stub — implemented in Task 10
+>>>>>>> theirs
     }
 }
