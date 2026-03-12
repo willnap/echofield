@@ -1,6 +1,9 @@
 <<<<<<< ours
+<<<<<<< ours
 =======
 // $TEST/TerrainBufferFactoryTest.java
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 package com.sonicether.soundphysics.eap.hyperreality;
 
@@ -200,6 +203,9 @@ class TerrainBufferFactoryTest {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     // ---- Surface buffer generation ----
 
     @Test
@@ -219,6 +225,12 @@ class TerrainBufferFactoryTest {
     void surfaceSamples_decorrelated_differentVariants() {
         float[] a = TerrainBufferFactory.generateSurfaceSamples(0);
         float[] b = TerrainBufferFactory.generateSurfaceSamples(1);
+<<<<<<< ours
+=======
+        // Surface variants share a 110 Hz tone component (-18 dB) which adds
+        // a correlated floor. Use a relaxed threshold to account for this
+        // shared tonal content while still verifying the noise is independent.
+>>>>>>> theirs
         float correlation = pearsonCorrelation(a, b, 10000);
         assertTrue(Math.abs(correlation) < 0.6f,
                 "Different surface variants should be decorrelated, correlation=" + correlation);
@@ -415,6 +427,9 @@ class TerrainBufferFactoryTest {
         }
     }
 
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
     // ---- Helpers ----
