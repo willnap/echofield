@@ -6,15 +6,21 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.sonicether.soundphysics.eap.SpectralCategory;
 
+<<<<<<< ours
 =======
 import java.util.List;
 
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -186,6 +192,9 @@ class TerrainScannerTest {
         }
     }
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
 
     // ── Task 5: height feature detection ─────────────────────────────────
 
@@ -362,6 +371,7 @@ class TerrainScannerTest {
             assertTrue(hasWood || hasStone, "Features should have material from floor");
         }
     }
+<<<<<<< ours
 
     // ── Task 6: wall, solid object, ceiling detection ────────────────────
 
@@ -1238,6 +1248,8 @@ class TerrainScannerTest {
                     "Density caps should limit total features to 48, got " + features.size());
         }
     }
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 }

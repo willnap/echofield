@@ -289,6 +289,9 @@ public final class TerrainScanner {
             int scanSize, int worldOriginX, int worldOriginZ, int playerY,
             SpectralCategory[][] floorMaterials) {
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         List<TerrainFeature> features = new ArrayList<>();
         // Cardinal neighbor offsets: +x, -x, +z, -z
         int[] dx = {1, -1, 0, 0};
@@ -368,8 +371,11 @@ public final class TerrainScanner {
             }
         }
         return features;
+<<<<<<< ours
 =======
         return List.of(); // Task 5
+>>>>>>> theirs
+=======
 >>>>>>> theirs
     }
 
