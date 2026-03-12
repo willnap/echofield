@@ -383,6 +383,9 @@ public final class TerrainScanner {
             int worldOriginX, int worldOriginZ, int playerY,
             int[][] wallHeights, SpectralCategory[][] wallMaterials) {
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         List<TerrainFeature> features = new ArrayList<>();
         int[] dx = {1, -1, 0, 0};
         int[] dz = {0, 0, 1, -1};
@@ -423,8 +426,11 @@ public final class TerrainScanner {
             }
         }
         return features;
+<<<<<<< ours
 =======
         return List.of(); // Task 6
+>>>>>>> theirs
+=======
 >>>>>>> theirs
     }
 
@@ -432,6 +438,9 @@ public final class TerrainScanner {
             int worldOriginX, int worldOriginZ, int playerY,
             int[][] objectHeights, SpectralCategory[][] objectMaterials) {
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         List<TerrainFeature> features = new ArrayList<>();
         int[] dx = {1, -1, 0, 0};
         int[] dz = {0, 0, 1, -1};
@@ -518,8 +527,11 @@ public final class TerrainScanner {
             }
         }
         return size;
+<<<<<<< ours
 =======
         return List.of(); // Task 6
+>>>>>>> theirs
+=======
 >>>>>>> theirs
     }
 
@@ -527,6 +539,9 @@ public final class TerrainScanner {
             int worldOriginX, int worldOriginZ, int playerY,
             SpectralCategory[][] ceilingMaterials) {
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         List<TerrainFeature> features = new ArrayList<>();
         for (int x = 0; x < scanSize; x++) {
             for (int z = 0; z < scanSize; z++) {
@@ -554,6 +569,7 @@ public final class TerrainScanner {
             }
         }
         return features;
+<<<<<<< ours
     }
 
     static int[][] chebyshevDistanceTransform(boolean[][] solid, int w, int h) {
@@ -604,6 +620,8 @@ public final class TerrainScanner {
         return dist;
 =======
         return List.of(); // Task 6
+=======
+>>>>>>> theirs
     }
 
     static int[][] chebyshevDistanceTransform(boolean[][] solid, int w, int h) {

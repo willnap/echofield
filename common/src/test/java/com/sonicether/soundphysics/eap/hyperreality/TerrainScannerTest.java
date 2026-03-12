@@ -372,6 +372,9 @@ class TerrainScannerTest {
         }
     }
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
 
     // ── Task 6: wall, solid object, ceiling detection ────────────────────
 
@@ -645,6 +648,7 @@ class TerrainScannerTest {
             assertTrue(features.isEmpty());
         }
     }
+<<<<<<< ours
 
     // ── Task 7: passage detection ────────────────────────────────────────
 
@@ -1248,6 +1252,8 @@ class TerrainScannerTest {
                     "Density caps should limit total features to 48, got " + features.size());
         }
     }
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 =======
