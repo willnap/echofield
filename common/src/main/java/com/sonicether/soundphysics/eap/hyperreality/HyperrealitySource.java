@@ -57,6 +57,7 @@ public final class HyperrealitySource {
         return slotIndex;
     }
 
+<<<<<<< ours
     public boolean isActive() { return active; }
     public TerrainFeatureType getType() { return type; }
     public float getCurrentGain() { return currentGain; }
@@ -64,6 +65,8 @@ public final class HyperrealitySource {
     public float getCurrentY() { return currentY; }
     public float getCurrentZ() { return currentZ; }
 
+=======
+>>>>>>> theirs
     public static float materialHFGain(SpectralCategory category) {
         return switch (category) {
             case HARD -> 0.85f;
