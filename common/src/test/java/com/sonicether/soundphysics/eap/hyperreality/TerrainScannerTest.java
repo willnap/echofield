@@ -858,6 +858,9 @@ class TerrainScannerTest {
         }
     }
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
 
     // ── Task 8: wall coalescing, deduplication, density caps ─────────────
 
@@ -1192,6 +1195,7 @@ class TerrainScannerTest {
             assertEquals(48, result.size());
         }
     }
+<<<<<<< ours
 
     @Nested
     class AnalyzeAndProduceFeaturesPipeline {
@@ -1256,6 +1260,8 @@ class TerrainScannerTest {
                     "Density caps should limit total features to 48, got " + features.size());
         }
     }
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 =======

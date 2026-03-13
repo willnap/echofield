@@ -936,15 +936,179 @@ public final class TerrainScanner {
     }
 
     static List<TerrainFeature> coalesceWalls(List<TerrainFeature> rawWalls) {
-        return rawWalls; // Task 8
+        if (rawWalls.size() <= 2) return new ArrayList<>(rawWalls);
+
+        // Group walls by facing direction (quantized to 4 cardinal directions)
+        // Direction key: 0=+x, 1=-x, 2=+z, 3=-z
+        List<List<TerrainFeature>> groups = new ArrayList<>();
+        boolean[] assigned = new boolean[rawWalls.size()];
+
+        for (int i = 0; i < rawWalls.size(); i++) {
+            if (assigned[i]) continue;
+            TerrainFeature seed = rawWalls.get(i);
+            int seedDir = cardinalDirection(seed.nx(), seed.nz());
+            List<TerrainFeature> group = new ArrayList<>();
+            group.add(seed);
+            assigned[i] = true;
+
+            // BFS: find all walls with same direction and within 2 blocks of any group member
+            boolean changed = true;
+            while (changed) {
+                changed = false;
+                for (int j = 0; j < rawWalls.size(); j++) {
+                    if (assigned[j]) continue;
+                    TerrainFeature candidate = rawWalls.get(j);
+                    if (cardinalDirection(candidate.nx(), candidate.nz()) != seedDir) continue;
+                    // Check adjacency: within 2 blocks of any member
+                    for (TerrainFeature member : group) {
+                        if (member.distanceTo(candidate.x(), candidate.y(), candidate.z()) <= 2.0f) {
+                            group.add(candidate);
+                            assigned[j] = true;
+                            changed = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            groups.add(group);
+        }
+
+        // For each group, place features at ends, corners, and midpoints
+        List<TerrainFeature> result = new ArrayList<>();
+        for (List<TerrainFeature> group : groups) {
+            if (group.size() <= 2) {
+                result.addAll(group);
+                continue;
+            }
+            result.addAll(placeCoalescedPoints(group));
+        }
+        return result;
+    }
+
+    private static List<TerrainFeature> placeCoalescedPoints(List<TerrainFeature> group) {
+        // Find the two features furthest apart as the "spine"
+        TerrainFeature endA = group.get(0);
+        TerrainFeature endB = group.get(0);
+        float maxDist = 0;
+        for (int i = 0; i < group.size(); i++) {
+            for (int j = i + 1; j < group.size(); j++) {
+                float d = group.get(i).distanceTo(
+                        group.get(j).x(), group.get(j).y(), group.get(j).z());
+                if (d > maxDist) {
+                    maxDist = d;
+                    endA = group.get(i);
+                    endB = group.get(j);
+                }
+            }
+        }
+
+        List<TerrainFeature> result = new ArrayList<>();
+        // Always place endpoints
+        result.add(endA);
+        if (maxDist > 0.5f) {
+            result.add(endB);
+        }
+
+        // Place midpoints at ~6 block intervals along the spine
+        if (maxDist > 6.0f) {
+            float midpointInterval = 6.0f;
+            int numMidpoints = (int) (maxDist / midpointInterval);
+            TerrainFeature ref = endA;
+            for (int i = 1; i <= numMidpoints; i++) {
+                float t = i * midpointInterval / maxDist;
+                if (t >= 1.0f) break;
+                float mx = endA.x() + t * (endB.x() - endA.x());
+                float my = endA.y() + t * (endB.y() - endA.y());
+                float mz = endA.z() + t * (endB.z() - endA.z());
+                // Find the closest original wall feature to this interpolated point
+                TerrainFeature closest = group.get(0);
+                float closestDist = Float.MAX_VALUE;
+                for (TerrainFeature f : group) {
+                    float d = f.distanceTo(mx, my, mz);
+                    if (d < closestDist) {
+                        closestDist = d;
+                        closest = f;
+                    }
+                }
+                float saliency = TerrainFeature.computeDetectionSaliency(
+                        ref.magnitude(), ref.type().maxRange(), mx, my, mz,
+                        my, maxDist / 2.0f);
+                result.add(new TerrainFeature(
+                        ref.type(), mx, my, mz,
+                        ref.nx(), ref.ny(), ref.nz(),
+                        ref.magnitude(), saliency, closest.material()));
+            }
+        }
+
+        return result;
+    }
+
+    private static int cardinalDirection(float nx, float nz) {
+        if (Math.abs(nx) >= Math.abs(nz)) {
+            return nx >= 0 ? 0 : 1; // +x or -x
+        } else {
+            return nz >= 0 ? 2 : 3; // +z or -z
+        }
     }
 
     static List<TerrainFeature> deduplicateFeatures(List<TerrainFeature> features) {
-        return features; // Task 8
+        if (features.isEmpty()) return features;
+        // Sort by magnitude descending so we keep the largest when merging
+        List<TerrainFeature> sorted = new ArrayList<>(features);
+        sorted.sort((a, b) -> Float.compare(b.magnitude(), a.magnitude()));
+
+        List<TerrainFeature> result = new ArrayList<>();
+        boolean[] merged = new boolean[sorted.size()];
+
+        for (int i = 0; i < sorted.size(); i++) {
+            if (merged[i]) continue;
+            TerrainFeature best = sorted.get(i);
+            for (int j = i + 1; j < sorted.size(); j++) {
+                if (merged[j]) continue;
+                TerrainFeature other = sorted.get(j);
+                if (best.type() != other.type()) continue;
+                if (best.distanceTo(other.x(), other.y(), other.z()) <= 1.0f) {
+                    merged[j] = true;
+                    // Keep 'best' since it has larger magnitude (sorted)
+                }
+            }
+            result.add(best);
+        }
+        return result;
     }
 
     static List<TerrainFeature> applyDensityCaps(List<TerrainFeature> features) {
+<<<<<<< ours
         return features; // Task 8
+>>>>>>> theirs
+=======
+        List<TerrainFeature> result = new ArrayList<>();
+
+        // Group by family
+        List<TerrainFeature> voidFeatures = new ArrayList<>();
+        List<TerrainFeature> surfaceFeatures = new ArrayList<>();
+        List<TerrainFeature> groundFeatures = new ArrayList<>();
+
+        for (TerrainFeature f : features) {
+            switch (f.type().family()) {
+                case VOID -> voidFeatures.add(f);
+                case SURFACE -> surfaceFeatures.add(f);
+                case GROUND -> groundFeatures.add(f);
+            }
+        }
+
+        // Sort each group by saliency descending, cap
+        result.addAll(capByFamily(voidFeatures, CAP_VOID));
+        result.addAll(capByFamily(surfaceFeatures, CAP_SURFACE));
+        result.addAll(capByFamily(groundFeatures, CAP_GROUND));
+
+        return result;
+    }
+
+    private static List<TerrainFeature> capByFamily(List<TerrainFeature> features, int cap) {
+        if (features.size() <= cap) return features;
+        features.sort((a, b) -> Float.compare(b.saliency(), a.saliency()));
+        return new ArrayList<>(features.subList(0, cap));
 >>>>>>> theirs
     }
 
