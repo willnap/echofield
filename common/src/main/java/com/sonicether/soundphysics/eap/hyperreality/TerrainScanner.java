@@ -625,13 +625,64 @@ public final class TerrainScanner {
     }
 
     static int[][] chebyshevDistanceTransform(boolean[][] solid, int w, int h) {
+<<<<<<< ours
         return new int[w][h]; // Task 7
+>>>>>>> theirs
+=======
+        int[][] dist = new int[w][h];
+        int INF = w + h; // safe upper bound
+
+        // Initialize: solid → 0, air → INF
+        for (int x = 0; x < w; x++) {
+            for (int z = 0; z < h; z++) {
+                dist[x][z] = solid[x][z] ? 0 : INF;
+            }
+        }
+
+        // Forward pass (top-left to bottom-right)
+        for (int x = 0; x < w; x++) {
+            for (int z = 0; z < h; z++) {
+                if (dist[x][z] == 0) continue;
+                int min = dist[x][z];
+                if (x > 0) {
+                    min = Math.min(min, dist[x - 1][z] + 1);
+                    if (z > 0) min = Math.min(min, dist[x - 1][z - 1] + 1);
+                }
+                if (z > 0) {
+                    min = Math.min(min, dist[x][z - 1] + 1);
+                    if (x < w - 1) min = Math.min(min, dist[x + 1][z - 1] + 1);
+                }
+                dist[x][z] = min;
+            }
+        }
+
+        // Backward pass (bottom-right to top-left)
+        for (int x = w - 1; x >= 0; x--) {
+            for (int z = h - 1; z >= 0; z--) {
+                if (dist[x][z] == 0) continue;
+                int min = dist[x][z];
+                if (x < w - 1) {
+                    min = Math.min(min, dist[x + 1][z] + 1);
+                    if (z < h - 1) min = Math.min(min, dist[x + 1][z + 1] + 1);
+                }
+                if (z < h - 1) {
+                    min = Math.min(min, dist[x][z + 1] + 1);
+                    if (x > 0) min = Math.min(min, dist[x - 1][z + 1] + 1);
+                }
+                dist[x][z] = min;
+            }
+        }
+
+        return dist;
 >>>>>>> theirs
     }
 
     static List<TerrainFeature> detectPassages(int[][] dist, int scanSize,
             int worldOriginX, int worldOriginZ, int playerY) {
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         List<TerrainFeature> features = new ArrayList<>();
         float constrictionThreshold = 3.0f;
         float openThreshold = 4.0f;
@@ -705,6 +756,7 @@ public final class TerrainScanner {
         }
 
         return features;
+<<<<<<< ours
     }
 
     static List<TerrainFeature> coalesceWalls(List<TerrainFeature> rawWalls) {
@@ -879,6 +931,8 @@ public final class TerrainScanner {
         return new ArrayList<>(features.subList(0, cap));
 =======
         return List.of(); // Task 7
+=======
+>>>>>>> theirs
     }
 
     static List<TerrainFeature> coalesceWalls(List<TerrainFeature> rawWalls) {

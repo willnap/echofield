@@ -649,6 +649,9 @@ class TerrainScannerTest {
         }
     }
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
 
     // ── Task 7: passage detection ────────────────────────────────────────
 
@@ -854,6 +857,7 @@ class TerrainScannerTest {
             }
         }
     }
+<<<<<<< ours
 
     // ── Task 8: wall coalescing, deduplication, density caps ─────────────
 
@@ -1252,6 +1256,8 @@ class TerrainScannerTest {
                     "Density caps should limit total features to 48, got " + features.size());
         }
     }
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 =======
