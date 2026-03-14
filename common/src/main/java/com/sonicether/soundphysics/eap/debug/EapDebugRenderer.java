@@ -22,6 +22,7 @@ import com.sonicether.soundphysics.eap.hyperreality.HyperrealitySource;
 import com.sonicether.soundphysics.eap.hyperreality.HyperrealitySystem;
 import com.sonicether.soundphysics.eap.hyperreality.TerrainFeature;
 import com.sonicether.soundphysics.eap.hyperreality.TerrainFeatureType;
+<<<<<<< ours
 =======
 import com.sonicether.soundphysics.eap.EnvironmentProfile;
 import com.sonicether.soundphysics.eap.ExcitationSourceManager;
@@ -34,6 +35,8 @@ import com.sonicether.soundphysics.eap.spatial.SpatialFieldProcessor;
 >>>>>>> theirs
 =======
 import com.sonicether.soundphysics.eap.spatial.SurfaceCluster;
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -90,6 +93,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     private static final int COLOR_EMITTER_CAVE = 0xFF9370DB;    // Medium purple
     private static final int COLOR_EMITTER_MECH = 0xFFCD853F;    // Peru
 <<<<<<< ours
+<<<<<<< ours
 
     private volatile ExcitationSourceManager excitationRef;
     private volatile EnvironmentProfile profileRef;
@@ -99,6 +103,8 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
 =======
 =======
     private static final int COLOR_SPATIAL = 0xFFFF69B4;         // Hot pink
+=======
+>>>>>>> theirs
 
 >>>>>>> theirs
     private volatile ExcitationSourceManager excitationRef;
@@ -107,7 +113,12 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
 >>>>>>> theirs
 =======
     private volatile EmitterManager emitterManagerRef;
+<<<<<<< ours
     private volatile SpatialFieldProcessor spatialFieldRef;
+>>>>>>> theirs
+=======
+    private volatile HyperrealitySystem hyperrealityRef;
+    private volatile EnvironmentConditions conditionsRef;
 >>>>>>> theirs
 
     public void setExcitationManager(ExcitationSourceManager manager) {
@@ -127,6 +138,9 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     public void setHyperrealitySystem(HyperrealitySystem system) {
         this.hyperrealityRef = system;
     }
@@ -164,7 +178,11 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
 >>>>>>> theirs
 =======
         renderEmitterMarkers(camX, camY, camZ);
+<<<<<<< ours
         renderSpatialFieldClusters(camX, camY, camZ);
+>>>>>>> theirs
+=======
+        renderHyperrealityFeatures(camX, camY, camZ);
 >>>>>>> theirs
     }
 
@@ -264,6 +282,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
     }
 
 <<<<<<< ours
+<<<<<<< ours
     private void renderHyperrealityFeatures(double camX, double camY, double camZ) {
         HyperrealitySystem system = this.hyperrealityRef;
         if (system == null || system.getActiveCount() == 0) return;
@@ -282,10 +301,19 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         EnvironmentProfile profile = this.profileRef;
         if (field == null || profile == null || field.getActiveCount() == 0) return;
 >>>>>>> theirs
+=======
+    private void renderHyperrealityFeatures(double camX, double camY, double camZ) {
+        HyperrealitySystem system = this.hyperrealityRef;
+        if (system == null || system.getActiveCount() == 0) return;
+
+        HyperrealityPool pool = system.getPool();
+        if (pool == null) return;
+>>>>>>> theirs
 
         Vec3 cam = new Vec3(camX, camY, camZ);
         Vec3 playerPos = mc.gameRenderer.getMainCamera().position();
 
+<<<<<<< ours
 <<<<<<< ours
         for (HyperrealitySource src : pool.getSources()) {
             if (!src.isActive() || src.getCurrentGain() < 0.001f) continue;
@@ -304,17 +332,26 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
 =======
         List<SurfaceCluster> clusters = com.sonicether.soundphysics.eap.spatial.ClusterDetector.detect(
                 profile.taps(), playerPos);
+=======
+        for (HyperrealitySource src : pool.getSources()) {
+            if (!src.active || src.currentGain < 0.001f) continue;
+>>>>>>> theirs
 
-        for (int i = 0; i < Math.min(clusters.size(), field.getSourceCount()); i++) {
-            SurfaceCluster c = clusters.get(i);
-            float gain = c.computeGain(0.5f);
-            if (gain < 0.0001f) continue;
-            if (cam.distanceTo(c.centroid()) > 64.0) continue;
+            Vec3 featurePos = new Vec3(src.currentX, src.currentY, src.currentZ);
+            if (cam.distanceTo(featurePos) > 64.0) continue;
 
-            int alpha = (int) (Math.min(gain * 5f, 1f) * 255);
-            int color = (alpha << 24) | (COLOR_SPATIAL & 0x00FFFFFF);
+            int baseColor = src.type != null
+                    ? HyperrealityDebugRenderer.colorForType(src.type)
+                    : 0xFFFFFFFF;
 
+<<<<<<< ours
             GizmoProperties line = Gizmos.line(playerPos, c.centroid(), color);
+>>>>>>> theirs
+=======
+            int alpha = (int) (Math.min(src.currentGain * 5f, 1f) * 255);
+            int color = (alpha << 24) | (baseColor & 0x00FFFFFF);
+
+            GizmoProperties line = Gizmos.line(playerPos, featurePos, color);
 >>>>>>> theirs
             line.persistForMillis(100);
             line.fadeOut();
@@ -330,6 +367,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
 >>>>>>> theirs
     // ── Source budget ─────────────────────────────────────────────────
 
+<<<<<<< ours
     /**
      * Returns a formatted string showing the OpenAL source budget across all EAP subsystems.
      * Format: "Sources: excitation=5 refl=3/8 emit=12/64 spatial=4/8 total=24"
@@ -341,6 +379,9 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
      */
     public String getSourceBudgetText(EmitterManager emitters, SpatialFieldProcessor spatial,
 >>>>>>> theirs
+=======
+    public String getSourceBudgetText(EmitterManager emitters, HyperrealitySystem hyperreality,
+>>>>>>> theirs
                                        EarlyReflectionProcessor reflections) {
         ExcitationSourceManager excitation = this.excitationRef;
         int excitationCount = (excitation != null) ? excitation.getActiveSourceInfo().size() : 0;
@@ -349,6 +390,9 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         int emitActive = emitters.getActiveCount();
         int emitTotal = emitters.getTotalTracked();
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         int hyperActive = hyperreality.getActiveCount();
         int hyperTotal = hyperreality.getSourceCount();
         int totalActive = excitationCount + reflActive + emitActive + hyperActive;
@@ -359,8 +403,13 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
             HyperrealityPool pool = hyperreality.getPool();
             if (pool != null) {
                 for (HyperrealitySource src : pool.getSources()) {
+<<<<<<< ours
                     if (src.isActive() && src.getType() != null) {
                         counts[src.getType().ordinal()]++;
+=======
+                    if (src.active && src.type != null) {
+                        counts[src.type.ordinal()]++;
+>>>>>>> theirs
                     }
                 }
             }
@@ -373,6 +422,7 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
                     counts[TerrainFeatureType.PASSAGE.ordinal()],
                     counts[TerrainFeatureType.SOLID_OBJECT.ordinal()]);
         }
+<<<<<<< ours
 
         return String.format("Sources: excite=%d refl=%d/%d emit=%d/%d hyper=%d/%d%s total=%d",
                 excitationCount, reflActive, reflTotal, emitActive, emitTotal,
@@ -381,10 +431,16 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         int spatialActive = spatial.getActiveCount();
         int spatialTotal = spatial.getSourceCount();
         int totalActive = excitationCount + reflActive + emitActive + spatialActive;
+=======
+>>>>>>> theirs
 
-        return String.format("Sources: excite=%d refl=%d/%d emit=%d/%d spatial=%d/%d total=%d",
+        return String.format("Sources: excite=%d refl=%d/%d emit=%d/%d hyper=%d/%d%s total=%d",
                 excitationCount, reflActive, reflTotal, emitActive, emitTotal,
+<<<<<<< ours
                 spatialActive, spatialTotal, totalActive);
+>>>>>>> theirs
+=======
+                hyperActive, hyperTotal, breakdown, totalActive);
 >>>>>>> theirs
     }
 
