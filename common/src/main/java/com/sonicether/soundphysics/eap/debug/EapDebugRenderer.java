@@ -149,11 +149,18 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
         this.conditionsRef = conditions;
     }
 
+<<<<<<< ours
 =======
 >>>>>>> theirs
 =======
     public void setSpatialField(SpatialFieldProcessor field) {
         this.spatialFieldRef = field;
+    }
+
+>>>>>>> theirs
+=======
+    public void setSpatialField(com.sonicether.soundphysics.eap.spatial.SpatialFieldProcessor spatialField) {
+        // Reserved for future spatial field debug visualization
     }
 
 >>>>>>> theirs
@@ -334,21 +341,29 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
                 profile.taps(), playerPos);
 =======
         for (HyperrealitySource src : pool.getSources()) {
+<<<<<<< ours
             if (!src.active || src.currentGain < 0.001f) continue;
 >>>>>>> theirs
+=======
+            if (!src.isActive() || src.getCurrentGain() < 0.001f) continue;
+>>>>>>> theirs
 
-            Vec3 featurePos = new Vec3(src.currentX, src.currentY, src.currentZ);
+            Vec3 featurePos = new Vec3(src.getCurrentX(), src.getCurrentY(), src.getCurrentZ());
             if (cam.distanceTo(featurePos) > 64.0) continue;
 
-            int baseColor = src.type != null
-                    ? HyperrealityDebugRenderer.colorForType(src.type)
+            int baseColor = src.getType() != null
+                    ? HyperrealityDebugRenderer.colorForType(src.getType())
                     : 0xFFFFFFFF;
 
+<<<<<<< ours
 <<<<<<< ours
             GizmoProperties line = Gizmos.line(playerPos, c.centroid(), color);
 >>>>>>> theirs
 =======
             int alpha = (int) (Math.min(src.currentGain * 5f, 1f) * 255);
+=======
+            int alpha = (int) (Math.min(src.getCurrentGain() * 5f, 1f) * 255);
+>>>>>>> theirs
             int color = (alpha << 24) | (baseColor & 0x00FFFFFF);
 
             GizmoProperties line = Gizmos.line(playerPos, featurePos, color);
@@ -360,6 +375,25 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
 
 <<<<<<< ours
     // ── Source budget ─────────────────────────────────────────────────
+
+    public String getSourceBudgetText(EmitterManager emitters,
+                                       com.sonicether.soundphysics.eap.spatial.SpatialFieldProcessor spatialField,
+                                       EarlyReflectionProcessor reflections) {
+        // Overload for callers that pass SpatialFieldProcessor instead of HyperrealitySystem
+        ExcitationSourceManager excitation = this.excitationRef;
+        int excitationCount = (excitation != null) ? excitation.getActiveSourceInfo().size() : 0;
+        int reflActive = reflections.getActiveSlotCount();
+        int reflTotal = EarlyReflectionProcessor.POOL_SIZE;
+        int emitActive = emitters.getActiveCount();
+        int emitTotal = emitters.getTotalTracked();
+        int spatialActive = spatialField != null ? spatialField.getActiveCount() : 0;
+        int spatialTotal = spatialField != null ? spatialField.getSourceCount() : 0;
+        int totalActive = excitationCount + reflActive + emitActive + spatialActive;
+
+        return String.format("Sources: excite=%d refl=%d/%d emit=%d/%d spatial=%d/%d total=%d",
+                excitationCount, reflActive, reflTotal, emitActive, emitTotal,
+                spatialActive, spatialTotal, totalActive);
+    }
 
     public String getSourceBudgetText(EmitterManager emitters, HyperrealitySystem hyperreality,
 =======
@@ -404,11 +438,16 @@ public class EapDebugRenderer implements DebugRenderer.SimpleDebugRenderer {
             if (pool != null) {
                 for (HyperrealitySource src : pool.getSources()) {
 <<<<<<< ours
+<<<<<<< ours
                     if (src.isActive() && src.getType() != null) {
                         counts[src.getType().ordinal()]++;
 =======
                     if (src.active && src.type != null) {
                         counts[src.type.ordinal()]++;
+>>>>>>> theirs
+=======
+                    if (src.isActive() && src.getType() != null) {
+                        counts[src.getType().ordinal()]++;
 >>>>>>> theirs
                     }
                 }

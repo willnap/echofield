@@ -1196,6 +1196,9 @@ class TerrainScannerTest {
         }
     }
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
 
     @Nested
     class AnalyzeAndProduceFeaturesPipeline {
@@ -1260,6 +1263,9 @@ class TerrainScannerTest {
                     "Density caps should limit total features to 48, got " + features.size());
         }
     }
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
 =======

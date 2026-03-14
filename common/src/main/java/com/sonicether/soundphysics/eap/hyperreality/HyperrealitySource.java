@@ -58,6 +58,9 @@ public final class HyperrealitySource {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     public boolean isActive() { return active; }
     public TerrainFeatureType getType() { return type; }
     public float getCurrentGain() { return currentGain; }
@@ -65,6 +68,9 @@ public final class HyperrealitySource {
     public float getCurrentY() { return currentY; }
     public float getCurrentZ() { return currentZ; }
 
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
     public static float materialHFGain(SpectralCategory category) {

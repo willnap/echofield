@@ -48,8 +48,11 @@ public final class HyperrealitySystem {
                 pool.getPoolSize(), 12);
     }
 
+<<<<<<< ours
     private int debugTickCounter = 0;
 
+=======
+>>>>>>> theirs
     public void tick(EnvironmentProfile profile, float masterGain,
                      float sceneEnergy, Vec3 playerPos) {
         ensureInitialized();
@@ -73,9 +76,14 @@ public final class HyperrealitySystem {
             pendingRange = -1;
         }
 
+<<<<<<< ours
         if (scanner.isCycleComplete() && scanner.shouldRescan(px, py, pz)) {
             scanner.beginCycle(playerBlockX, playerBlockY, playerBlockZ);
             Loggers.log("HYPER-SCAN: beginCycle at {},{},{} gridSize={}", playerBlockX, playerBlockY, playerBlockZ, scanner.getGridSize());
+=======
+        if (scanner.shouldRescan(px, py, pz)) {
+            scanner.beginCycle(playerBlockX, playerBlockY, playerBlockZ);
+>>>>>>> theirs
         }
 
         if (!scanner.isCycleComplete()) {
@@ -83,6 +91,7 @@ public final class HyperrealitySystem {
             scanner.advanceSlice();
 
             if (scanner.isCycleComplete()) {
+<<<<<<< ours
                 // Log raw grid data sample before analysis
                 int[][] floorArr = scanner.getFloorArray();
                 int probed = 0, unprobed = 0;
@@ -103,6 +112,10 @@ public final class HyperrealitySystem {
                     Loggers.log("HYPER-SCAN: first feature: type={} pos=({},{},{}) mag={} sal={}",
                             f0.type(), f0.x(), f0.y(), f0.z(), f0.magnitude(), f0.saliency());
                 }
+=======
+                scanner.analyzeAndProduceFeatures();
+                List<TerrainFeature> features = scanner.getFeatures();
+>>>>>>> theirs
 
                 scanner.markCycleComplete();
 
@@ -118,6 +131,7 @@ public final class HyperrealitySystem {
             pool.applyReverb(profile.enclosureFactor(), profile.estimatedRT60(),
                     hfAbsorption, maxSends);
         }
+<<<<<<< ours
 
         debugTickCounter++;
         if (debugTickCounter % 100 == 0) {
@@ -132,6 +146,8 @@ public final class HyperrealitySystem {
             Loggers.log("HYPER-DEBUG tick={} features={} active={} maxGain={} masterGain={} intensity={}",
                     debugTickCounter, feats.size(), active, maxGain, masterGain, intensity);
         }
+=======
+>>>>>>> theirs
     }
 
     private static void scanCurrentSlice(Level level, TerrainScanner scanner) {
