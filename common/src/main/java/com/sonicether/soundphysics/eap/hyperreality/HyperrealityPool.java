@@ -317,9 +317,15 @@ public final class HyperrealityPool {
 
     public static float familyGain(TerrainFeatureType.Family family) {
         return switch (family) {
+<<<<<<< ours
             case VOID -> 4.0f;
             case SURFACE -> 3.0f;
             case GROUND -> 2.0f;
+=======
+            case VOID -> 0.08f;
+            case SURFACE -> 0.06f;
+            case GROUND -> 0.03f;
+>>>>>>> theirs
         };
     }
 
