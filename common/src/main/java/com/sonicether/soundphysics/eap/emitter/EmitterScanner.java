@@ -2,8 +2,12 @@ package com.sonicether.soundphysics.eap.emitter;
 
 import net.minecraft.core.BlockPos;
 <<<<<<< ours
+<<<<<<< ours
 import net.minecraft.core.Direction;
 =======
+>>>>>>> theirs
+=======
+import net.minecraft.core.Direction;
 >>>>>>> theirs
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -11,8 +15,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 <<<<<<< ours
+<<<<<<< ours
 import net.minecraft.world.level.material.FluidState;
 =======
+>>>>>>> theirs
+=======
+import net.minecraft.world.level.material.FluidState;
 >>>>>>> theirs
 import net.minecraft.world.level.LightLayer;
 
@@ -134,6 +142,9 @@ public final class EmitterScanner {
                 if (hash < 8) return EmitterCategory.WATER_STILL; // ~3% of still water surfaces
                 return null;
             }
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
             return EmitterCategory.WATER_FLOW;
@@ -185,6 +196,9 @@ public final class EmitterScanner {
     }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     private static boolean hasAdjacentFlow(Level level, BlockPos pos) {
         for (Direction dir : Direction.Plane.HORIZONTAL) {
             FluidState adjacent = level.getFluidState(pos.relative(dir));

@@ -22,6 +22,9 @@ public final class EmitterPool {
 
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     private SamplePoolLoader samplePoolLoader;
 
     void setSamplePoolLoader(SamplePoolLoader loader) {
@@ -276,6 +279,7 @@ public final class EmitterPool {
                     if (buf != 0 && (samplePoolLoader == null || !samplePoolLoader.isPooledBuffer(buf))) {
                         AL10.alDeleteBuffers(buf);
                     }
+<<<<<<< ours
 =======
             // Recycle finished one-shot sources
             if (e.category.sampleBased && e.active) {
@@ -283,6 +287,8 @@ public final class EmitterPool {
                 if (state == AL10.AL_STOPPED || state == AL10.AL_INITIAL) {
                     AL10.alSourcef(e.sourceId, AL10.AL_GAIN, 0f);
                     AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, 0);
+>>>>>>> theirs
+=======
 >>>>>>> theirs
                     for (int i = 0; i < maxSources; i++) {
                         if (sourceIds[i] == e.sourceId) { sourceInUse[i] = false; break; }

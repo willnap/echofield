@@ -120,6 +120,7 @@ public final class EmitterManager {
 =======
 =======
         samplePoolLoader.loadAll();
+        pool.setSamplePoolLoader(samplePoolLoader);
 
 >>>>>>> theirs
         this.underwater = minecraft.player.isUnderWater();
