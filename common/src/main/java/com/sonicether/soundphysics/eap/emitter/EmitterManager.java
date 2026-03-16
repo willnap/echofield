@@ -51,6 +51,9 @@ public final class EmitterManager {
     private final EmitterScanner scanner;
     private final ProceduralBufferFactory bufferFactory;
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
     private final SamplePoolLoader samplePoolLoader = new SamplePoolLoader();
     private final SampleEmitterScheduler scheduler = new SampleEmitterScheduler();
     private final Random triggeredRng = new Random();
@@ -106,6 +109,7 @@ public final class EmitterManager {
 
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
         samplePoolLoader.loadAll();
         pool.setSamplePoolLoader(samplePoolLoader);
 
@@ -114,6 +118,10 @@ public final class EmitterManager {
 =======
 >>>>>>> theirs
 =======
+=======
+        samplePoolLoader.loadAll();
+
+>>>>>>> theirs
         this.underwater = minecraft.player.isUnderWater();
 
 >>>>>>> theirs
@@ -153,9 +161,13 @@ public final class EmitterManager {
             if (done) {
                 scanInProgress = false;
 <<<<<<< ours
+<<<<<<< ours
                 reconcile(scanner.getCandidates(), playerX, playerY, playerZ, conditions);
 =======
                 reconcile(scanner.getCandidates(), playerX, playerY, playerZ);
+>>>>>>> theirs
+=======
+                reconcile(scanner.getCandidates(), playerX, playerY, playerZ, conditions);
 >>>>>>> theirs
             }
         }
@@ -182,6 +194,7 @@ public final class EmitterManager {
         // Rotate sample buffers on continuous sample-based emitters (e.g. WATER_FLOW)
         tickContinuousSampleSwap(triggeredRng);
 
+<<<<<<< ours
         // DEBUG: log active emitter categories every 5 seconds
         if (currentTick % 100 == 0) {
             var catCounts = new java.util.EnumMap<EmitterCategory, int[]>(EmitterCategory.class);
@@ -201,6 +214,8 @@ public final class EmitterManager {
             com.sonicether.soundphysics.Loggers.log(sb.toString());
         }
 
+=======
+>>>>>>> theirs
     }
 
     /**
@@ -306,6 +321,7 @@ public final class EmitterManager {
             }
 
 <<<<<<< ours
+<<<<<<< ours
             // Clean up old buffer if any (but never delete pooled sample buffers)
             int oldBuffer = AL10.alGetSourcei(e.sourceId, AL10.AL_BUFFER);
             AL10.alSourceStop(e.sourceId);
@@ -317,6 +333,13 @@ public final class EmitterManager {
             AL10.alSourceStop(e.sourceId);
             AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, 0);
             if (oldBuffer != 0) {
+>>>>>>> theirs
+=======
+            // Clean up old buffer if any (but never delete pooled sample buffers)
+            int oldBuffer = AL10.alGetSourcei(e.sourceId, AL10.AL_BUFFER);
+            AL10.alSourceStop(e.sourceId);
+            AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, 0);
+            if (oldBuffer != 0 && !samplePoolLoader.isPooledBuffer(oldBuffer)) {
 >>>>>>> theirs
                 AL10.alDeleteBuffers(oldBuffer);
             }
@@ -446,10 +469,15 @@ public final class EmitterManager {
      */
     private void reconcile(List<EmitterScanner.EmitterCandidate> candidates,
 <<<<<<< ours
+<<<<<<< ours
                            float playerX, float playerY, float playerZ,
                            EnvironmentConditions conditions) {
 =======
                            float playerX, float playerY, float playerZ) {
+>>>>>>> theirs
+=======
+                           float playerX, float playerY, float playerZ,
+                           EnvironmentConditions conditions) {
 >>>>>>> theirs
         Set<Long> foundKeys = new HashSet<>();
 
@@ -476,8 +504,12 @@ public final class EmitterManager {
 
                 Emitter emitter = new Emitter(c.category(), c.x(), c.y(), c.z());
 <<<<<<< ours
+<<<<<<< ours
                 emitter.subcategory = assignSubcategory(c.category(), conditions, triggeredRng);
 =======
+>>>>>>> theirs
+=======
+                emitter.subcategory = assignSubcategory(c.category(), conditions, triggeredRng);
 >>>>>>> theirs
                 emittersByPos.put(key, emitter);
             }
@@ -502,6 +534,9 @@ public final class EmitterManager {
 
     /**
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
      * Assigns a sample subcategory for emitters that use sample pools.
      * Uses biome conditions and randomness for species diversity.
      *
@@ -529,6 +564,9 @@ public final class EmitterManager {
     }
 
     /**
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
      * Removes emitters that are beyond their category's max range.
@@ -837,11 +875,15 @@ public final class EmitterManager {
         }
 
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         int bufferId;
         if (e.category == EmitterCategory.WATER_FLOW) {
             // WATER_FLOW uses sample pool: one-shot playback with rotation via tickContinuousSampleSwap
             bufferId = samplePoolLoader.getBuffer(SampleSubcategory.WATER_FLOW_SAMPLE, e.sampleHistory, triggeredRng);
             if (bufferId == 0) return;
+<<<<<<< ours
 
             AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, bufferId);
             AL10.alSourcei(e.sourceId, AL10.AL_LOOPING, AL10.AL_FALSE);
@@ -860,6 +902,20 @@ public final class EmitterManager {
 
         AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, bufferId);
         AL10.alSourcei(e.sourceId, AL10.AL_LOOPING, AL10.AL_TRUE);
+>>>>>>> theirs
+=======
+
+            AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, bufferId);
+            AL10.alSourcei(e.sourceId, AL10.AL_LOOPING, AL10.AL_FALSE);
+        } else {
+            // Procedural continuous emitters: loop a generated buffer
+            int variant = Math.abs(e.blockX * 73 + e.blockZ * 37 + e.blockY * 11) % 4;
+            bufferId = bufferFactory.getBuffer(e.category, variant);
+            if (bufferId == 0) return;
+
+            AL10.alSourcei(e.sourceId, AL10.AL_BUFFER, bufferId);
+            AL10.alSourcei(e.sourceId, AL10.AL_LOOPING, AL10.AL_TRUE);
+        }
 >>>>>>> theirs
 
         // Stagger start offset to avoid phase correlation between emitters
@@ -943,6 +999,9 @@ public final class EmitterManager {
         pool.shutdown();
         bufferFactory.shutdown();
 <<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
         samplePoolLoader.shutdown();
         emittersByPos.clear();
         scheduler.clear();
