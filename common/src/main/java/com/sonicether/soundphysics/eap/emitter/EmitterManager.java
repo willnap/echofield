@@ -378,6 +378,18 @@ public final class EmitterManager {
 >>>>>>> theirs
             }
 
+            // Per-play pitch and gain variation for sample-based emitter categories.
+            // Pitch: ±5% uniform spread prevents mechanical repetition across plays.
+            // Gain: ±2 dB (converted from dB to linear) adds natural loudness variation.
+            if (e.category == EmitterCategory.INSECT || e.category == EmitterCategory.FROG
+                    || e.category == EmitterCategory.WATER_DRIP || e.category == EmitterCategory.WATER_RAIN
+                    || e.category == EmitterCategory.WATER_STILL) {
+                float pitchVar = 0.95f + triggeredRng.nextFloat() * 0.10f;  // ±5%
+                float gainVar = (float) Math.pow(10.0, (-2.0 + triggeredRng.nextFloat() * 4.0) / 20.0);  // ±2 dB
+                e.pitch = pitchVar;
+                e.targetGain *= gainVar;
+            }
+
             e.applyToOpenAL(masterGain);
             AL10.alSourcePlay(e.sourceId);
             e.lastCallTick = currentTick;
