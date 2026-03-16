@@ -4,7 +4,10 @@ cicada_03.ogg
 cicada_04.ogg
 cicada_05.ogg
 cicada_06.ogg
+<<<<<<< ours
 cicada_07.ogg
 cicada_08.ogg
 cicada_09.ogg
 cicada_10.ogg
+=======
+>>>>>>> theirs

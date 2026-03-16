@@ -1,2 +1,9 @@
+<<<<<<< ours
 katydid_02.ogg
+=======
+katydid_01.ogg
+katydid_02.ogg
+katydid_03.ogg
+katydid_04.ogg
+>>>>>>> theirs
 katydid_05.ogg

@@ -1,5 +1,6 @@
 # EAP Sound Sample Credits
 
+<<<<<<< ours
 All sound samples in this directory are **real field recordings and nature sounds**
 sourced from free, royalty-free archives. Replaced synthetic placeholders on 2026-03-16.
 
@@ -131,3 +132,43 @@ When distributing this mod, include the following credits:
 > Spring peeper recordings by BudJillett, licensed CC-BY 4.0 via orangefreesounds.com
 > Field recordings by Joseph Sardin, BigSoundBank.com (CC0)
 > Nature recordings from U.S. National Park Service and U.S. Fish & Wildlife Service (Public Domain)
+=======
+All sound samples in this directory are **synthesized placeholders** generated
+using ffmpeg signal generators (sine, noise, aevalsrc) and sox for OGG Vorbis
+encoding.
+
+These are not recordings of real animals or environments. They use mathematical
+waveforms (sine tones, filtered noise, AM modulation, frequency sweeps) to
+approximate the character of each sound category.
+
+## Generation Details
+
+- **Format:** OGG Vorbis, mono, 44100 Hz
+- **Tool chain:** ffmpeg (signal generation + filtering) piped to sox (Vorbis encoding)
+- **Date generated:** 2026-03-16
+
+## Categories
+
+| Category | Subcategory | Count | Technique |
+|----------|-------------|-------|-----------|
+| Insects | Cricket | 10 | Sine tones 4000-5500 Hz with AM chirp envelopes |
+| Insects | Cicada | 6 | Sine + harmonics with dual AM modulation |
+| Insects | Katydid | 5 | Bandpass-filtered pink noise with fast tremolo |
+| Insects | Generic Night | 4 | Multi-tone layered insect chorus |
+| Frogs | Tree Frog | 8 | High-frequency sine with upward sweep and decay |
+| Frogs | Bullfrog | 5 | Low-frequency harmonic series with slow decay |
+| Frogs | Chorus Frog | 5 | Rising frequency sweep with rapid trill |
+| Frogs | Spring Peeper | 5 | Short pure tones with fast exponential decay |
+| Water | Flow | 8 | Bandpass-filtered brown/pink noise |
+| Water | Still | 8 | Low-pass brown noise with slow tremolo |
+| Water | Drip | 12 | Sine impulses with fast exponential decay |
+| Water | Rain | 6 | Broadband filtered white/pink noise |
+
+**Total: 82 samples**
+
+## Replacement
+
+These placeholders should be replaced with properly recorded or licensed audio
+samples for production use. The file naming convention (`{type}_{nn}.ogg`) and
+manifest structure must be preserved.
+>>>>>>> theirs
